@@ -1,0 +1,10 @@
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\bin\Debug\netcoreapp1.1\DziennikSportowca.deps.json
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\bin\Debug\netcoreapp1.1\DziennikSportowca.runtimeconfig.json
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\bin\Debug\netcoreapp1.1\DziennikSportowca.runtimeconfig.dev.json
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\bin\Debug\netcoreapp1.1\DziennikSportowca.dll
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\bin\Debug\netcoreapp1.1\DziennikSportowca.pdb
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.csprojResolveAssemblyReference.cache
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.AssemblyInfo.cs
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.dll
+C:\Users\Przemek\Desktop\Praca_Inzynierska\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.pdb
