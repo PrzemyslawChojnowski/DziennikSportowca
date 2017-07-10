@@ -12,7 +12,7 @@ namespace DziennikSportowca.Data
         {
             if(!context.MuscleParts.Any())
             {
-                var muscleParts = new MusclePart[]
+                MusclePart[] muscleParts = new MusclePart[]
                 {
                     new MusclePart { Description = "Barki"},
                     new MusclePart { Description = "Klatka piersiowa"},
@@ -23,16 +23,13 @@ namespace DziennikSportowca.Data
                     new MusclePart { Description = "Uda i pośladki"},
                     new MusclePart { Description = "Łydki"}
                 };
-                foreach(MusclePart mp in muscleParts)
-                {
-                    context.MuscleParts.Add(mp);
-                }
+                context.MuscleParts.AddRange(muscleParts);
                 context.SaveChanges();
             }
 
             if(!context.Exercises.Any())
             {
-                var exercises = new Exercise[]
+                Exercise[] exercises = new Exercise[]
                 {
                     new Exercise{Name = "Wyciskanie sztangi sprzed głowy"},
                     new Exercise{Name = "Wyciskanie sztangi zza głowy"},
@@ -106,12 +103,47 @@ namespace DziennikSportowca.Data
                     new Exercise{Name = "Prostowanie ramienia podchwytem na wyciągu stojąc"},
                     new Exercise{Name = "Wyciskanie w leżeniu na ławce poziomej wąskim uchwytem"}
                 };
-                foreach(Exercise e in exercises)
-                {
-                    context.Exercises.Add(e);
-                }
+                context.Exercises.AddRange(exercises);
                 context.SaveChanges();
-            }           
+            }      
+            
+            if(!context.MusclePartExercises.Any())
+            {
+                MusclePartExercise[] musclePartExercises = new MusclePartExercise[]
+                {
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 1},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 51},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 50},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 49},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 48},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 47},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 46},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 52},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 45},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 43},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 42},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 41},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 40},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 39},
+                    new MusclePartExercise{MuscePartId = 1, ExerciseId = 38},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 44},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 54},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 62},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 55},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 69},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 68},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 67},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 66},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 65},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 64},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 70},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 63},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 61},
+                    new MusclePartExercise{MuscePartId = 2, ExerciseId = 60}
+                };
+                context.MusclePartExercises.AddRange(musclePartExercises);
+                context.SaveChanges();
+            }
         }
     }
 }
