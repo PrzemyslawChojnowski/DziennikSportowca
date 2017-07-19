@@ -9,6 +9,7 @@ using DziennikSportowca.Data;
 using Microsoft.AspNetCore.Identity;
 using DziennikSportowca.Models.ViewModels;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace DziennikSportowca.Models
 {
@@ -53,14 +54,7 @@ namespace DziennikSportowca.Models
         // GET: TrainingPlans/Create
         public async Task<IActionResult> Create()
         {
-            IQueryable<string> muscleParts = _context.MuscleParts.Select(x => x.Description);
-            IQueryable<Exercise> exercises = from e in _context.Exercises
-                                           select e;
-
-            TrainingPlanViewModel trainingPlanViewModel = new TrainingPlanViewModel();
-            trainingPlanViewModel.MuscleParts = new SelectList(await muscleParts.Distinct().ToListAsync());
-            trainingPlanViewModel.Exercises = await exercises.ToListAsync();
-            return View(trainingPlanViewModel);
+            return View();
         }
 
         // POST: TrainingPlans/Create
@@ -76,7 +70,8 @@ namespace DziennikSportowca.Models
                 trainingPlan.UserId = loggedUser;
                 _context.Add(trainingPlan);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                var id = trainingPlan.Id;
+                return RedirectToAction("AddTrainingExercises", new { id = id });
             }
             return View(trainingPlan);
         }
@@ -159,6 +154,8 @@ namespace DziennikSportowca.Models
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var trainingPlan = await _context.TrainingPlans.SingleOrDefaultAsync(m => m.Id == id);
+            var trainingPlanExercises = _context.TrainingPlanExercises.Where(x => x.TrainingPlanId == trainingPlan.Id);
+            _context.TrainingPlanExercises.RemoveRange(trainingPlanExercises);
             _context.TrainingPlans.Remove(trainingPlan);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -172,59 +169,86 @@ namespace DziennikSportowca.Models
         // GET: TrainingPlans/AddTrainingExercises/5
         public async Task<IActionResult> AddTrainingExercises(int? id)
         {
-            if (id == null)
+            IQueryable<string> muscleParts = _context.MuscleParts.Select(x => x.Description);
+            TrainingPlan plan = await _context.TrainingPlans.FirstOrDefaultAsync(x => x.Id == id);
+
+            List<TrainingPlanExercise> exercises = await _context.TrainingPlanExercises.
+                                                    Where(x => x.TrainingPlanId == plan.Id).
+                                                    Include(x => x.Exercise).
+                                                    Include(x => x.Exercise.MuscleParts).
+                                                    ToListAsync();
+
+            foreach(var exercise in exercises)
             {
-                return NotFound();
+                exercise.Exercise.MuscleParts = await _context.MusclePartExercises.Where(x => x.ExerciseId == exercise.ExerciseId).Include(x => x.MusclePart).ToListAsync();
             }
 
-            var trainingPlan = await _context.TrainingPlans.SingleOrDefaultAsync(m => m.Id == id);
-            if (trainingPlan == null)
-            {
-                return NotFound();
+            TrainingPlanViewModel trainingPlanViewModel = new TrainingPlanViewModel();
+            trainingPlanViewModel.MuscleParts = new SelectList(await muscleParts.Distinct().ToListAsync());
+            plan.Exercises = exercises;
+            trainingPlanViewModel.TrainingPlan = plan;
+            
+            return View(trainingPlanViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTrainingExercises(string jsonData, int id)
+        {
+            TrainingPlanExercises result = JsonConvert.DeserializeObject<TrainingPlanExercises>(jsonData);
+            TrainingPlan plan = await _context.TrainingPlans.SingleOrDefaultAsync(x => x.Id == id);
+            List<TrainingPlanExercise> tpExercises = await _context.TrainingPlanExercises.
+                                                Where(x => x.TrainingPlan.Id == plan.Id).ToListAsync();
+
+            for (int i = 0; i < result.rowNo.Count; i++)
+            {                
+                Exercise exercise = await _context.Exercises.SingleOrDefaultAsync(x => x.Name == result.exercise[i] && 
+                                                x.MuscleParts.Any(z => z.MusclePart.Description == result.musclePart[i]));
+                var tmp = tpExercises.FirstOrDefault(x => x.ExerciseId == exercise.Id && 
+                                                        x.RepsNo == result.repsNo[i] && 
+                                                        x.SeriesNo == result.seriesNo[i]);
+
+                if (tmp != null)
+                {
+                    tpExercises.Remove(tmp);
+                    continue;
+                }                   
+
+                TrainingPlanExercise tpExercise = new TrainingPlanExercise()
+                {
+                    Exercise = exercise,
+                    ExerciseId = exercise.Id,
+                    TrainingPlanId = id,
+                    TrainingPlan = plan,
+                    SeriesNo = result.seriesNo[i],
+                    RepsNo = result.repsNo[i]
+                };
+
+                tpExercises.Remove(tmp);
+                await _context.TrainingPlanExercises.AddAsync(tpExercise);
             }
-            return View(trainingPlan);
+
+            if (tpExercises.Any())
+                _context.TrainingPlanExercises.RemoveRange(tpExercises);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         public JsonResult getExercises(string trainingPartName)
         {
-            //string trainingPartName = "";
             List<string> exercises = _context.MusclePartExercises
                 .Where(x => x.MusclePart.Description == trainingPartName)
                 .Select(x => x.Exercise.Name).ToList();
             return Json(exercises);
         }
+    }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> AddTrainingExercises(int id, [Bind("Id,Description,UserId")] TrainingPlan trainingPlan)
-        //{
-        //    if (id != trainingPlan.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(trainingPlan);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!TrainingPlanExists(trainingPlan.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", trainingPlan.UserId);
-        //    return View(trainingPlan);
-        //}
+    public class TrainingPlanExercises
+    {
+        public List<int> rowNo { get; set; }
+        public List<string> musclePart { get; set; }
+        public List<string> exercise { get; set; }
+        public List<int> seriesNo { get; set; }
+        public List<int> repsNo { get; set; }
     }
 }

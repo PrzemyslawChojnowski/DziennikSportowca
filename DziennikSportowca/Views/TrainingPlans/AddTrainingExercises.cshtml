@@ -1,0 +1,71 @@
+@model DziennikSportowca.Models.ViewModels.TrainingPlanViewModel
+
+@{
+    ViewData["Title"] = "AddTrainingExercises";
+}
+
+<head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
+    <script src="~/js/Training/AddTrainingExercisesScript.js" type="text/javascript"></script>
+</head>
+
+<h2>AddTrainingExercises</h2>
+
+<div class="form-horizontal">
+    <div class="form-inline">
+        <div class="form-inline">
+            <input type="hidden" asp-for="TrainingPlan.Id" id="Id"/>
+            <select class="form-control" asp-items="Model.MuscleParts" id="MusclePartName">
+                <option value="Wybierz partie" asp-for>Wybierz partie</option>
+            </select>
+
+            <select class="form-control" id="Exercises">
+                <option value="Wybierz cwiczenie">Wybierz cwiczenie</option>
+            </select>
+
+            <input type="number" class="form-control" placeholder="Liczba serii" id="SeriesNo" />
+            <input type="number" class="form-control" placeholder="Liczba powtorzen" id="RepsNo" />
+
+            <button class="btn btn-default" onclick="newElement()">Add</button>
+
+        </div>
+    </div>
+
+    <table class="table table-hover" id="ExercisesTable">
+        <thead>
+            <tr>
+                <th>Lp.</th>
+                <th>Partia</th>
+                <th>Cwiczenie</th>
+                <th>Liczba serii</th>
+                <th>Liczba powtorzen</th>
+                <th>Usun</th>
+            </tr>
+        </thead>
+        <tbody id="ExercisesBody">
+            @{ int i = 1;
+                if (Model.TrainingPlan.Exercises.Any())
+                {
+                    foreach (var data in Model.TrainingPlan.Exercises)
+                    {
+                        <tr>
+                            <td class="ExerciseNo">@i</td>
+                            <td class="PartName">@data.Exercise.MuscleParts[0].MusclePart.Description</td>
+                            <td class="Exercise">@data.Exercise.Name</td>
+                            <td class="SeriesNo">@data.SeriesNo</td>
+                            <td class="RepsNo">@data.RepsNo</td>
+                            <td>
+                                <span class="btn btn-default btn-sm remove">
+                                    <span class="glyphicon glyphicon-trash" id="Delete"></span>
+                                </span>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <button class="btn btn-default" id="AddExercises">Zapisz cwiczenia</button>
+</div>

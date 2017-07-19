@@ -23,7 +23,7 @@ namespace DziennikSportowca.Data
             // Add your customizations after calling base.OnModelCreating(builder);
 
             builder.Entity<TrainingPlanExercise>()
-                .HasKey(t => new { t.ExerciseId, t.TrainingPlanId });
+                .HasKey(t => new { t.Id });
 
             builder.Entity<TrainingPlanExercise>()
                 .HasOne(t => t.TrainingPlan)

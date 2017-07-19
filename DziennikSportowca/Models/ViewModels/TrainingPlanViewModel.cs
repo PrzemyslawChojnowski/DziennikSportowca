@@ -10,7 +10,6 @@ namespace DziennikSportowca.Models.ViewModels
     public class TrainingPlanViewModel
     {
         public TrainingPlan TrainingPlan { get; set; }
-        public IList<Exercise> Exercises { get; set; }
 
         [Display(Name = "Partia mięśniowa")]
         public SelectList MuscleParts { get; set; }

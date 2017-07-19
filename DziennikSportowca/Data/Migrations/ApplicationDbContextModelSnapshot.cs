@@ -125,7 +125,16 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<int>("TrainingPlanId");
 
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("RepsNo");
+
+                    b.Property<int>("SeriesNo");
+
                     b.HasKey("ExerciseId", "TrainingPlanId");
+
+                    b.HasAlternateKey("Id");
 
                     b.HasIndex("TrainingPlanId");
 

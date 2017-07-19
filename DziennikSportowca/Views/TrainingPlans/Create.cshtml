@@ -4,145 +4,10 @@
     ViewData["Title"] = "Create";
 }
 
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function () {
-    $('#MusclePartName').change(function () {
-
-        $('#Exercises')
-            .find('option')
-            .remove()
-            .end()
-            .append('<option value="Wybierz cwiczenie">Wybierz cwiczenie</option>')
-            .val('Wybierz cwiczenie')
-            ;
-
-        var musclePartName = $('#MusclePartName').find(":selected").text();
-        var muscle = {};
-        muscle.trainingPartName = musclePartName;
-        var exercises = [];
-        $.ajax({
-            url: '@Url.Action("getExercises", "TrainingPlans")',
-            type: 'POST',
-            data: muscle,
-            async: false,
-            success: function (obj) {
-                exercises = obj;
-                $.each(obj, function (key, value) {
-                    $('#Exercises').append($("<option/>", {
-                        value: key,
-                        text: value
-                    }));
-                });
-            },
-            error: function (obj) {
-                alert('Something happened');
-            }
-        });
-    });
-    });
-    </script>
-
-    <script type="text/javascript">
-        var exercises = {};
-        exercises.rowNo = [];
-        exercises.musclePart = [];
-        exercises.exercise = [];
-        exercises.seriesNo = [];
-        exercises.repsNo = [];
-        function newElement() {
-            var tr = document.createElement("tr");
-            var td1 = document.createElement("td");
-            td1.className = "ExerciseNo";
-            var td2 = document.createElement("td");
-            td2.className = "PartName";
-            var td3 = document.createElement("td");
-            td3.className = "Exercise";
-            var td4 = document.createElement("td");
-            td4.className = "SeriesNo";
-            var td5 = document.createElement("td");
-            td5.className = "RepsNo";
-            var td6 = document.createElement("td");
-
-            var deleteButtonContainer = document.createElement("span");
-            deleteButtonContainer.className = "btn btn-default btn-sm remove";
-            var deleteButton = document.createElement("span");
-            deleteButton.className = "glyphicon glyphicon-trash";
-            deleteButton.id = "Delete";
-            deleteButtonContainer.appendChild(deleteButton);
-            
-            var rowsNo = document.getElementById("ExercisesTable").rows.length;
-            var musclePart = $("select[id='MusclePartName'").find('option:selected').text()
-            var exercise = $("select[id='Exercises'").find('option:selected').text()
-            var seriesNo = $("#SeriesNo").val();
-            var repsNo = $("#RepsNo").val();
-
-            exercises.rowNo.push(rowsNo);
-            exercises.musclePart.push(musclePart);
-            exercises.exercise.push(exercise);
-            exercises.seriesNo.push(seriesNo);
-            exercises.repsNo.push(repsNo);
-            console.log(exercises);
-
-            td1.innerHTML = rowsNo;
-            td2.innerHTML = musclePart;
-            td3.innerHTML = exercise;
-            td4.innerHTML = seriesNo;
-            td5.innerHTML = repsNo;
-            td6.appendChild(deleteButtonContainer);
-
-            tr.appendChild(td1);
-            tr.appendChild(td2);
-            tr.appendChild(td3);
-            tr.appendChild(td4);
-            tr.appendChild(td5);
-            tr.appendChild(td6);
-            
-            if (musclePart === '' || musclePart === 'Wybierz partie' || exercise === '' || exercise === 'Wybierz cwiczenie'
-                || seriesNo === '' || repsNo === '') {
-                alert("You must write something!");
-            } else {
-                document.getElementById("ExercisesBody").appendChild(tr);
-            }
-
-            $("select[id='MusclePartName'").val("Wybierz partie");
-            $('#Exercises')
-                .find('option')
-                .remove()
-                .end()
-                .append('<option value="Wybierz cwiczenie">Wybierz cwiczenie</option>')
-                .val('Wybierz cwiczenie')
-                ;
-            $("#SeriesNo").val('');
-            $("#RepsNo").val('');
-
-        }
-
-        $(function () {
-            $("table#ExercisesTable").on("click", ".remove", function () {
-                var a = $(this).closest('tr').find('.ExerciseNo').html();
-                console.log(a);
-                delete exercises.exercise[a - 1];
-                console.log(exercises);
-                $(this).closest('tr').remove();
-
-                var i = 1;
-                $('td.ExerciseNo','#ExercisesBody tr').each(function () {                      
-                    console.log(i);
-                    $(this).html(i);
-                    i++;
-                });
-            });
-        });
-    </script>
-</head>
-
 <h2>Create</h2>
 
 <form asp-action="Create" >
-    <div class="form-horizontal">   
-        
+    <div class="form-horizontal">           
         <h4>TrainingPlan</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -153,46 +18,10 @@
                 <span asp-validation-for="TrainingPlan.Description" class="text-danger"></span>
             </div>
         </div>
-        <hr />
-
-        <div class="form-inline">
-            <div class="form-inline">
-                
-                <select class="form-control" asp-items="Model.MuscleParts" id="MusclePartName">
-                    <option value="Wybierz partie" asp-for>Wybierz partie</option>
-                </select>
-                
-                <select class="form-control" id="Exercises">
-                    <option value="Wybierz cwiczenie">Wybierz cwiczenie</option>
-                </select>
-
-                <input type="number" class="form-control" placeholder="Liczba serii" id="SeriesNo" />
-                <input type="number" class="form-control" placeholder="Liczba powtorzen" id="RepsNo"/>
-
-                <span class="form-control" onclick="newElement()">Add</span>
-               
-            </div>
-        </div>
-
-        <table class="table table-hover" id="ExercisesTable" asp-for="TrainingPlan.Exercises">
-            <thead>
-                <tr>
-                    <th>Lp.</th>
-                    <th>Partia</th>
-                    <th>Cwiczenie</th>
-                    <th>Liczba serii</th>
-                    <th>Liczba powtorzen</th>
-                    <th>Usun</th>
-                </tr>
-            </thead>
-            <tbody id="ExercisesBody">
-
-            </tbody>
-        </table>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Dalej" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -201,8 +30,6 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
