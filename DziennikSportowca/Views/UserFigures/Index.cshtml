@@ -1,0 +1,89 @@
+@model IEnumerable<DziennikSportowca.Models.UserFigure>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShouldersCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ChestCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WaistCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BicepsCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TricepsCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ThighCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HipCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BodyFat)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShouldersCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChestCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaistCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicepsCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TricepsCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThighCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HipCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BodyFat)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

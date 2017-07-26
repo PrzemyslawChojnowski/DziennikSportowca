@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.1",
-    "signature": "191b5d2b782e296bda81e609ba39c1dbc0d851aa"
+    "signature": "e71cbd8f0ecc65246f577b50aa4959ea08e11fb9"
   },
   "compilationOptions": {
     "defines": [
@@ -23,6 +23,8 @@
     ".NETCoreApp,Version=v1.1": {
       "dzienniksportowca/1.0.0": {
         "dependencies": {
+          "Bootstrap.Datepicker": "1.6.4",
+          "Font.Awesome": "4.7.0",
           "Microsoft.ApplicationInsights.AspNetCore": "2.0.0",
           "Microsoft.AspNetCore": "1.1.1",
           "Microsoft.AspNetCore.Authentication.Cookies": "1.1.1",
@@ -54,6 +56,8 @@
           "jQuery": "1.9.1"
         }
       },
+      "bootstrap.datepicker/1.6.4": {},
+      "font.awesome/4.7.0": {},
       "jquery/1.9.1": {},
       "microsoft.applicationinsights/2.2.0": {
         "dependencies": {
@@ -3571,6 +3575,20 @@
       "sha512": "sha512-3YTWhPNh6UcnUvzw9u6A2/hy2w0h4lznxPbX6FY47lFia3+Ib4zBixTpW6YieYA/b2fLXbkjoD59OjcVF3cJXw==",
       "path": "bootstrap/3.3.7",
       "hashPath": "bootstrap.3.3.7.nupkg.sha512"
+    },
+    "bootstrap.datepicker/1.6.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HO0WMZSXN/E8LiZLVfGvCiXBaT6UFe1fnwSizwkWNLZO3XnFjsq2tglvQXZPzGxLGKn0w35Z3F+pfH201srKrw==",
+      "path": "bootstrap.datepicker/1.6.4",
+      "hashPath": "bootstrap.datepicker.1.6.4.nupkg.sha512"
+    },
+    "font.awesome/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GOqijjrr/uwGFZoMRmZGOcZ2shBl6sRvilgoRozwledWo/CFkEsJ+f9LkJlWtFSBxUwu7lxuIbt4WoqzSk+HiA==",
+      "path": "font.awesome/4.7.0",
+      "hashPath": "font.awesome.4.7.0.nupkg.sha512"
     },
     "jquery/1.9.1": {
       "type": "package",

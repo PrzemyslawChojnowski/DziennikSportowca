@@ -9,6 +9,11 @@ namespace DziennikSportowca.Models
 {
     public class MusclePart
     {
+        public MusclePart()
+        {
+            Exercises = new List<MusclePartExercise>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

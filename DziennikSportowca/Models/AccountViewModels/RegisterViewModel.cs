@@ -23,5 +23,17 @@ namespace DziennikSportowca.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Imię")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Nazwisko")]
+        public string Surname { get; set; }
+
+        [Required]
+        [Display(Name = "Płeć")]
+        public Gender Gender { get; set; }
     }
 }

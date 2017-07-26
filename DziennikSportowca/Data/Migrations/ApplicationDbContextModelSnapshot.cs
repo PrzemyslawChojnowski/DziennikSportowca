@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using DziennikSportowca.Data;
+using DziennikSportowca.Models;
 
 namespace DziennikSportowca.Data.Migrations
 {
@@ -31,9 +32,13 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<int>("Gender");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -48,6 +53,8 @@ namespace DziennikSportowca.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<string>("Surname");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -66,6 +73,35 @@ namespace DziennikSportowca.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("DziennikSportowca.Models.Dish", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Dish");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.DishFoodProduct", b =>
+                {
+                    b.Property<int>("DishId");
+
+                    b.Property<int>("FoodProductId");
+
+                    b.HasKey("DishId", "FoodProductId");
+
+                    b.HasIndex("FoodProductId");
+
+                    b.ToTable("DishFoodProduct");
+                });
+
             modelBuilder.Entity("DziennikSportowca.Models.Exercise", b =>
                 {
                     b.Property<int>("Id")
@@ -76,6 +112,28 @@ namespace DziennikSportowca.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Exercise");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.FoodProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Carbohydrate");
+
+                    b.Property<string>("Description");
+
+                    b.Property<double>("Energy");
+
+                    b.Property<double>("Fat");
+
+                    b.Property<int>("Measurement");
+
+                    b.Property<double>("Protein");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FoodProduct");
                 });
 
             modelBuilder.Entity("DziennikSportowca.Models.MusclePart", b =>
@@ -121,24 +179,58 @@ namespace DziennikSportowca.Data.Migrations
 
             modelBuilder.Entity("DziennikSportowca.Models.TrainingPlanExercise", b =>
                 {
-                    b.Property<int>("ExerciseId");
-
-                    b.Property<int>("TrainingPlanId");
-
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ExerciseId");
 
                     b.Property<int>("RepsNo");
 
                     b.Property<int>("SeriesNo");
 
-                    b.HasKey("ExerciseId", "TrainingPlanId");
+                    b.Property<int>("TrainingPlanId");
 
-                    b.HasAlternateKey("Id");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
 
                     b.HasIndex("TrainingPlanId");
 
                     b.ToTable("TrainingPlanExercise");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.UserFigure", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("BicepsCircumference");
+
+                    b.Property<double>("BodyFat");
+
+                    b.Property<double>("ChestCircumference");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<double>("HipCircumference");
+
+                    b.Property<double>("ShouldersCircumference");
+
+                    b.Property<double>("ThighCircumference");
+
+                    b.Property<double>("TricepsCircumference");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<double>("WaistCircumference");
+
+                    b.Property<double>("Weight");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFigure");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -248,6 +340,26 @@ namespace DziennikSportowca.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("DziennikSportowca.Models.Dish", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.ApplicationUser", "User")
+                        .WithMany("Dishes")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.DishFoodProduct", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.Dish", "Dish")
+                        .WithMany("FoodProducts")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DziennikSportowca.Models.FoodProduct", "FoodProduct")
+                        .WithMany("Dishes")
+                        .HasForeignKey("FoodProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("DziennikSportowca.Models.MusclePartExercise", b =>
                 {
                     b.HasOne("DziennikSportowca.Models.Exercise", "Exercise")
@@ -279,6 +391,13 @@ namespace DziennikSportowca.Data.Migrations
                         .WithMany("Exercises")
                         .HasForeignKey("TrainingPlanId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.UserFigure", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.ApplicationUser", "User")
+                        .WithMany("UserCircumferences")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

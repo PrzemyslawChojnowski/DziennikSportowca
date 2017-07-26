@@ -17,6 +17,7 @@ namespace DziennikSportowca.Models
         public virtual Exercise Exercise { get; set; }
 
         public int TrainingPlanId { get; set; }
+        [ForeignKey("TrainingPlanId")]
         public virtual TrainingPlan TrainingPlan { get; set; }
 
         public int SeriesNo { get; set; }
