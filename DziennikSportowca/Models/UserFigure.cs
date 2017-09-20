@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +10,11 @@ namespace DziennikSportowca.Models
 {
     public class UserFigure
     {
+        public UserFigure()
+        {
+            Photos = new List<Photo>();
+        }
+
         public int Id { get; set; }
 
         public string UserId { get; set; }
@@ -45,5 +51,7 @@ namespace DziennikSportowca.Models
 
         [Display(Name = "Poziom tkanki tłuszczowej [%]")]
         public double BodyFat { get; set; }       
+
+        public virtual List<Photo> Photos { get; set; }
     }
 }

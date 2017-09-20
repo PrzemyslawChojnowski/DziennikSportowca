@@ -14,7 +14,9 @@ E:\Repos\DziennikSportowca\DziennikSportowca\bin\Debug\netcoreapp1.1\DziennikSpo
 E:\Repos\DziennikSportowca\DziennikSportowca\bin\Debug\netcoreapp1.1\DziennikSportowca.dll
 E:\Repos\DziennikSportowca\DziennikSportowca\bin\Debug\netcoreapp1.1\DziennikSportowca.pdb
 E:\Repos\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.csprojResolveAssemblyReference.cache
+E:\Repos\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.csproj.CoreCompileInputs.cache
+E:\Repos\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs
 E:\Repos\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.AssemblyInfo.cs
 E:\Repos\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.dll
 E:\Repos\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.pdb
-E:\Repos\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs
+E:\Repos\DziennikSportowca\DziennikSportowca\obj\Debug\netcoreapp1.1\DziennikSportowca.AssemblyInfoInputs.cache

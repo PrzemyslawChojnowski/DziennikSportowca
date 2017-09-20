@@ -12,6 +12,8 @@ using Microsoft.Extensions.Options;
 using DziennikSportowca.Models;
 using DziennikSportowca.Models.AccountViewModels;
 using DziennikSportowca.Services;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace DziennikSportowca.Controllers
 {
@@ -114,6 +116,12 @@ namespace DziennikSportowca.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email,
                                                 Name = model.Name, Surname = model.Surname, Gender = model.Gender };
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.ProfilePicture.CopyToAsync(memoryStream);
+                    user.ProfilePicture = memoryStream.ToArray();
+                }
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

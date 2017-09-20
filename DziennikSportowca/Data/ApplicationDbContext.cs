@@ -70,6 +70,7 @@ namespace DziennikSportowca.Data
             builder.Entity<Dish>().ToTable("Dish");
             builder.Entity<DishFoodProduct>().ToTable("DishFoodProduct");
             builder.Entity<UserFigure>().ToTable("UserFigure");
+            builder.Entity<Photo>().ToTable("Photo");
         }
 
         public DbSet<Exercise> Exercises { get; set; }
@@ -81,5 +82,7 @@ namespace DziennikSportowca.Data
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<DishFoodProduct> DishFoodProducts { get; set; }
         public DbSet<UserFigure> UserFigure { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Photo> Photos { get; set; }
     }
 }

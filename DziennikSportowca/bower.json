@@ -8,6 +8,8 @@
     "jquery-validation-unobtrusive": "3.2.6",
     "sweetalert": "1.1.3",
     "bootstrap-datepicker": "1.7.1",
-    "font-awesome": "4.7.0"
+    "font-awesome": "4.7.0",
+    "bootstrap4c-dropzone": "1.0.1",
+    "dropzone": "5.1.1"
   }
 }

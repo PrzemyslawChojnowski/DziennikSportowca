@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -35,5 +36,8 @@ namespace DziennikSportowca.Models.AccountViewModels
         [Required]
         [Display(Name = "Płeć")]
         public Gender Gender { get; set; }
+
+        [Display(Name = "Zdjęcie profilowe")]
+        public IFormFile ProfilePicture { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace DziennikSportowca.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public Gender Gender { get; set; }
+        public byte[] ProfilePicture { get; set; } 
 
         public virtual List<TrainingPlan> TrainingPlans { get; set; }
         public virtual List<Dish> Dishes { get; set; }

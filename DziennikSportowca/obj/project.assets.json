@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "targets": {
     ".NETCoreApp,Version=v1.1": {
       "bootstrap/3.3.7": {
@@ -7736,16 +7736,16 @@
       ]
     },
     "System.Interactive.Async/3.0.0": {
-      "sha512": "UEM+WmG1Oq0bNbPx/E1jaIQ83QOrPfVDUyuYBtG6D6DpB77ytv9flPterMujumpHuoRjSc0ilSB8w41fQc05dw==",
+      "sha512": "iyrgkZz9Dzm0fiPouQszFC3SO/46k6AYd/jG9bu+/o0AoDMaRXtlo3TIuWVNtOuJFd1noL963QouroJ0T3rImw==",
       "type": "package",
       "path": "system.interactive.async/3.0.0",
       "files": [
-        "System.Interactive.Async.3.0.0.nupkg.sha512",
-        "System.Interactive.Async.nuspec",
         "lib/net45/System.Interactive.Async.dll",
         "lib/net45/System.Interactive.Async.xml",
         "lib/netstandard1.0/System.Interactive.Async.dll",
-        "lib/netstandard1.0/System.Interactive.Async.xml"
+        "lib/netstandard1.0/System.Interactive.Async.xml",
+        "system.interactive.async.3.0.0.nupkg.sha512",
+        "system.interactive.async.nuspec"
       ]
     },
     "System.IO/4.3.0": {
@@ -11150,23 +11150,41 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Przemek\\.nuget\\packages\\": {}
+    "C:\\Users\\przem\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
       "projectUniqueName": "E:\\Repos\\DziennikSportowca\\DziennikSportowca\\DziennikSportowca.csproj",
       "projectName": "DziennikSportowca",
       "projectPath": "E:\\Repos\\DziennikSportowca\\DziennikSportowca\\DziennikSportowca.csproj",
+      "packagesPath": "C:\\Users\\przem\\.nuget\\packages\\",
       "outputPath": "E:\\Repos\\DziennikSportowca\\DziennikSportowca\\obj\\",
       "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\przem\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
       "originalTargetFrameworks": [
         "netcoreapp1.1"
       ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
       "frameworks": {
         "netcoreapp1.1": {
           "projectReferences": {}
         }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
       }
     },
     "frameworks": {

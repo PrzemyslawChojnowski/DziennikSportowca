@@ -52,6 +52,8 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<byte[]>("ProfilePicture");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<string>("Surname");
@@ -159,6 +161,22 @@ namespace DziennikSportowca.Data.Migrations
                     b.HasIndex("MuscePartId");
 
                     b.ToTable("MusclePartExercise");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<byte[]>("PhotoContent");
+
+                    b.Property<int>("UserFigureId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserFigureId");
+
+                    b.ToTable("Photo");
                 });
 
             modelBuilder.Entity("DziennikSportowca.Models.TrainingPlan", b =>
@@ -370,6 +388,14 @@ namespace DziennikSportowca.Data.Migrations
                     b.HasOne("DziennikSportowca.Models.MusclePart", "MusclePart")
                         .WithMany("Exercises")
                         .HasForeignKey("MuscePartId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.Photo", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.UserFigure", "UserFigure")
+                        .WithMany("Photos")
+                        .HasForeignKey("UserFigureId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

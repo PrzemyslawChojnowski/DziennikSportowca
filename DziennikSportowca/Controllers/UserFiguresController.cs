@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using DziennikSportowca.Data;
 using DziennikSportowca.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using DziennikSportowca.Models.ViewModels;
 
 namespace DziennikSportowca.Controllers
 {
@@ -29,6 +32,19 @@ namespace DziennikSportowca.Controllers
             return View(await _context.UserFigure.Where(x => x.User == user).ToListAsync());
         }
 
+        public async Task<IActionResult> Calculators()
+        {            
+            CalculatorsViewModel model = new CalculatorsViewModel();
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (_context.UserFigure.Where(x => x.User == user).Any())
+                    model.Weight = await _context.UserFigure.Where(x => x.User == user).Select(x => x.Weight).LastAsync();
+                model.Gender = await _context.ApplicationUser.Where(x => x.Id == user.Id).Select(x => x.Gender).SingleOrDefaultAsync();
+            }
+            return View(model);
+        }
+
         // GET: UserFigures/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -39,6 +55,7 @@ namespace DziennikSportowca.Controllers
 
             var userFigure = await _context.UserFigure
                 .SingleOrDefaultAsync(m => m.Id == id);
+            userFigure.Photos = await _context.Photos.Where(x => x.UserFigureId == userFigure.Id).ToListAsync();
             if (userFigure == null)
             {
                 return NotFound();
@@ -58,11 +75,28 @@ namespace DziennikSportowca.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,ShouldersCircumference,ChestCircumference,WaistCircumference,BicepsCircumference,TricepsCircumference,ThighCircumference,HipCircumference,Weight,BodyFat")] UserFigure userFigure)
+        public async Task<IActionResult> Create([Bind("Id,Date,ShouldersCircumference,ChestCircumference,WaistCircumference,BicepsCircumference,TricepsCircumference,ThighCircumference,HipCircumference,Weight,BodyFat")] UserFigure userFigure, 
+            List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
                 userFigure.UserId = await _userManager.GetUserIdAsync(await _userManager.GetUserAsync(User));
+                if (files.Any())
+                {
+                    foreach (var ph in files)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await ph.CopyToAsync(memoryStream);
+                            Photo photo = new Photo()
+                            {
+                                PhotoContent = memoryStream.ToArray(),
+                                UserFigure = userFigure
+                            };
+                            _context.Photos.Add(photo);
+                        }
+                    }
+                }
                 _context.Add(userFigure);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");

@@ -1,4 +1,9 @@
-﻿$(document).ready(function () {
+﻿//Dropzone.autoDiscover = false;
+//jQuery(document).ready(function () {
+    
+    
+//});
+$(document).ready(function () {
     $('#datepicker').datepicker({
         autoclose: true,
         calendarWeeks: true,
@@ -8,6 +13,13 @@
         todayBtn: "linked",
         todayHighlight: true
     });
+
+    //$(function () {
+    //    $("#dropzone").dropzone({
+    //        url: "/file/post",
+    //        dictDefaultMessage: "Drop files here or<br>click to upload..."
+    //    });
+    //});
 
     var userGender;
     var userWeight;
@@ -33,7 +45,7 @@
         error: function (obj) {
             swal("Niepowodzenie", "Napotkano nieoczekiwany błąd. Spróbuj ponownie.", "error");
         }
-    });
+    });    
 });
 
 function calculateBodyFat(userWeight, userWaistCircumference, userGender) {
