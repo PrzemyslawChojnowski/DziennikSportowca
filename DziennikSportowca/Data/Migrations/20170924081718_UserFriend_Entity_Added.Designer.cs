@@ -9,9 +9,10 @@ using DziennikSportowca.Models;
 namespace DziennikSportowca.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170924081718_UserFriend_Entity_Added")]
+    partial class UserFriend_Entity_Added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -257,46 +258,11 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<string>("FriendId");
 
-                    b.Property<int>("FriendshipStatus");
-
                     b.HasKey("UserId", "FriendId");
 
                     b.HasIndex("FriendId");
 
                     b.ToTable("UserFriend");
-                });
-
-            modelBuilder.Entity("DziennikSportowca.Models.UserTraining", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("TrainingDate");
-
-                    b.Property<int>("TrainingId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TrainingId");
-
-                    b.ToTable("UserTraining");
-                });
-
-            modelBuilder.Entity("DziennikSportowca.Models.UserTrainingExerciseResult", b =>
-                {
-                    b.Property<int>("UserTrainingId");
-
-                    b.Property<int>("TrainingPlanExerciseId");
-
-                    b.Property<int>("RepsNo");
-
-                    b.Property<int>("SeriesNo");
-
-                    b.HasKey("UserTrainingId", "TrainingPlanExerciseId");
-
-                    b.HasIndex("TrainingPlanExerciseId");
-
-                    b.ToTable("UserTrainingExerciseResult");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -484,27 +450,6 @@ namespace DziennikSportowca.Data.Migrations
                     b.HasOne("DziennikSportowca.Models.ApplicationUser", "User")
                         .WithMany("UserFriends")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DziennikSportowca.Models.UserTraining", b =>
-                {
-                    b.HasOne("DziennikSportowca.Models.TrainingPlan", "Training")
-                        .WithMany("UserTrainings")
-                        .HasForeignKey("TrainingId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DziennikSportowca.Models.UserTrainingExerciseResult", b =>
-                {
-                    b.HasOne("DziennikSportowca.Models.TrainingPlanExercise", "TrainingPlanExercise")
-                        .WithMany("Results")
-                        .HasForeignKey("TrainingPlanExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DziennikSportowca.Models.UserTraining", "UserTraining")
-                        .WithMany("UserTrainingsExercisesResults")
-                        .HasForeignKey("UserTrainingId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

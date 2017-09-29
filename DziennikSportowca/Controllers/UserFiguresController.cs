@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using DziennikSportowca.Models.ViewModels;
+using Newtonsoft.Json;
 
 namespace DziennikSportowca.Controllers
 {
@@ -29,7 +30,7 @@ namespace DziennikSportowca.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            return View(await _context.UserFigure.Where(x => x.User == user).ToListAsync());
+            return View(await _context.UserFigure.Where(x => x.User == user).OrderBy(x => x.Date).ToListAsync());
         }
 
         public async Task<IActionResult> Calculators()
@@ -193,6 +194,18 @@ namespace DziennikSportowca.Controllers
         {
             ApplicationUser user = await _userManager.GetUserAsync(User);
             return user.Gender.ToString();
+        }
+
+        public async Task<string> GetUserCircumferences(string id)
+        {
+            if(String.IsNullOrEmpty(id))
+            {
+                return null;
+            }
+
+            var circumferences = await _context.UserFigure.Where(x => x.UserId == id).OrderBy(x => x.Date).ToListAsync();
+            string json = await JsonConvert.SerializeObjectAsync(circumferences);
+            return json;
         }
     }
 }

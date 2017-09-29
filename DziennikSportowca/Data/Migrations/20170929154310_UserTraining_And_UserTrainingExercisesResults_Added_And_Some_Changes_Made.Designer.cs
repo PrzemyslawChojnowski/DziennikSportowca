@@ -9,9 +9,10 @@ using DziennikSportowca.Models;
 namespace DziennikSportowca.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170929154310_UserTraining_And_UserTrainingExercisesResults_Added_And_Some_Changes_Made")]
+    partial class UserTraining_And_UserTrainingExercisesResults_Added_And_Some_Changes_Made
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

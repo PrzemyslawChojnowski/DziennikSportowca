@@ -15,6 +15,8 @@ namespace DziennikSportowca.Models
             TrainingPlans = new List<TrainingPlan>();
             Dishes = new List<Dish>();
             UserCircumferences = new List<UserFigure>();
+            UserFriends = new List<UserFriend>();
+            Users = new List<UserFriend>();
         }
 
         public string Name { get; set; }
@@ -25,6 +27,8 @@ namespace DziennikSportowca.Models
         public virtual List<TrainingPlan> TrainingPlans { get; set; }
         public virtual List<Dish> Dishes { get; set; }
         public virtual List<UserFigure> UserCircumferences { get; set; }
+        public virtual List<UserFriend> UserFriends { get; set; }
+        public virtual List<UserFriend> Users { get; set; }
     }
 
     public enum Gender

@@ -12,6 +12,7 @@ namespace DziennikSportowca.Models
         public TrainingPlan()
         {
             Exercises = new List<TrainingPlanExercise>();
+            UserTrainings = new List<UserTraining>();
         }
 
         [Key]
@@ -26,5 +27,6 @@ namespace DziennikSportowca.Models
         public virtual ApplicationUser User { get; set; }
 
         public virtual List<TrainingPlanExercise> Exercises { get; set; }
+        public virtual List<UserTraining> UserTrainings { get; set; }
     }
 }

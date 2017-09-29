@@ -1,4 +1,5 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject UserManager<ApplicationUser> _manager
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +27,7 @@
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -34,16 +35,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">DziennikSportowca</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Dziennik Sportowca</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Index">Plany</a></li>
-                    <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Dania</a></li>
-                    <li><a asp-area="" asp-controller="UserFigures" asp-action="Index">Figury</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Index">Moje plany</a></li>
+                        <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Moje posilki</a></li>
+                        <li><a asp-area="" asp-controller="UserFigures" asp-action="Index">Moje pomiary</a></li>
+                    }
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">O aplikacji</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

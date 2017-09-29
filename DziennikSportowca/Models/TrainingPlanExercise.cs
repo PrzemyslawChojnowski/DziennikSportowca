@@ -9,6 +9,11 @@ namespace DziennikSportowca.Models
 {
     public class TrainingPlanExercise
     {
+        public TrainingPlanExercise()
+        {
+            Results = new List<UserTrainingExerciseResult>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -19,6 +24,8 @@ namespace DziennikSportowca.Models
         public int TrainingPlanId { get; set; }
         [ForeignKey("TrainingPlanId")]
         public virtual TrainingPlan TrainingPlan { get; set; }
+
+        public virtual List<UserTrainingExerciseResult> Results { get; set; }
 
         public int SeriesNo { get; set; }
         public int RepsNo { get; set; }

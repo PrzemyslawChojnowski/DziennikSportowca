@@ -1,4 +1,14 @@
+@using System.Linq;
 @model IEnumerable<DziennikSportowca.Models.UserFigure>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script>
+<script type="text/javascript" src="~/js/chartjs-plugin-datalabels.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
+<script type="text/javascript" src="~/js/UserFigure/DrawChart.js"></script>
+@*<script type="text/javascript" src="~/js/chartjs-plugin-zoom.js"></script>*@
 
 @{
     ViewData["Title"] = "Index";
@@ -9,6 +19,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<input type="hidden" id="userId" value="@Model.ElementAt(0).UserId" />
+
 <table class="table">
     <thead>
         <tr>
@@ -87,3 +100,5 @@
 }
     </tbody>
 </table>
+
+<canvas id="myChart" style="height:80vh; width:80vw; margin:0 auto"></canvas>

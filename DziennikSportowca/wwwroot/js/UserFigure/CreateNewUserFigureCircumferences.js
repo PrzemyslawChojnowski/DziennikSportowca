@@ -8,7 +8,7 @@ $(document).ready(function () {
         autoclose: true,
         calendarWeeks: true,
         clearBtn: true,
-        format: "mm/dd/yyyy",
+        format: "dd/mm/yyyy",
         language: "pl",
         todayBtn: "linked",
         todayHighlight: true

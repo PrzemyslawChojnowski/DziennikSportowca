@@ -10,7 +10,7 @@ namespace DziennikSportowca.Models.ViewModels
     {
         public Gender Gender { get; set; }
 
-        public double Weight { get; set; }
+        public double? Weight { get; set; }
 
 
     }

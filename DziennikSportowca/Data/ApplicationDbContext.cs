@@ -61,6 +61,32 @@ namespace DziennikSportowca.Data
                 .WithMany(d => d.FoodProducts)
                 .HasForeignKey(d => d.DishId);
 
+            builder.Entity<UserFriend>()
+                .HasKey(u => new { u.UserId, u.FriendId });
+
+            builder.Entity<UserFriend>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserFriends)
+                .HasForeignKey(x => x.UserId);
+
+            builder.Entity<UserFriend>()
+                .HasOne(x => x.Friend)
+                .WithMany(x => x.Users)
+                .HasForeignKey(x => x.FriendId);
+
+            builder.Entity<UserTrainingExerciseResult>()
+                .HasKey(x => new { x.UserTrainingId, x.TrainingPlanExerciseId });
+
+            builder.Entity<UserTrainingExerciseResult>()
+                .HasOne(x => x.TrainingPlanExercise)
+                .WithMany(x => x.Results)
+                .HasForeignKey(x => x.TrainingPlanExerciseId);
+
+            builder.Entity<UserTrainingExerciseResult>()
+                .HasOne(x => x.UserTraining)
+                .WithMany(x => x.UserTrainingsExercisesResults)
+                .HasForeignKey(x => x.UserTrainingId);
+
             builder.Entity<TrainingPlan>().ToTable("TrainingPlan");
             builder.Entity<Exercise>().ToTable("Exercise");
             builder.Entity<TrainingPlanExercise>().ToTable("TrainingPlanExercise");
@@ -71,6 +97,10 @@ namespace DziennikSportowca.Data
             builder.Entity<DishFoodProduct>().ToTable("DishFoodProduct");
             builder.Entity<UserFigure>().ToTable("UserFigure");
             builder.Entity<Photo>().ToTable("Photo");
+            builder.Entity<UserFriend>().ToTable("UserFriend");
+            builder.Entity<UserTraining>().ToTable("UserTraining");
+            builder.Entity<UserTrainingExerciseResult>().ToTable("UserTrainingExerciseResult");
+
         }
 
         public DbSet<Exercise> Exercises { get; set; }
@@ -84,5 +114,8 @@ namespace DziennikSportowca.Data
         public DbSet<UserFigure> UserFigure { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<UserFriend> UsersFriends { get; set; }
+        public DbSet<UserTraining> UserTrainings { get; set; }
+        public DbSet<UserTrainingExerciseResult> UserTrainingExercisesResults { get; set; }
     }
 }
