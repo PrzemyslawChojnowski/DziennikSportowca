@@ -41,6 +41,15 @@ textarea {
     width: 100%;
 }
 
+.container-fluid{
+    padding-left: 20px;
+    padding-right: 40px;
+}
+
+.navbar {
+    background-color: #222D32;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */

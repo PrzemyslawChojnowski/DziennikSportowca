@@ -39,12 +39,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Strona domowa</a></li>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Index">Moje plany</a></li>
                         <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Moje posilki</a></li>
                         <li><a asp-area="" asp-controller="UserFigures" asp-action="Index">Moje pomiary</a></li>
+                        <li><a asp-area="" asp-controller="UserTrainings" asp-action="Index">Moje treningi</a></li>
                     }
                     <li><a asp-area="" asp-controller="Home" asp-action="About">O aplikacji</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>

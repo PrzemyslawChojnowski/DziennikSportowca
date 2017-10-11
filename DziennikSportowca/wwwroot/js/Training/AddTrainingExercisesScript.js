@@ -157,7 +157,7 @@ $(function () {
     $("#AddExercises").click(function () {
         var trainingPlanExercises = {};
         var id = $('#Id').val();
-        console.log(id);
+        //console.log(id);
         trainingPlanExercises.jsonData = JSON.stringify(exercises);
         trainingPlanExercises.id = id;
        

@@ -1,37 +1,133 @@
-﻿@{
+﻿@model DziennikSportowca.Models.ViewModels.ContactViewModel
+
+@{
     ViewData["Title"] = "Contact";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
 
-<div id="contact" class="container">
-    <h3 class="text-center">Contact</h3>
-    <p class="text-center"><em>We love our fans!</em></p>
+<link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Teko:400,700" rel="stylesheet">
 
-    <div class="row">
-        <div class="col-md-4">
-            <p>Fan? Drop a note.</p>
-            <p><span class="glyphicon glyphicon-map-marker"></span>Chicago, US</p>
-            <p><span class="glyphicon glyphicon-phone"></span>Phone: +00 1515151515</p>
-            <p><span class="glyphicon glyphicon-envelope"></span>Email: mail@mail.com</p>
-        </div>
-        <div class="col-md-8">
-            <div class="row">
-                <div class="col-sm-6 form-group">
-                    <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+<style>
+    .content-header {
+        font-family: 'Oleo Script', cursive;
+        color: #fcc500;
+        font-size: 45px;
+    }
+
+    .section-content {
+        text-align: center;
+    }
+
+    .container{
+        width: 100vw;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    body {
+        background: #3a6186; /* fallback for old browsers */
+        background: -webkit-linear-gradient(to left, #3a6186, #89253e); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to left, #3a6186, #89253e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        color: #fff;
+    }
+
+    #contact {
+        font-family: 'Teko', sans-serif;
+        padding-top: 60px;
+        width: 100%;        
+    }
+
+    .contact-section {
+        padding-top: 40px;
+    }
+
+    .form-line {
+        border-right: 1px solid #B29999;
+    }
+
+    hr {
+        border-color: #B29999;
+    }
+
+    .form-group {
+        margin-top: 10px;
+    }
+
+    label {
+        font-size: 1.3em;
+        line-height: 1em;
+        font-weight: normal;
+    }
+
+    .form-control {
+        font-size: 1.3em;
+        color: #080808;
+    }
+
+    textarea.form-control {
+        height: 135px;
+    }
+
+    .submit {
+        font-size: 1.1em;
+        float: left;
+        width: 150px;
+        background-color: transparent;
+        color: #fff;
+    }
+
+    .column-right {
+        float: left;
+        width: 25vw;
+    }
+
+    .column-left {
+        float:right;
+        width: 25vw;
+    }
+
+    i{
+        padding-right:6px;
+    }
+</style>
+
+<section id="contact">
+    <div class="section-content">
+        <h1 class="section-header">Skontaktuj Sie <span class="content-header wow fadeIn " data-wow-delay="0.2s" data-wow-duration="2s"> Z Nami!</span></h1>
+        <h3>Jezeli masz jakis problem - nie krepuj sie i napisz do nas wiadomosc!</h3>
+    </div>
+    <div class="contact-section">
+        <div class="container">
+            <form asp-action="Contact">
+                <div class="col-md-6">
+                    <div class="column-left">
+                        <div class="form-group">
+                            <label asp-for="@Model.Name"></label>
+                            <input asp-for="@Model.Name" type="text" class="form-control" id="" placeholder="Wpisz imie" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Email"></label>
+                            <input asp-for="@Model.Email" type="email" class="form-control" id="exampleInputEmail" placeholder="Wpisz adres e-mail" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.PhoneNumber"></label>
+                            <input asp-for="@Model.PhoneNumber" type="tel" class="form-control" id="telephone" placeholder="Wpisz numer telefonu" />
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-6 form-group">
-                    <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+                <div id="line"></div>
+                <div class="col-md-6">
+                    <div class="column-right">
+                        <div class="form-group">
+                            <label asp-for="@Model.Message"></label>
+                            <textarea asp-for="@Model.Message" class="form-control" id="description" placeholder="Wpisz swoja wiadomosc"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" value="Send" class="btn btn-default submit"><i class="fa fa-paper-plane" aria-hidden="true"></i>Wyslij wiadomosc</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea>
-            <br>
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    <button class="btn pull-right" type="submit">Send</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
-    <br>
-</div>
+</section>

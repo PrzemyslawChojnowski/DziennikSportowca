@@ -75,7 +75,7 @@ namespace DziennikSportowca.Data
                 .HasForeignKey(x => x.FriendId);
 
             builder.Entity<UserTrainingExerciseResult>()
-                .HasKey(x => new { x.UserTrainingId, x.TrainingPlanExerciseId });
+                .HasKey(x => new { x.Id });
 
             builder.Entity<UserTrainingExerciseResult>()
                 .HasOne(x => x.TrainingPlanExercise)
@@ -100,6 +100,7 @@ namespace DziennikSportowca.Data
             builder.Entity<UserFriend>().ToTable("UserFriend");
             builder.Entity<UserTraining>().ToTable("UserTraining");
             builder.Entity<UserTrainingExerciseResult>().ToTable("UserTrainingExerciseResult");
+            builder.Entity<ExerciseWeight>().ToTable("ExerciseWeight");
 
         }
 
@@ -117,5 +118,6 @@ namespace DziennikSportowca.Data
         public DbSet<UserFriend> UsersFriends { get; set; }
         public DbSet<UserTraining> UserTrainings { get; set; }
         public DbSet<UserTrainingExerciseResult> UserTrainingExercisesResults { get; set; }
+        public DbSet<ExerciseWeight> ExercisesWeights { get; set; }
     }
 }

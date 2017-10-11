@@ -116,6 +116,22 @@ namespace DziennikSportowca.Data.Migrations
                     b.ToTable("Exercise");
                 });
 
+            modelBuilder.Entity("DziennikSportowca.Models.ExerciseWeight", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("UserTrainingExerciseResultId");
+
+                    b.Property<double>("Weight");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserTrainingExerciseResultId");
+
+                    b.ToTable("ExerciseWeight");
+                });
+
             modelBuilder.Entity("DziennikSportowca.Models.FoodProduct", b =>
                 {
                     b.Property<int>("Id")
@@ -271,7 +287,9 @@ namespace DziennikSportowca.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("TrainingDate");
+                    b.Property<DateTime>("EndDateTime");
+
+                    b.Property<DateTime>("StartDateTime");
 
                     b.Property<int>("TrainingId");
 
@@ -284,17 +302,22 @@ namespace DziennikSportowca.Data.Migrations
 
             modelBuilder.Entity("DziennikSportowca.Models.UserTrainingExerciseResult", b =>
                 {
-                    b.Property<int>("UserTrainingId");
-
-                    b.Property<int>("TrainingPlanExerciseId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("RepsNo");
 
                     b.Property<int>("SeriesNo");
 
-                    b.HasKey("UserTrainingId", "TrainingPlanExerciseId");
+                    b.Property<int>("TrainingPlanExerciseId");
+
+                    b.Property<int>("UserTrainingId");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("TrainingPlanExerciseId");
+
+                    b.HasIndex("UserTrainingId");
 
                     b.ToTable("UserTrainingExerciseResult");
                 });
@@ -423,6 +446,14 @@ namespace DziennikSportowca.Data.Migrations
                     b.HasOne("DziennikSportowca.Models.FoodProduct", "FoodProduct")
                         .WithMany("Dishes")
                         .HasForeignKey("FoodProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.ExerciseWeight", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.UserTrainingExerciseResult", "UserTrainingExerciseResult")
+                        .WithMany("Weights")
+                        .HasForeignKey("UserTrainingExerciseResultId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

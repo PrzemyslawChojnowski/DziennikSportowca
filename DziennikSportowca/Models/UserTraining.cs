@@ -19,7 +19,8 @@ namespace DziennikSportowca.Models
         [ForeignKey("TrainingId")]
         public TrainingPlan Training { get; set; }
 
-        public DateTime TrainingDate { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
 
         public virtual List<UserTrainingExerciseResult> UserTrainingsExercisesResults { get; set; }
     }
