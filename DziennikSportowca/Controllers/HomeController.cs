@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using DziennikSportowca.Models;
-using System.Net.
+using System.Net.Mail;
+using System.Net;
 
 namespace DziennikSportowca.Controllers
 {
@@ -54,16 +55,16 @@ namespace DziennikSportowca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Contact([Bind("Name,Email,PhoneNumber,Message")] ContactViewModel model)
         {
-            //SmtpClient client = new SmtpClient("mysmtpserver");
-            //client.UseDefaultCredentials = false;
-            //client.Credentials = new NetworkCredential("username", "password");
+            SmtpClient client = new SmtpClient("mysmtpserver");
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential("username", "password");
 
-            //MailMessage mailMessage = new MailMessage();
-            //mailMessage.From = new MailAddress("whoever@me.com");
-            //mailMessage.To.Add("receiver@me.com");
-            //mailMessage.Body = "body";
-            //mailMessage.Subject = "subject";
-            //client.Send(mailMessage);
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("whoever@me.com");
+            mailMessage.To.Add("receiver@me.com");
+            mailMessage.Body = "body";
+            mailMessage.Subject = "subject";
+            client.Send(mailMessage);
 
             return RedirectToAction("Contact", "Twoja wiadomość została wysłana");
         }

@@ -1,4 +1,6 @@
-﻿using DziennikSportowca.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using DziennikSportowca.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +10,14 @@ namespace DziennikSportowca.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(ApplicationDbContext context)
+        public static void Initialize(IServiceProvider serviceProvider)
         {
-            if(!context.MuscleParts.Any())
+            using (var context = new ApplicationDbContext(serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
-                MusclePart[] muscleParts = new MusclePart[]
+                if (!context.MuscleParts.Any())
                 {
+                    MusclePart[] muscleParts = new MusclePart[]
+                    {
                     new MusclePart { Description = "Barki"},
                     new MusclePart { Description = "Klatka piersiowa"},
                     new MusclePart { Description = "Plecy"},
@@ -22,15 +26,15 @@ namespace DziennikSportowca.Data
                     new MusclePart { Description = "Brzuch"},
                     new MusclePart { Description = "Uda i pośladki"},
                     new MusclePart { Description = "Łydki"}
-                };
-                context.MuscleParts.AddRange(muscleParts);
-                context.SaveChanges();
-            }
+                    };
+                    context.MuscleParts.AddRange(muscleParts);
+                    context.SaveChanges();
+                }
 
-            if(!context.Exercises.Any())
-            {
-                Exercise[] exercises = new Exercise[]
+                if (!context.Exercises.Any())
                 {
+                    Exercise[] exercises = new Exercise[]
+                    {
                     new Exercise{Name = "Wyciskanie sztangi sprzed głowy"},
                     new Exercise{Name = "Wyciskanie sztangi zza głowy"},
                     new Exercise{Name = "Wyciskanie hantli"},
@@ -102,15 +106,15 @@ namespace DziennikSportowca.Data
                     new Exercise{Name = "Pompki w podporze tyłem"},
                     new Exercise{Name = "Prostowanie ramienia podchwytem na wyciągu stojąc"},
                     new Exercise{Name = "Wyciskanie w leżeniu na ławce poziomej wąskim uchwytem"}
-                };
-                context.Exercises.AddRange(exercises);
-                context.SaveChanges();
-            }      
-            
-            if(!context.MusclePartExercises.Any())
-            {
-                MusclePartExercise[] musclePartExercises = new MusclePartExercise[]
+                    };
+                    context.Exercises.AddRange(exercises);
+                    context.SaveChanges();
+                }
+
+                if (!context.MusclePartExercises.Any())
                 {
+                    MusclePartExercise[] musclePartExercises = new MusclePartExercise[]
+                    {
                     new MusclePartExercise{MuscePartId = 1, ExerciseId = 1},
                     new MusclePartExercise{MuscePartId = 1, ExerciseId = 51},
                     new MusclePartExercise{MuscePartId = 1, ExerciseId = 50},
@@ -140,9 +144,10 @@ namespace DziennikSportowca.Data
                     new MusclePartExercise{MuscePartId = 2, ExerciseId = 63},
                     new MusclePartExercise{MuscePartId = 2, ExerciseId = 61},
                     new MusclePartExercise{MuscePartId = 2, ExerciseId = 60}
-                };
-                context.MusclePartExercises.AddRange(musclePartExercises);
-                context.SaveChanges();
+                    };
+                    context.MusclePartExercises.AddRange(musclePartExercises);
+                    context.SaveChanges();
+                }
             }
         }
     }

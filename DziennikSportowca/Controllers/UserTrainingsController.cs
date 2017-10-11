@@ -21,7 +21,7 @@ namespace DziennikSportowca.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _manager;
 
-        
+
         public UserTrainingsController(ApplicationDbContext context, UserManager<ApplicationUser> manager)
         {
             _context = context;
@@ -199,17 +199,17 @@ namespace DziennikSportowca.Controllers
             DateTime localStartDateTime = ((DateTime)JsonConvert.DeserializeObject(startDate)).ToLocalTime();
             DateTime localEndDateTime = ((DateTime)JsonConvert.DeserializeObject(endDate)).ToLocalTime();
 
-            var deserializedJsonData = JsonConvert.DeserializeAnonymousType(jsonString, 
+            var deserializedJsonData = JsonConvert.DeserializeAnonymousType(jsonString,
                 new[] {
                     new { Exercise = "",
                         SeriesNo = 0,
                         RepsNo = 0,
                         Weight = new List<double>() }
                 }.ToList());
-           
+
             TrainingPlan tp = await _context.TrainingPlans.FirstOrDefaultAsync(x => x.Id == id);
 
-            if(tp == null)
+            if (tp == null)
             {
                 return NotFound();
             }
@@ -229,7 +229,7 @@ namespace DziennikSportowca.Controllers
                 TrainingPlanExercise tpExercise = await _context.TrainingPlanExercises.FirstOrDefaultAsync
                     (x => x.TrainingPlanId == tp.Id);
 
-                if(tpExercise == null)
+                if (tpExercise == null)
                 {
                     return NotFound();
                 }
@@ -254,7 +254,7 @@ namespace DziennikSportowca.Controllers
                         UserTrainingExerciseResultId = result.Id,
                         Weight = weightResult
                     };
-                    weights.Add(weight);                   
+                    weights.Add(weight);
                 }
 
                 _context.ExercisesWeights.AddRange(weights);

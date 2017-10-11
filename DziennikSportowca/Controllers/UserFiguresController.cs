@@ -34,7 +34,7 @@ namespace DziennikSportowca.Controllers
         }
 
         public async Task<IActionResult> Calculators()
-        {            
+        {
             CalculatorsViewModel model = new CalculatorsViewModel();
             if (User.Identity.IsAuthenticated)
             {
@@ -76,7 +76,7 @@ namespace DziennikSportowca.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,ShouldersCircumference,ChestCircumference,WaistCircumference,BicepsCircumference,TricepsCircumference,ThighCircumference,HipCircumference,Weight,BodyFat")] UserFigure userFigure, 
+        public async Task<IActionResult> Create([Bind("Id,Date,ShouldersCircumference,ChestCircumference,WaistCircumference,BicepsCircumference,TricepsCircumference,ThighCircumference,HipCircumference,Weight,BodyFat")] UserFigure userFigure,
             List<IFormFile> files)
         {
             if (ModelState.IsValid)
@@ -198,13 +198,13 @@ namespace DziennikSportowca.Controllers
 
         public async Task<string> GetUserCircumferences(string id)
         {
-            if(String.IsNullOrEmpty(id))
+            if (String.IsNullOrEmpty(id))
             {
                 return null;
             }
 
             var circumferences = await _context.UserFigure.Where(x => x.UserId == id).OrderBy(x => x.Date).ToListAsync();
-            string json = await JsonConvert.SerializeObjectAsync(circumferences);
+            string json = JsonConvert.SerializeObject(circumferences);
             return json;
         }
     }
