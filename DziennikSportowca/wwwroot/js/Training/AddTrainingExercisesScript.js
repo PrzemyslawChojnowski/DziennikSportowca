@@ -51,7 +51,6 @@
     tmp.each(function () {
         exercises.repsNo.push(this.innerHTML);
     });
-    console.log(exercises);
 });
 
 var exercises = {};
@@ -124,13 +123,12 @@ function newElement() {
         .val('Wybierz cwiczenie')
         ;
     $("#SeriesNo").val('');
-    $("#RepsNo").val(''); console.log(exercises); 
+    $("#RepsNo").val('');
 }
 
 $(function () {
     $("table#ExercisesTable").on("click", ".remove", function () {
         var a = $(this).closest('tr').find('.ExerciseNo').html();
-        console.log(exercises);
         exercises.exercise.splice(a - 1, 1);
         exercises.seriesNo.splice(a - 1, 1);
         exercises.repsNo.splice(a - 1, 1);
@@ -157,7 +155,6 @@ $(function () {
     $("#AddExercises").click(function () {
         var trainingPlanExercises = {};
         var id = $('#Id').val();
-        //console.log(id);
         trainingPlanExercises.jsonData = JSON.stringify(exercises);
         trainingPlanExercises.id = id;
        

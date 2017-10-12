@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" />
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
+<script type="text/javascript" src="~/js/UserTrainings/DoTheWorkout.js"></script>
 
 <h2>DoTheWorkout</h2>
 <input type="hidden" asp-for="TrainingPlan.Id" id="Id" readonly/>
@@ -31,19 +32,6 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(".date").datetimepicker({
-        format: "dd/mm/yyyy - hh:ii",
-        language: "pl",
-        autoclose: true,
-        calendarWeeks: true,
-        todayHighlight: true,
-        todayBtn: "linked",
-        minuteStep: 1,
-        fontAwesome: true
-    });
-</script>
 
 <div class="form-horizontal">
     <table class="table table-hover" id="WorkoutTable">
@@ -83,77 +71,21 @@
         </tbody>
     </table>
 </div>
-<button type="button" class="btn btn-default" id="Save" value="@Model.TrainingPlan.Id">Left</button>
-
-<script type="text/javascript">
-    $('#Save').click(function () {
-        var data = [];
-        data.Exercise = {};
-        var exercises = $('#WorkoutTable > tbody > tr > td.Exercise');
-        var series = $('#WorkoutTable > tbody > tr > td.SeriesNo');
-        var reps = $('#WorkoutTable > tbody > tr > td.RepsNo');
-        var weights = $('#WorkoutTable > tbody > tr > td.Weight > input');
-        var i = 0;
-        var k = 0;
-        exercises.each(function () {
-            var item = {};
-            item["Exercise"] = this.innerHTML;
-            item["SeriesNo"] = parseInt(series[i].innerHTML);
-            item["RepsNo"] = parseInt(reps[i].innerHTML);
-            item["Weight"] = [];
-            var tmp = parseInt(series[i].innerHTML);
-            for (var j = k; j < k + tmp; j++) {
-                item["Weight"].push(parseFloat(weights[j].value));
-            }
-            k += tmp;
-            i++;
-            data.push(item);
-        });
-
-        var trainingResults = {};
-        trainingResults.jsonString = JSON.stringify(data);
-        trainingResults.id = $('#Id').val();
-        trainingResults.startDate = JSON.stringify(createDate($('#startDate').find('input').val()));
-        trainingResults.endDate = JSON.stringify(createDate($('#endDate').find('input').val()));
-
-        $.ajax({
-            url: '../SaveTrainingResults',
-            type: 'POST',
-            data: trainingResults,
-            async: true,
-            success: function (obj) {
-                console.log("Hello");
-                swal({
-                    title: "Powodzenie",
-                    text: "Twój trening zosta³ zapisany pomyœlnie.",
-                    type: "success",
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "OK!",
-                    closeOnConfirm: true,
-                    html: false
-                }, function () {
-                    window.location.href = '/UserTrainings/Index'
-                });
-            },
-            error: function (obj) {
-                swal("Niepowodzenie", "Napotkano nieoczekiwany b³¹d. Spróbuj ponownie.", "error");
-            }
-
-        })
-    });
-
-    function createDate(dateString)
-    {
-        var day = dateString.substr(0, 2);
-        var month = parseInt(dateString.substr(3, 2)) - 1;
-        var year = dateString.substr(6, 4);
-        var hour = dateString.substr(13, 2);
-        var minutes = dateString.substr(16, 2);
-
-        return (new Date(year, month, day, hour, minutes));
-    }
-</script>
+<button type="button" class="btn btn-default" id="Save" value="@Model.TrainingPlan.Id">Zapisz trening</button>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script type="text/javascript">
+    $(".date").datetimepicker({
+        format: "dd/mm/yyyy - hh:ii",
+        language: "pl",
+        autoclose: true,
+        calendarWeeks: true,
+        todayHighlight: true,
+        todayBtn: "linked",
+        minuteStep: 1,
+        fontAwesome: true
+    });
+</script>

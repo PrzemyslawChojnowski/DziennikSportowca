@@ -13,16 +13,22 @@
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="Id" />
         <dt>
-            @Html.DisplayNameFor(model => model.TrainingDate)
+            @Html.DisplayNameFor(model => model.StartDateTime)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.TrainingDate)
+            @Html.DisplayFor(model => model.StartDateTime)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Training)
+            @Html.DisplayNameFor(model => model.EndDateTime)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Training.Id)
+            @Html.DisplayFor(model => model.EndDateTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Training.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Training.Description)
         </dd>
     </dl>
     

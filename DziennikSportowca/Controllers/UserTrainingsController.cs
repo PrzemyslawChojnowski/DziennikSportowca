@@ -86,54 +86,73 @@ namespace DziennikSportowca.Controllers
         // GET: UserTrainings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var loggedUserId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
 
-            var userTraining = await _context.UserTrainings.SingleOrDefaultAsync(m => m.Id == id);
-            if (userTraining == null)
-            {
+            var selectedTraining = await _context.UserTrainings.Where(x => x.Id == id)
+                                    .Include(x => x.Training)
+                                        .ThenInclude(x => x.Exercises)
+                                    .Include(x => x.UserTrainingsExercisesResults)
+                                        .ThenInclude(x => x.TrainingPlanExercise)
+                                        .ThenInclude(x => x.Exercise)
+                                        .ThenInclude(x => x.MuscleParts).ThenInclude(x => x.MusclePart)
+                                    .Include(x => x.UserTrainingsExercisesResults)
+                                        .ThenInclude(x => x.Weights)
+                                    .FirstOrDefaultAsync(x => x.Training.UserId == loggedUserId);
+
+            if (selectedTraining == null)
                 return NotFound();
-            }
-            ViewData["TrainingId"] = new SelectList(_context.TrainingPlans, "Id", "Id", userTraining.TrainingId);
-            return View(userTraining);
+
+            return View(selectedTraining);
         }
 
         // POST: UserTrainings/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TrainingId,TrainingDate")] UserTraining userTraining)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string jsonString, int id, string startDate, string endDate)
         {
-            if (id != userTraining.Id)
+            DateTime localStartDateTime = ((DateTime)JsonConvert.DeserializeObject(startDate)).ToLocalTime();
+            DateTime localEndDateTime = ((DateTime)JsonConvert.DeserializeObject(endDate)).ToLocalTime();
+
+            var deserializedJsonData = JsonConvert.DeserializeAnonymousType(jsonString,
+                new[] {
+                    new { Exercise = "",
+                        SeriesNo = 0,
+                        RepsNo = 0,
+                        Weight = new List<double>() }
+                }.ToList());
+
+            if(!_context.UserTrainings.Any(x => x.Id == id))
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            UserTraining userTraining = await _context.UserTrainings.FirstOrDefaultAsync(x => x.Id == id);
+            userTraining.UserTrainingsExercisesResults = await _context.UserTrainingExercisesResults
+                                                        .Where(x => x.UserTrainingId == id)
+                                                        .Include(x => x.Weights)
+                                                        .Include(x => x.TrainingPlanExercise)
+                                                            .ThenInclude(x => x.Exercise)
+                                                        .ToListAsync();
+
+            userTraining.StartDateTime = localStartDateTime;
+            userTraining.EndDateTime = localEndDateTime;
+            int i = 0;
+            foreach(var exercise in deserializedJsonData)
             {
-                try
-                {
-                    _context.Update(userTraining);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserTrainingExists(userTraining.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
+                var index = userTraining.UserTrainingsExercisesResults.FindIndex(x => exercise.Exercise == x.TrainingPlanExercise.Exercise.Name);
+                userTraining.UserTrainingsExercisesResults.ElementAt(index).TrainingPlanExercise.RepsNo = exercise.RepsNo;
+                userTraining.UserTrainingsExercisesResults.ElementAt(index).TrainingPlanExercise.SeriesNo = exercise.SeriesNo;
+                for (int j = 0; j < exercise.Weight.Count; j++)
+                    userTraining.UserTrainingsExercisesResults.ElementAt(index).Weights[j].Weight = exercise.Weight[j];
+                i++;
             }
-            ViewData["TrainingId"] = new SelectList(_context.TrainingPlans, "Id", "Id", userTraining.TrainingId);
-            return View(userTraining);
+
+            _context.UserTrainings.Update(userTraining);
+            _context.SaveChanges();
+
+            return new EmptyResult();
         }
 
         // GET: UserTrainings/Delete/5
@@ -160,8 +179,27 @@ namespace DziennikSportowca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userTraining = await _context.UserTrainings.SingleOrDefaultAsync(m => m.Id == id);
-            _context.UserTrainings.Remove(userTraining);
+            var loggedUserId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
+
+            var selectedTraining = await _context.UserTrainings.Where(x => x.Id == id)
+                                    .Include(x => x.Training)
+                                        .ThenInclude(x => x.Exercises)
+                                    .Include(x => x.UserTrainingsExercisesResults)
+                                        .ThenInclude(x => x.TrainingPlanExercise)
+                                        .ThenInclude(x => x.Exercise)
+                                        .ThenInclude(x => x.MuscleParts).ThenInclude(x => x.MusclePart)
+                                    .Include(x => x.UserTrainingsExercisesResults)
+                                        .ThenInclude(x => x.Weights)
+                                    .FirstOrDefaultAsync(x => x.Training.UserId == loggedUserId);
+
+            if (selectedTraining == null)
+                return NotFound();
+
+            foreach (var result in selectedTraining.UserTrainingsExercisesResults)
+                _context.ExercisesWeights.RemoveRange(result.Weights);
+            _context.UserTrainingExercisesResults.RemoveRange(selectedTraining.UserTrainingsExercisesResults);
+            _context.UserTrainings.Remove(selectedTraining);
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
@@ -227,7 +265,8 @@ namespace DziennikSportowca.Controllers
             foreach (var exercise in deserializedJsonData)
             {
                 TrainingPlanExercise tpExercise = await _context.TrainingPlanExercises.FirstOrDefaultAsync
-                    (x => x.TrainingPlanId == tp.Id);
+                    (x => x.TrainingPlanId == tp.Id && x.Exercise.Name == exercise.Exercise);
+                tpExercise.Exercise = await _context.Exercises.FirstOrDefaultAsync(x => x.Id == tpExercise.ExerciseId);
 
                 if (tpExercise == null)
                 {

@@ -220,7 +220,8 @@ namespace DziennikSportowca.Models
                     TrainingPlanId = id,
                     TrainingPlan = plan,
                     SeriesNo = result.seriesNo[i],
-                    RepsNo = result.repsNo[i]
+                    RepsNo = result.repsNo[i],
+                    Index = result.rowNo[i]
                 };
 
                 tpExercises.Remove(tmp);
