@@ -1,5 +1,6 @@
 @using System.Linq;
 @model IEnumerable<DziennikSportowca.Models.UserFigure>
+@inject UserManager<ApplicationUser> _manager
 
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
@@ -20,7 +21,14 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-<input type="hidden" id="userId" value="@Model.ElementAt(0).UserId" />
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        var userId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
+        <input type="hidden" id="userId" value="@userId" />
+    }
+}
+
 
 <table class="table">
     <thead>

@@ -1,4 +1,6 @@
-﻿using DziennikSportowca.Models.ViewModels;
+﻿using Microsoft.EntityFrameworkCore;
+using DziennikSportowca.Data;
+using DziennikSportowca.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +20,13 @@ namespace DziennikSportowca.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private IConfiguration _configuration { get; set; }
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public HomeController(UserManager<ApplicationUser> userManager, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -101,6 +105,24 @@ namespace DziennikSportowca.Controllers
             }
 
             return RedirectToAction("Contact", new { message = "Twoja wiadomość została wysłana" });
+        }
+
+        public async Task<IActionResult> Search(string key)
+        {
+            SearchViewModel model = new SearchViewModel();
+
+            if (!String.IsNullOrEmpty(key))
+            {
+                
+                model.Key = key;
+                model.Exercises = await _context.Exercises.Where(x => x.Name.Contains(key)).ToListAsync();
+                model.MuscleParts = await _context.MuscleParts.Where(x => x.Description.Contains(key)).ToListAsync();
+                model.TrainingPlans = await _context.TrainingPlans.Where(x => x.Description.Contains(key)).ToListAsync();
+                model.Users = await _context.ApplicationUser
+                          .Where(x => x.UserName.Contains(key) || x.Surname.Contains(key) || x.Name.Contains(key) || x.Email.Contains(key)).ToListAsync();
+   
+            }
+            return View(model);
         }
 
         public IActionResult Error()

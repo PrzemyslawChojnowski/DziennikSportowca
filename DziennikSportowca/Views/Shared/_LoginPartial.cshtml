@@ -3,32 +3,123 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
 
 @if (SignInManager.IsSignedIn(User))
 {
     var user = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
-    var userName = user.Name;
-    //var base64 = Convert.ToBase64String(user.ProfilePicture);
-    //var profilePicture = String.Format("data:image/gif;base64,{0}", base64);
+    var userName = user.Name + " " + user.Surname;
+    String profilePicture = "";
+
+    if (user.ProfilePicture != null)
+    {
+        var base64 = Convert.ToBase64String(user.ProfilePicture);
+        profilePicture = String.Format("data:image/gif;base64,{0}", base64);
+    }
 
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">
-                Hello @userName!
-                @*<img src="@profilePicture" alt="." style="height:50px; width:50px; max-height:100px; max-width:200px;" />*@
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <strong>@user.Name</strong>
+                    <span class="glyphicon glyphicon-chevron-down"></span>
                 </a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+                <ul style="background-color:white;" class="dropdown-menu">
+                    <li>
+                        <div class="navbar-login">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <p class="text-center">
+                                        @{
+                                            if (!String.IsNullOrEmpty(profilePicture))
+                                            {
+                                                <img src="@profilePicture" alt="." style="height:90px; width:90px; max-height:100px; max-width:200px;" />
+                                            }
+
+                                            else
+                                            {
+                                                <span class="glyphicon glyphicon-user icon-size"></span>
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-lg-8">
+                                    <p class="text-left"><strong>@userName</strong></p>
+                                    <p class="text-left small">@user.Email</p>
+                                    <p class="text-left">
+                                        <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage" class="btn btn-primary btn-block btn-sm">
+                                            Edytuj profil
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="navbar-login navbar-login-session">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p>
+                                        <button type="submit" class="btn btn-danger btn-block">Wyloguj sie</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </li>
         </ul>
     </form>
+
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-        <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
-    </ul>
+    <p class="text-center" id="center"><a href="#" class="btn btn-success" role="button" data-toggle="modal" data-target="#login-modal">Login/Register</a></p>
+    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" align="center">
+                </div>
+                <div id="div-forms">
+                    @await Html.PartialAsync("_LoginFormPartial", new LoginViewModel())
+                    @await Html.PartialAsync("_RegisterFormPartial", new RegisterViewModel())    
+                    @await Html.PartialAsync("_ForgotPasswordFormPartial", new ForgotPasswordViewModel())
+                </div>
+            </div>
+        </div>
+    </div>
 }
+
+<script type="text/javascript">
+    $(function () {
+
+        var $formLogin = $('#login-form');
+        var $formLost = $('#lost-form');
+        var $formRegister = $('#register-form');
+        var $divForms = $('#div-forms');
+        var $modalAnimateTime = 300;
+        var $msgAnimateTime = 150;
+        var $msgShowTime = 2000;
+
+        $('#login_register_btn').click(function () { modalAnimate($formLogin, $formRegister) });
+        $('#register_login_btn').click(function () { modalAnimate($formRegister, $formLogin); });
+        $('#login_lost_btn').click(function () { modalAnimate($formLogin, $formLost); });
+        $('#lost_login_btn').click(function () { modalAnimate($formLost, $formLogin); });
+        $('#lost_register_btn').click(function () { modalAnimate($formLost, $formRegister); });
+        $('#register_lost_btn').click(function () { modalAnimate($formRegister, $formLost); });
+
+        function modalAnimate($oldForm, $newForm) {
+            var $oldH = $oldForm.height();
+            var $newH = $newForm.height();
+            $divForms.css("height", $oldH);
+            $oldForm.fadeToggle($modalAnimateTime, function () {
+                $divForms.animate({ height: $newH }, $modalAnimateTime, function () {
+                    $newForm.fadeToggle($modalAnimateTime);
+                });
+            });
+        }
+    });
+</script>
+

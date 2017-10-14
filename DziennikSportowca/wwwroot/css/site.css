@@ -1,7 +1,74 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. MODAL - POCZĄTEK.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
+
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+/** {
+    font-family: 'Roboto', sans-serif;
+}*/
+
+input::-webkit-calendar-picker-indicator {
+    display: none;
 }
+
+input[type="date"]::-webkit-input-placeholder {
+    visibility: hidden !important;
+}
+
+#login-modal {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+#login-modal .modal-dialog {
+    width: 350px;
+}
+
+.modal-backdrop.in {
+    filter: alpha(opacity=50);
+    opacity: .8;
+}
+
+.modal-content {
+    background-color: #ececec;
+    border: 1px solid #bdc3c7;
+    border-radius: 0px;
+    outline: 0;
+}
+
+.modal-header {
+    min-height: 16.43px;
+    padding: 15px 15px 15px 15px;
+    border-bottom: 0px;
+}
+
+.modal-body {
+    position: relative;
+    padding: 5px 15px 5px 15px;
+}
+
+.modal-footer {
+    padding: 15px 15px 15px 15px;
+    text-align: left;
+    border-top: 0px;
+}
+
+.btn {
+    border-radius: 0px;
+}
+
+.form-control {
+    border-radius: 0px;
+}
+
+@media (min-width: 768px) {
+    #center {
+        margin: 10px 0 10px 0;
+        float: right
+    }
+}
+
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. MODAL - KONIEC.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -57,3 +124,186 @@ textarea {
         display: none;
     }
 }
+
+/*.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.; KLASA DO LOGO APLIKACJI ;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.*/
+/*.navbar-brand {
+    width: 70px;
+    height: 50px;
+    background: url('http://www.sneaker-mission.com/uploads/3/1/2/7/31279819/5617441.png') no-repeat center center;
+    background-size: 50px;
+    padding-top: 7px;
+}*/
+/*.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.; KLASA DO LOGO APLIKACJI ;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.;.*/
+
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. BELKA NAWIGACYJNA - POCZĄTEK.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
+.navbar-login {
+    width: 305px;
+    padding: 10px;
+    padding-bottom: 0px;
+    padding-right:30px;
+}
+
+.navbar-default {
+    background-color: #f8f8f8;
+    border-color: #f8f8f8;
+}
+
+.navbar {
+    border: none;
+}
+
+.navbar-login-session {
+    padding: 10px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    padding-right:30px;
+}
+
+.icon-size {
+    font-size: 87px;
+}
+
+.navbar-nav {
+    padding-left: 15px;
+}
+
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #222D32;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: white;
+    background-color: #428bca;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0px;
+    margin: 2px 0px 0px;
+    font-size: 14px;
+    list-style: none;
+    background-color: white;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.14902);
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px;
+}
+
+@media (min-width: 768px) {
+    .navbar-right {
+        float: right !important;
+        margin-right: 0px;
+    }
+}
+
+
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. BELKA NAWIGACYJNA - KONIEC.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
+
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. MEGA-DROPDOWN - KONIEC.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
+.navbar-nav > li > .dropdown-menu {
+    margin-top: 20px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.navbar-default .navbar-nav > li > #mega {
+    width: 90px;
+}
+
+.mega-dropdown {
+    position: static !important;
+}
+
+.mega-dropdown-menu {
+    padding: 20px 0px;
+    width: 100%;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.mega-dropdown-menu:before {
+    content: "";
+    border-bottom: 15px solid #fff;
+    border-right: 17px solid transparent;
+    border-left: 17px solid transparent;
+    position: absolute;
+    top: -15px;
+    left: 560px;
+    z-index: 10;
+}
+
+.mega-dropdown-menu:after {
+    content: "";
+    border-bottom: 17px solid #ccc;
+    border-right: 19px solid transparent;
+    border-left: 19px solid transparent;
+    position: absolute;
+    top: -17px;
+    left: 558px;
+    z-index: 8;
+}
+
+.mega-dropdown-menu > li > ul {
+    padding: 0;
+    margin: 0;
+}
+
+.mega-dropdown-menu > li > ul > li {
+    list-style: none;
+}
+
+.mega-dropdown-menu > li > ul > li > a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #999;
+    white-space: normal;
+}
+
+.mega-dropdown-menu > li ul > li > a:hover,
+.mega-dropdown-menu > li ul > li > a:focus {
+    text-decoration: none;
+    color: #444;
+    background-color: #f5f5f5;
+}
+
+.mega-dropdown-menu .dropdown-header {
+    color: #428bca;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.mega-dropdown-menu form {
+    margin: 3px 20px;
+}
+
+.mega-dropdown-menu .form-group {
+    margin-bottom: 3px;
+}
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. MEGA-DROPDOWN - KONIEC.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
