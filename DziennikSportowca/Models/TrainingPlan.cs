@@ -26,6 +26,9 @@ namespace DziennikSportowca.Models
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
 
+        [Display(Name = "Data utworzenia")]
+        public DateTime CreationDate { get; set; }
+
         public virtual List<TrainingPlanExercise> Exercises { get; set; }
         public virtual List<UserTraining> UserTrainings { get; set; }
     }

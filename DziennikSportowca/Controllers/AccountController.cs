@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -120,11 +121,15 @@ namespace DziennikSportowca.Controllers
                     Surname = model.Surname,
                     Gender = model.Gender
                 };
-                using (var memoryStream = new MemoryStream())
+                if (model.ProfilePicture != null)
                 {
-                    await model.ProfilePicture.CopyToAsync(memoryStream);
-                    user.ProfilePicture = memoryStream.ToArray();
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await model.ProfilePicture.CopyToAsync(memoryStream);
+                        user.ProfilePicture = memoryStream.ToArray();
+                    }
                 }
+                else user.ProfilePicture = null;
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -456,6 +461,59 @@ namespace DziennikSportowca.Controllers
             }
         }
 
+        public async Task<IActionResult> EditProfile(string id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            EditProfileViewModel model = new EditProfileViewModel()
+            {
+                Id = user.Id,
+                ActualUserName = user.Name,
+                ActualUserSurname = user.Surname,
+                ActualUserProfilePicture = user.ProfilePicture
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(string id, [Bind("Id,NewUserName,NewUserSurname,NewProfilePicture")] EditProfileViewModel model)
+        {
+            if (id != model.Id)
+                return NotFound();
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    if (model.NewUserName != null) 
+                        user.Name = model.NewUserName;
+                    if (model.NewUserSurname != null) 
+                        user.Surname = model.NewUserSurname;
+                    if (model.NewProfilePicture != null)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await model.NewProfilePicture.CopyToAsync(memoryStream);
+                            user.ProfilePicture = memoryStream.ToArray();
+                        }
+                    }
+                    await _userManager.UpdateAsync(user);
+                }
+                catch
+                {
+                    return View(model);
+                }
+            }
+
+            return RedirectToAction("EditProfile", new { id = id });
+        }
 
 
         //

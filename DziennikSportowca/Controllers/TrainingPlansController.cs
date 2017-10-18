@@ -28,7 +28,8 @@ namespace DziennikSportowca.Models
         public async Task<IActionResult> Index()
         {
             var loggedUser = _manager.GetUserId(User);
-            var applicationDbContext = _context.TrainingPlans.Where(t => t.UserId == loggedUser).Include(t => t.User);
+            var applicationDbContext = _context.TrainingPlans.Where(t => t.UserId == loggedUser).Include(t => t.User).Include(x => x.UserTrainings);
+            
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -68,6 +69,7 @@ namespace DziennikSportowca.Models
             {
                 var loggedUser = _manager.GetUserId(User);
                 trainingPlan.UserId = loggedUser;
+                trainingPlan.CreationDate = DateTime.Now;
                 _context.Add(trainingPlan);
                 await _context.SaveChangesAsync();
                 var id = trainingPlan.Id;

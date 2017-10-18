@@ -9,7 +9,7 @@
 }
 
 .container {
-    width: 100vw;
+    /*width: 100vw;*/
     padding-left: 0px;
     padding-right: 0px;
 }
@@ -78,4 +78,8 @@ input,
 select,
 textarea {
     max-width: 100%;
+}
+
+footer{
+    color:white;
 }

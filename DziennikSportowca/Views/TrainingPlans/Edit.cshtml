@@ -4,7 +4,12 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Plany Treningowe</a></li>
+        <li class="active"><span>Edycja planu</span></li>
+    </ol>
+</div>
 
 <form asp-action="Edit">
     <div class="form-horizontal">

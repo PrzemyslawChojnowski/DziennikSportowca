@@ -4,7 +4,12 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Moje Pomiary</a></li>
+        <li class="active"><span>Szczegó³y pomiaru</span></li>
+    </ol>
+</div>
 
 <div>
     <h4>UserFigure</h4>
@@ -74,15 +79,18 @@
         {
             <dd>
                 <div id="nanogallery2" data-nanogallery2='{
-                    "thumbnailHeight": 100,
-                    "thumbnailWidth": 100
-                }'>
+                    "thumbnailWidth": "200",
+                    "thumbnailDisplayTransition": "randomScale",
+                    "thumbnailDisplayTransitionDuration": 1500,
+                    "thumbnailHoverEffect2": "image_rotateZ_0deg_5deg_400|image_scale_1_1.3_400",
+                    "thumbnailAlignment": "center"
+                    }'>
                     @{ foreach (var photo in Model.Photos)
                         {
                             var base64 = Convert.ToBase64String(photo.PhotoContent);
                             var picture = String.Format("data:image/jpeg;base64,{0}", base64);
 
-                            <a href=@picture data-ngThumb=@picture> Title</a>
+                            <a href=@picture data-ngThumb=@picture class="figurePicture"> Title</a>
                         }
                     }
                 </div>

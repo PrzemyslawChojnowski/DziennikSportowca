@@ -205,6 +205,8 @@ namespace DziennikSportowca.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreationDate");
+
                     b.Property<string>("Description");
 
                     b.Property<string>("UserId");

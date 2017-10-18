@@ -4,7 +4,12 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Plany Treningowe</a></li>
+        <li class="active"><span>Tworzenie planu</span></li>
+    </ol>
+</div>
 
 <form asp-action="Create" >
     <div class="form-horizontal">           

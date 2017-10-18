@@ -12,7 +12,12 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
 <script type="text/javascript" src="~/js/UserTrainings/DoTheWorkout.js"></script>
 
-<h2>Edit</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Moje Treningi</a></li>
+        <li class="active"><span>Edycja treningu</span></li>
+    </ol>
+</div>
 
 <input type="hidden" asp-for="@Model.Id" id="Id" readonly />
 <div class="form-group">

@@ -4,7 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li class="active"><span>Plany Treningowe</span></li>
+    </ol>
+</div>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,11 +16,17 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th>
+                Liczba wykonanych treningów
+            </th>
+            <th>
+                Data ostatniego treningu
             </th>
             <th></th>
         </tr>
@@ -28,7 +38,23 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
+                @{ var date = item.CreationDate.ToString("dd/MM/yyyy"); }
+                @Html.DisplayFor(modelItem => date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserTrainings.Count)
+            </td>
+            <td>
+                @{ 
+                    var lastTraining = item.UserTrainings.OrderBy(x => x.EndDateTime).FirstOrDefault();
+                    string lastTrainingDate = "Nie wykonano ¿adnego treningu";
+                    if (lastTraining != null)
+                    {
+                        lastTrainingDate = lastTraining.EndDateTime.ToString("dd/MM/yyyy");
+                    }
+
+                }
+                @Html.DisplayFor(modelItem => lastTrainingDate)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

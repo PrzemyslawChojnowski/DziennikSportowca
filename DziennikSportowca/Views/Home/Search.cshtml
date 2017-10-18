@@ -1,10 +1,19 @@
 ﻿@model DziennikSportowca.Models.ViewModels.SearchViewModel
+@inject DziennikSportowca.Data.ApplicationDbContext context
+@inject UserManager<ApplicationUser> userManager
 
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
 
 @{
     ViewData["Title"] = "Search";
 }
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Home</a></li>
+        <li class="active"><span>Wyszukiwanie</span></li>
+    </ol>
+</div>
 
 <h2>Wyniki wyszukiwania</h2>
 <h4><strong> Wyszukiwana fraza: </strong><i>@Html.DisplayFor(x => x.Key)</i></h4>
@@ -164,7 +173,33 @@
                         @Html.DisplayFor(x => item.Email)
                     </div>
                 </td>
-                
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        <div class="table-row">
+                            @{
+                            
+                                var loggedUserId = userManager.GetUserId(User);
+                                if (!context.UsersFriends.Where(x => (x.FriendId == item.Id && x.UserId == loggedUserId) ||
+                                    (x.FriendId == loggedUserId && x.UserId == item.Id)).Any()
+                                    && item.Id != loggedUserId)
+                                {
+                                    <a asp-action="SendInvitationToFriendship" asp-controller="ApplicationUsers" asp-route-id="@item.Id" class="btn btn-default">Zaproś do znajomych</a>
+                                }
+                                else if (context.UsersFriends.Where(x => (x.FriendId == item.Id && x.UserId == loggedUserId && x.FriendshipStatus == FriendshipStatus.Friends)
+                                         || (x.FriendId == loggedUserId && x.UserId == item.Id && x.FriendshipStatus == FriendshipStatus.Friends)).Any())
+                                {
+                                    <p>Nawiązano znajomość</p>
+                                }
+                                else if (context.UsersFriends.Where(x => (x.FriendId == item.Id && x.UserId == loggedUserId && x.FriendshipStatus == FriendshipStatus.InvitationSent)
+                                        || (x.FriendId == loggedUserId && x.UserId == item.Id && x.FriendshipStatus == FriendshipStatus.InvitationSent)).Any())
+                                {
+                                    <p>Wysłano zaproszenie</p>
+                                }
+                            }
+                        </div>
+                    </td> 
+                }
             </tr>
         }
     </tbody>

@@ -11,7 +11,13 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
 <script type="text/javascript" src="~/js/UserTrainings/DoTheWorkout.js"></script>
 
-<h2>DoTheWorkout</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Moje Treningi</a></li>
+        <li class="active"><span>Wykonywanie treningu</span></li>
+    </ol>
+</div>
+
 <input type="hidden" asp-for="TrainingPlan.Id" id="Id" readonly/>
 <div class="form-group">
     <label asp-for="@Model.StartTime" class="col-md-2 control-label"></label>

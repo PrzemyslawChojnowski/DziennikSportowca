@@ -1,7 +1,12 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Home</a></li>
+        <li class="active"><span>O aplikacji</span></li>
+    </ol>
+</div>
 
 <p>Use this area to provide additional information.</p>
