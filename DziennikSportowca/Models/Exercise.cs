@@ -24,5 +24,9 @@ namespace DziennikSportowca.Models
 
         public virtual List<TrainingPlanExercise> TrainingPlans { get; set; }
         public virtual List<MusclePartExercise> MuscleParts { get; set; }
+
+        public int ActivityTypeId { get; set; }
+        [ForeignKey("ActivityTypeId")]
+        public ActivityType ActivityType { get; set; }
     }
 }

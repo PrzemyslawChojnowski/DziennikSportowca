@@ -17,6 +17,7 @@ namespace DziennikSportowca.Models.ViewModels
         }
 
         public string Key { get; set; }
+        public string Type { get; set; }
         [Display(Name = "Użytkownicy")]
         public List<ApplicationUser> Users { get; set; }
         [Display(Name = "Ćwiczenia")]
@@ -25,6 +26,8 @@ namespace DziennikSportowca.Models.ViewModels
         public List<MusclePart> MuscleParts { get; set; }
         [Display(Name = "Plany treningowe")]
         public List<TrainingPlan> TrainingPlans { get; set; }
+        [Display(Name = "Wartości odżywcze")]
+        public List<FoodProduct> FoodProducts { get; set; }
 
     }
 }

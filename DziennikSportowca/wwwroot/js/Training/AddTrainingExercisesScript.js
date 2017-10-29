@@ -1,13 +1,10 @@
 ﻿$(document).ready(function () {
+    $("#Exercises").selectpicker('hide');
+    $("#MusclePartName").selectpicker('hide');
+
     $('#MusclePartName').change(function () {
         
-        $('#Exercises')
-            .find('option')
-            .remove()
-            .end()
-            .append('<option value="Wybierz cwiczenie">Wybierz cwiczenie</option>')
-            .val('Wybierz cwiczenie')
-            ;
+        $("#Exercises").selectpicker('show');
 
         var musclePartName = $('#MusclePartName').find(":selected").text();
         var muscle = {};
@@ -24,11 +21,23 @@
                         text: value
                     }));
                 });
+                $('#Exercises').selectpicker('refresh');
             },
             error: function (obj) {
                 swal("Niepowodzenie", "Napotkano nieoczekiwany błąd. Spróbuj ponownie.", "error");
             }
         });
+    });
+
+    $('#Exercises').change(function () {
+        if ($("#ActivityType").val() === "Ćwiczenia siłowe") {
+            if ($("#SeriesNo").hasClass('hidden')) {
+                $("#SeriesNo").removeClass('hidden');
+            }
+            if ($("#RepsNo").hasClass('hidden')) {
+                $("#RepsNo").removeClass('hidden');
+            }
+        }
     });
 
     var tmp = $('#ExercisesTable > tbody > tr > td.ExerciseNo')
@@ -181,4 +190,51 @@ $(function () {
             }
         });
     })
+})
+
+$(function () {
+    $("#ActivityType").change(function () {
+        $('#Exercises')
+            .find('option')
+            .remove()
+            .end();
+
+        var activityType = $('#ActivityType').find(":selected").text();
+        if (activityType === "Ćwiczenia wytrzymałościowe" || activityType === "Sporty grupowe") {
+            $("#MusclePartName").selectpicker('hide');
+            $("#Exercises").selectpicker('show');
+
+            if (!$("#SeriesNo").hasClass('hidden')) {
+                $("#SeriesNo").addClass('hidden');
+            }
+            if (!$("#RepsNo").hasClass('hidden')) {
+                $("#RepsNo").addClass('hidden');
+            }
+            
+            var data = {};
+            data.activityType = activityType;
+            $.ajax({
+                url: '../getExercises',
+                type: 'GET',
+                data: data,
+                async: false,
+                success: function (obj) {
+                    $.each(obj, function (key, value) {
+                        $('#Exercises').append($("<option/>", {
+                            value: key,
+                            text: value
+                        }));
+                    });
+                    $('#Exercises').selectpicker('refresh');
+                },
+                error: function (obj) {
+                    swal("Niepowodzenie", "Napotkano nieoczekiwany błąd. Spróbuj ponownie.", "error");
+                }
+            });
+        }
+        else if (activityType === "Ćwiczenia siłowe") {
+            $("#MusclePartName").selectpicker('show');
+            $("#Exercises").selectpicker('hide');
+        }
+    });
 })

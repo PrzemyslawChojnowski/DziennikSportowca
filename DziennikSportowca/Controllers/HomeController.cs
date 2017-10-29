@@ -41,13 +41,16 @@ namespace DziennikSportowca.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Contact(string infoMessage, string name, string phoneNumber, string email, string message)
+        public async Task<IActionResult> Contact(string infoMessage, string success, string name, string phoneNumber, string email, string message)
         {
             ContactViewModel model = new ContactViewModel();
             ViewData["InfoMessage"] = "";
+            ViewData["Success"] = "";
 
             if (!String.IsNullOrEmpty(infoMessage))
                 ViewData["InfoMessage"] = infoMessage;
+            if (!String.IsNullOrEmpty(success))
+                ViewData["Success"] = success;
             
             if(!String.IsNullOrEmpty(name) || !String.IsNullOrEmpty(phoneNumber) || !String.IsNullOrEmpty(email) || !String.IsNullOrEmpty(message))
             {
@@ -84,7 +87,7 @@ namespace DziennikSportowca.Controllers
                 msg.To.Add(_configuration["MyEmail"]);
                 msg.IsBodyHtml = true;
                 client.Host = "smtp.gmail.com";
-                NetworkCredential basicAuthenticationInfo = new NetworkCredential(_configuration["MyEmai"], _configuration["MyPassword"]);
+                NetworkCredential basicAuthenticationInfo = new NetworkCredential(_configuration["MyEmail"], _configuration["MyPassword"]);
                 client.Port = int.Parse("587");
                 client.EnableSsl = true;
                 client.UseDefaultCredentials = false;
@@ -97,6 +100,7 @@ namespace DziennikSportowca.Controllers
                 return RedirectToAction("Contact", new
                 {
                     infoMessage = "Niestety, ale Twoja wiadomość nie została wysłana. \nProsimy, abyś ponowił próbę.",
+                    success = "Failure",
                     name = model.Name,
                     phoneNumber = model.PhoneNumber,
                     email = model.Email,
@@ -104,23 +108,60 @@ namespace DziennikSportowca.Controllers
                 });
             }
 
-            return RedirectToAction("Contact", new { message = "Twoja wiadomość została wysłana" });
+            return RedirectToAction("Contact", new { infoMessage = "Twoja wiadomość została wysłana", success = "Success" });
         }
 
-        public async Task<IActionResult> Search(string key)
+        public async Task<IActionResult> Search(string key, string type)
         {
             SearchViewModel model = new SearchViewModel();
 
             if (!String.IsNullOrEmpty(key))
             {
-                
                 model.Key = key;
-                model.Exercises = await _context.Exercises.Where(x => x.Name.Contains(key)).ToListAsync();
-                model.MuscleParts = await _context.MuscleParts.Where(x => x.Description.Contains(key)).ToListAsync();
-                model.TrainingPlans = await _context.TrainingPlans.Where(x => x.Description.Contains(key)).ToListAsync();
-                model.Users = await _context.ApplicationUser
-                          .Where(x => x.UserName.Contains(key) || x.Surname.Contains(key) || x.Name.Contains(key) || x.Email.Contains(key)).ToListAsync();
-   
+
+                if (!String.IsNullOrEmpty(type))
+                {
+                    model.Type = type;
+                    switch(type)
+                    {
+                        case "Exercises":
+                            model.Exercises = await _context.Exercises.Where(x => x.Name.Contains(key)).ToListAsync();
+                            break;
+                        case "MuscleParts":
+                            model.MuscleParts = await _context.MuscleParts.Where(x => x.Description.Contains(key)).ToListAsync();
+                            break;
+                        case "TrainingPlans":
+                            model.TrainingPlans = await _context.TrainingPlans.Where(x => x.Description.Contains(key)).ToListAsync();
+                            break;
+                        case "Users":
+                            model.Users = await _context.ApplicationUser
+                                .Where(x => x.UserName.Contains(key) || x.Surname.Contains(key) || x.Name.Contains(key) || x.Email.Contains(key)).ToListAsync();
+                            break;
+                        case "FoodProducts":
+                            model.FoodProducts = await _context.FoodProducts.Include(x => x.Type).Where(x => x.Description.Contains(key) ||
+                                x.Type.Description.Contains(key)).ToListAsync();
+                            break;
+                        default:
+                            model.Exercises = await _context.Exercises.Where(x => x.Name.Contains(key)).ToListAsync();
+                            model.MuscleParts = await _context.MuscleParts.Where(x => x.Description.Contains(key)).ToListAsync();
+                            model.TrainingPlans = await _context.TrainingPlans.Where(x => x.Description.Contains(key)).ToListAsync();
+                            model.Users = await _context.ApplicationUser
+                                .Where(x => x.UserName.Contains(key) || x.Surname.Contains(key) || x.Name.Contains(key) || x.Email.Contains(key)).ToListAsync();
+                            model.FoodProducts = await _context.FoodProducts.Include(x => x.Type).Where(x => x.Description.Contains(key) ||
+                                x.Type.Description.Contains(key)).ToListAsync();
+                            break;
+                    }
+                }
+                else
+                {
+                    model.Exercises = await _context.Exercises.Where(x => x.Name.Contains(key)).ToListAsync();
+                    model.MuscleParts = await _context.MuscleParts.Where(x => x.Description.Contains(key)).ToListAsync();
+                    model.TrainingPlans = await _context.TrainingPlans.Where(x => x.Description.Contains(key)).ToListAsync();
+                    model.Users = await _context.ApplicationUser
+                        .Where(x => x.UserName.Contains(key) || x.Surname.Contains(key) || x.Name.Contains(key) || x.Email.Contains(key)).ToListAsync();
+                    model.FoodProducts = await _context.FoodProducts.Include(x => x.Type).Where(x => x.Description.Contains(key) ||
+                        x.Type.Description.Contains(key)).ToListAsync();
+                }   
             }
             return View(model);
         }

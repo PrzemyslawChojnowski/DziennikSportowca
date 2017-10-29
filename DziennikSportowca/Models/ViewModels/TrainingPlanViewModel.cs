@@ -13,5 +13,8 @@ namespace DziennikSportowca.Models.ViewModels
 
         [Display(Name = "Partia mięśniowa")]
         public SelectList MuscleParts { get; set; }
+
+        [Display(Name = "Rodzaj aktywności")]
+        public SelectList ActivityTypes { get; set; }
     }
 }

@@ -21,6 +21,18 @@ namespace DziennikSportowca.Data.Migrations
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DziennikSportowca.Models.ActivityType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivityType");
+                });
+
             modelBuilder.Entity("DziennikSportowca.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -102,6 +114,8 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<int>("FoodProductId");
 
+                    b.Property<double>("FoodProductWeight");
+
                     b.HasKey("DishId", "FoodProductId");
 
                     b.HasIndex("FoodProductId");
@@ -114,9 +128,13 @@ namespace DziennikSportowca.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("ActivityTypeId");
+
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivityTypeId");
 
                     b.ToTable("Exercise");
                 });
@@ -154,9 +172,25 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<double>("Protein");
 
+                    b.Property<int?>("TypeId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("TypeId");
+
                     b.ToTable("FoodProduct");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.FoodProductType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FoodProductType");
                 });
 
             modelBuilder.Entity("DziennikSportowca.Models.MusclePart", b =>
@@ -459,12 +493,27 @@ namespace DziennikSportowca.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("DziennikSportowca.Models.Exercise", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.ActivityType", "ActivityType")
+                        .WithMany("Exercises")
+                        .HasForeignKey("ActivityTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("DziennikSportowca.Models.ExerciseWeight", b =>
                 {
                     b.HasOne("DziennikSportowca.Models.UserTrainingExerciseResult", "UserTrainingExerciseResult")
                         .WithMany("Weights")
                         .HasForeignKey("UserTrainingExerciseResultId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.FoodProduct", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.FoodProductType", "Type")
+                        .WithMany("FoodProducts")
+                        .HasForeignKey("TypeId");
                 });
 
             modelBuilder.Entity("DziennikSportowca.Models.MusclePartExercise", b =>

@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
+using DziennikSportowca.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +16,12 @@ namespace DziennikSportowca.Controllers
     public class DishesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _manager;
 
-        public DishesController(ApplicationDbContext context)
+        public DishesController(ApplicationDbContext context, UserManager<ApplicationUser> manager)
         {
-            _context = context;    
+            _context = context;
+            _manager = manager;
         }
 
         // GET: Dishes
@@ -46,23 +51,65 @@ namespace DziennikSportowca.Controllers
         // GET: Dishes/Create
         public IActionResult Create()
         {
-            return View();
+            DishViewModel model = new DishViewModel();
+            model.FoodProductType = new SelectList(_context.FoodProductsTypes.Select(x => x.Description));
+            
+            return View(model);
         }
 
         // POST: Dishes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description")] Dish dish)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(string jsonData, string dishName)
         {
-            if (ModelState.IsValid)
+            if (String.IsNullOrEmpty(jsonData) || String.IsNullOrEmpty(dishName))
+                return NotFound();
+
+            ApplicationUser user = await _manager.GetUserAsync(User);
+            
+            var dishProducts = JsonConvert.DeserializeAnonymousType(jsonData,
+                new[] {
+                    new { foodType = "",
+                        name = "",
+                        weight = (double)0,
+                        protein = (double)0,
+                        carbohydrates = (double)0,
+                        fat = (double)0,
+                        kcal = (double)0 
+                    }
+                }.ToList());
+
+            Dish dish = new Dish()
             {
-                _context.Add(dish);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                Description = dishName,
+                UserId = user.Id,
+                User = user
+            };
+
+            _context.Dishes.Add(dish);
+            await _context.SaveChangesAsync();
+
+            foreach(var element in dishProducts)
+            {
+                FoodProduct product = await _context.FoodProducts.FirstOrDefaultAsync(x => x.Description == element.name && 
+                                                                                        x.Type.Description == element.foodType);
+
+                DishFoodProduct dishProduct = new DishFoodProduct()
+                {
+                    FoodProduct = product,
+                    FoodProductId = product.Id,
+                    Dish = dish,
+                    DishId = dish.Id,
+                    FoodProductWeight = element.weight
+                };
+
+                _context.DishFoodProducts.Add(dishProduct);
             }
-            return View(dish);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         // GET: Dishes/Edit/5
@@ -148,6 +195,35 @@ namespace DziennikSportowca.Controllers
         private bool DishExists(int id)
         {
             return _context.Dishes.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> NutritionFacts (string type)
+        {
+            List<FoodProduct> nutritionFacts = await _context.FoodProducts.Include(x => x.Type).OrderBy(x => x.Type).ToListAsync();
+            SelectList types = new SelectList(await _context.FoodProductsTypes.Select(x => x.Description).ToListAsync());
+
+            if (!String.IsNullOrEmpty(type))
+                nutritionFacts = nutritionFacts.Where(x => x.Type.Description == type).ToList();
+
+            NutritionFactsViewModel model = new NutritionFactsViewModel()
+            {
+                FoodProducts = nutritionFacts,
+                FoodProductTypes = types
+            };
+
+            return View(model);
+        }
+
+        public JsonResult GetProducts (string foodType)
+        {
+            List<string> foodProducts = _context.FoodProducts.Where(x => x.Type.Description == foodType).Select(x => x.Description).ToList();
+            return Json(foodProducts);
+        }
+
+        public JsonResult GetNutritionFacts (string foodProduct)
+        {
+            var nutritionFacts = _context.FoodProducts.FirstOrDefault(x => x.Description == foodProduct);
+            return Json(nutritionFacts);
         }
     }
 }

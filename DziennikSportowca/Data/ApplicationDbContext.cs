@@ -101,6 +101,8 @@ namespace DziennikSportowca.Data
             builder.Entity<UserTraining>().ToTable("UserTraining");
             builder.Entity<UserTrainingExerciseResult>().ToTable("UserTrainingExerciseResult");
             builder.Entity<ExerciseWeight>().ToTable("ExerciseWeight");
+            builder.Entity<FoodProductType>().ToTable("FoodProductType");
+            builder.Entity<ActivityType>().ToTable("ActivityType");
 
         }
 
@@ -119,5 +121,7 @@ namespace DziennikSportowca.Data
         public DbSet<UserTraining> UserTrainings { get; set; }
         public DbSet<UserTrainingExerciseResult> UserTrainingExercisesResults { get; set; }
         public DbSet<ExerciseWeight> ExercisesWeights { get; set; }
+        public DbSet<FoodProductType> FoodProductsTypes { get; set; }
+        public DbSet<ActivityType> ActivityTypes { get; set; }
     }
 }

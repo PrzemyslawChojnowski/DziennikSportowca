@@ -1,4 +1,4 @@
-@model IEnumerable<DziennikSportowca.Models.TrainingPlan>
+ï»¿@model IEnumerable<DziennikSportowca.Models.TrainingPlan>
 
 @{
     ViewData["Title"] = "Index";
@@ -23,7 +23,7 @@
                 @Html.DisplayNameFor(model => model.CreationDate)
             </th>
             <th>
-                Liczba wykonanych treningów
+                Liczba wykonanych treningÃ³w
             </th>
             <th>
                 Data ostatniego treningu
@@ -47,7 +47,7 @@
             <td>
                 @{ 
                     var lastTraining = item.UserTrainings.OrderBy(x => x.EndDateTime).FirstOrDefault();
-                    string lastTrainingDate = "Nie wykonano ¿adnego treningu";
+                    string lastTrainingDate = "Nie wykonano Å¼adnego treningu";
                     if (lastTraining != null)
                     {
                         lastTrainingDate = lastTraining.EndDateTime.ToString("dd/MM/yyyy");

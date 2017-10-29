@@ -24,6 +24,12 @@
     </environment>
 </head>
 <body>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -80,21 +86,25 @@
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Moje Plany</li>
-                                    <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Index">Przegladaj</a></li>
+                                    <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Index">Przeglądaj</a></li>
                                     <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Create">Dodaj nowy</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Moje Treningi</li>
-                                    <li><a asp-area="" asp-controller="UserTrainings" asp-action="Index">Przegladaj</a></li>
+                                    <li><a asp-area="" asp-controller="UserTrainings" asp-action="Index">Przeglądaj</a></li>
                                     <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Index">Wykonaj trening</a></li>
                                 </ul>
                             </li>
                             <li class="col-sm-3">
                                 <ul>
                                     <li class="dropdown-header">Moje pomiary</li>
-                                    <li><a asp-area="" asp-controller="UserFigures" asp-action="Index">Przegladaj</a></li>
+                                    <li><a asp-area="" asp-controller="UserFigures" asp-action="Index">Przeglądaj</a></li>
                                     <li><a asp-area="" asp-controller="UserFigures" asp-action="Create">Wykonaj nowy pomiar</a></li>
                                     <li><a asp-area="" asp-controller="UserFigures" asp-action="Calculators">Kalkulatory</a></li>
                                     <li class="divider"></li>
+                                    <li class="dropdown-header">Moje Posiłki</li>
+                                    <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Przeglądaj</a></li>
+                                    <li><a asp-area="" asp-controller="Dishes" asp-action="Create">Utwórz posiłek</a></li>
+                                    <li><a asp-area="" asp-controller="Dishes" asp-action="NutritionFacts">Sprawdź wartości odżywcze</a></li>
                                 </ul>
                             </li>
                             <li class="col-sm-3">
@@ -110,7 +120,18 @@
                                             <label class="sr-only">Wpisz szukana fraze</label>
                                             <input type="text" class="form-control" id="key" name="key" placeholder="Szukaj">
                                         </div>
-                                        <input type="submit" class="btn btn-primary btn-block" value="Szukaj"/>
+                                        <div class="form-group">
+                                            <label class="sr-only">Wybierz zakres poszukiwań</label>
+                                            <select name="type" class="form-control">
+                                                <option value="All">Wszystkie</option>
+                                                <option value="Exercises">Ćwiczenia</option>
+                                                <option value="MuscleParts">Partie mięśniowe</option>
+                                                <option value="TrainingPlans">Plany treningowe</option>
+                                                <option value="Users">Użytkownicy</option>
+                                                <option value="FoodProducts">Żywność</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="box bar btn btn-primary btn-block" value="Szukaj">Szukaj</button>
                                     </form>
                                 </ul>
                             </li>

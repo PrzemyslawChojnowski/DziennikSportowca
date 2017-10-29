@@ -1,32 +1,333 @@
-@model DziennikSportowca.Models.Dish
+﻿@model DziennikSportowca.Models.ViewModels.DishViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+@section Scripts{ 
+    <script src="~/lib/bootstrap-select-1.13.0-alpha/bootstrap-select-1.13.0-alpha/js/bootstrap-select.js" type="text/javascript"></script>
+    <link href="~/lib/bootstrap-select-1.13.0-alpha/bootstrap-select-1.13.0-alpha/css/bootstrap-select.css" rel="stylesheet" />
+}
 
-<form asp-action="Create">
-    <div class="form-horizontal">
-        <h4>Dish</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Posiłki</a></li>
+        <li class="active"><span>Tworzenie posiłku</span></li>
+    </ol>
+</div>
+
+<div class="form-horizontal">
+    <input type="text" id="DishName" placeholder="Nazwa posiłku" />
+    <div class="form-inline">
+        <div class="form-inline">
+            <select class="selectpicker" id="FoodProductType" data-live-search="true" title="Wybierz typ produktu" asp-items="Model.FoodProductType">
+            </select>
+
+            <select class="selectpicker" id="FoodProduct" data-live-search="true" title="Wybierz produkt"></select>
+
+            <input type="number" class="form-control" placeholder="Masa produktu" id="Weight" min="0"/>
+
+            <button class="btn btn-default" id="Create">Dodaj</button>
+
         </div>
     </div>
-</form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <table class="table table-hover" id="DishesTable">
+        <thead>
+            <tr>
+                <th>Lp.</th>
+                <th>Typ produktu</th>
+                <th>Produkt</th>
+                <th>Masa produktu</th>               
+                <th>Białko</th>
+                <th>Węglowodany</th>
+                <th>Tłuszcz</th>
+                <th>kcal</th>
+                <th>Usuń</th>
+            </tr>
+        </thead>
+        <tbody id="DishesBody">
+            @{ int i = 1;
+                if (Model.Dish != null && Model.Dish.FoodProducts.Any())
+                {
+                    foreach (var data in Model.Dish.FoodProducts)
+                    {
+                        <tr>
+                            <td class="FoodProductNo">@i</td>
+                            <td class="ProductType">@data.FoodProduct.Type.Description</td>
+                            <td class="ProductName">@data.FoodProduct.Description</td>
+                            <td class="ProductWeight">waga</td>
+                            <td class="Proteins">@data.FoodProduct.Protein</td>
+                            <td class="Carbohydrates">@data.FoodProduct.Carbohydrate</td>
+                            <td class="Fat">@data.FoodProduct.Fat</td>
+                            <td class="Energy">@data.FoodProduct.Energy</td>
+                            <td>
+                                <span class="btn btn-default btn-sm remove">
+                                    <span class="glyphicon glyphicon-trash" id="Delete"></span>
+                                </span>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            }            
+        </tbody>
+        <tbody id="TotalNutritions">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="TotalWeight"></td>
+                <td class="TotalProteins"></td>
+                <td class="TotalCarbs"></td>
+                <td class="TotalFat"></td>
+                <td class="TotalEnergy"></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-default" id="CreateDish">Utwórz posiłek</button>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var dish = [];
+        var totalWeight = 0;
+        var totalProteins = 0;
+        var totalCarbs = 0;
+        var totalFat = 0;
+        var totalEnergy = 0;
+
+        $('#FoodProductType').change(function () {
+            $('#FoodProduct')
+                .find('option')
+                .remove()
+                .end()
+            
+            var selectedFoodType = $(this).find(':selected').text();
+            var type = {};
+            type.foodType = selectedFoodType;
+            
+            $.ajax({
+                url: 'GetProducts',
+                type: 'GET',
+                async: false,
+                data: type,
+                success: function(obj){
+                    $.each(obj, function (key, value) {
+                        $('#FoodProduct').append($("<option/>", {
+                            value: key,
+                            text: value
+                        }));
+                        $('#FoodProduct').selectpicker('refresh');
+                    });
+                },
+                error: function (obj) {
+                    swal("Niepowodzenie", "Napotkano nieoczekiwany błąd. Spróbuj ponownie.", "error");
+                }                
+            });
+        });
+
+        $('#Create').click(function () {
+            if (!$('#Weight').val() || $('#FoodProduct').val() === '' || !$('#FoodProductType').val()) { 
+                swal("Uwaga!", "Uzupełnij wszystkie pola.", "warning");
+            }
+            else {
+                var data = {};
+                data.foodProduct = $('#FoodProduct option:selected').text();
+                var nutritionFacts;
+
+                $.ajax({
+                    url: 'GetNutritionFacts',
+                    type: 'GET',
+                    async: false,
+                    data: data,
+                    success: function (obj) {
+                        nutritionFacts = obj;
+                    },
+                    error: function (obj) {
+                        swal("Niepowodzenie", "Napotkano nieoczekiwany błąd. Spróbuj ponownie.", "error");
+                    }
+                });
+
+                var index = document.getElementById("DishesTable").rows.length - 1;
+                var type = $('#FoodProductType option:selected').text();
+                var name = data.foodProduct;
+                var weightOfProduct = parseFloat($('#Weight').val());
+                var proteins = parseFloat((nutritionFacts.protein * weightOfProduct / 100).toFixed(2));
+                var carbs = parseFloat((nutritionFacts.carbohydrate * weightOfProduct / 100).toFixed(2));
+                var fats = parseFloat((nutritionFacts.fat * weightOfProduct / 100).toFixed(2));
+                var energy = parseFloat((nutritionFacts.energy * weightOfProduct / 100).toFixed(2));
+
+                var tr = document.createElement("tr");
+
+                var lp = document.createElement("td");
+                lp.className = "FoodProductNo";
+                lp.innerHTML = index;
+                tr.appendChild(lp);
+
+                var productType = document.createElement("td");
+                productType.className = "ProductType";
+                productType.innerHTML = type;
+                tr.appendChild(productType);
+
+                var productName = document.createElement("td");
+                productName.className = "ProductName";
+                productName.innerHTML = name;
+                tr.appendChild(productName);
+
+                var productWeight = document.createElement("td");
+                productWeight.className = "ProductWeight";
+                productWeight.innerHTML = weightOfProduct;
+                tr.appendChild(productWeight);
+
+                var protein = document.createElement("td");
+                protein.className = "Proteins";
+                protein.innerHTML = proteins;
+                tr.appendChild(protein);
+
+                var carbohydrates = document.createElement("td");
+                carbohydrates.className = "Carbohydrates";
+                carbohydrates.innerHTML = carbs;
+                tr.appendChild(carbohydrates);
+
+                var fat = document.createElement("td");
+                fat.className = "Fat";
+                fat.innerHTML = fats;
+                tr.appendChild(fat);
+
+                var kcal = document.createElement("td");
+                kcal.className = "Energy";
+                kcal.innerHTML = energy;
+                tr.appendChild(kcal);
+
+                var deleteButtonTD = document.createElement("td");
+                var deleteButtonContainer = document.createElement("span");
+                deleteButtonContainer.className = "btn btn-default btn-sm remove";
+                var deleteButton = document.createElement("span");
+                deleteButton.className = "glyphicon glyphicon-trash";
+                deleteButton.id = "Delete";
+                deleteButtonContainer.appendChild(deleteButton);
+                deleteButtonTD.appendChild(deleteButtonContainer);
+                tr.appendChild(deleteButtonTD);
+
+                $('#DishesBody').append(tr);
+                
+                var product = {};
+                product["lp"] = index;
+                product["foodType"] = type;;
+                product["name"] = name;
+                product["weight"] = weightOfProduct;
+                product["protein"] = proteins;
+                product["carbohydrates"] = carbs;
+                product["fat"] = fats;
+                product["kcal"] = energy;
+
+                dish.push(product);
+                console.log(dish);
+                $.fn.updateTotals(proteins, carbs, fats, energy, weightOfProduct, '+');
+
+                $('.TotalWeight').text(totalWeight);
+                $('.TotalProteins').text(totalProteins);
+                $('.TotalCarbs').text(totalCarbs);
+                $('.TotalFat').text(totalFat);
+                $('.TotalEnergy').text(totalEnergy);
+
+            }
+        });
+
+        $(function () {
+            $("table#DishesTable").on("click", ".remove", function () {
+                var a = $(this).closest('tr').find('.FoodProductNo').html();
+                var weightOfProduct = dish[a - 1].weight;
+                var proteins = dish[a - 1].protein;
+                var carbs = dish[a - 1].carbohydrates;
+                var fats = dish[a - 1].fat;
+                var energy = dish[a - 1].kcal;             
+
+                $.fn.updateTotals(proteins, carbs, fats, energy, weightOfProduct, '-');
+
+                dish.splice(a - 1, 1);
+
+                $(this).closest('tr').remove();
+
+                if ($('td', '#DishesBody tr').length === 0)
+                {
+                    $('.TotalWeight').text('');
+                    $('.TotalProteins').text('');
+                    $('.TotalCarbs').text('');
+                    $('.TotalFat').text('');
+                    $('.TotalEnergy').text('');
+                }
+                else
+                {
+                    $('.TotalWeight').text(totalWeight);
+                    $('.TotalProteins').text(totalProteins);
+                    $('.TotalCarbs').text(totalCarbs);
+                    $('.TotalFat').text(totalFat);
+                    $('.TotalEnergy').text(totalEnergy);
+
+                    var i = 1;
+                    $('td.FoodProductNo', '#DishesBody tr').each(function () {
+                        $(this).html(i);
+                        i++;
+                    });
+                }
+                
+                for (i = a - 1; i < dish.length; i++) {
+                    dish[i].lp -= 1;
+                }
+
+            });
+        });
+
+        $(function () {
+            $("#CreateDish").click(function () {
+                var data = {};
+                data.jsonData = JSON.stringify(dish);
+                data.dishName = $('#DishName').val();
+
+                $.ajax({
+                    url: './Create',
+                    type: 'POST',
+                    data: data,
+                    async: true,
+                    success: function (obj) {
+                        swal({
+                            title: "Powodzenie",
+                            text: "Twój trening został zapisany pomyślnie.",
+                            type: "success",
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "OK!",
+                            closeOnConfirm: true,
+                            html: false
+                        }, function () {
+                            window.location.href = './Index'
+                        });
+                    },
+                    error: function (obj) {
+                        swal("Niepowodzenie", "Napotkano nieoczekiwany błąd. Spróbuj ponownie.", "error");
+                    }
+                });
+            })
+        });
+
+        $.fn.updateTotals = function (proteins, carbs, fat, energy, weight, type) {
+            if (type === '+') {
+                totalWeight += weight;
+                totalProteins += proteins;
+                totalCarbs += carbs;
+                totalFat += fat;
+                totalEnergy += energy;
+            }
+            else if (type === '-') {
+                totalWeight -= weight;
+                totalProteins -= proteins;
+                totalCarbs -= carbs;
+                totalFat -= fat;
+                totalEnergy -= energy; 
+            }
+        }
+    });
+</script>
 

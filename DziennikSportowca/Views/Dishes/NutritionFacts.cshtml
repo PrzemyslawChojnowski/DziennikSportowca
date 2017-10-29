@@ -1,0 +1,40 @@
+﻿@model DziennikSportowca.Models.ViewModels.NutritionFactsViewModel
+
+@{
+    ViewData["Title"] = "NutritionFacts";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Moje posiłki</a></li>
+        <li class="active"><span>Wartości odżywcze</span></li>
+    </ol>
+</div>
+
+<form asp-controller="Dishes" asp-action="NutritionFacts" method="get">
+    <select asp-for="type" asp-items="Model.FoodProductTypes">
+        <option value="">Wszystkie</option>
+    </select>
+    <button type="submit" class="box bar btn btn-info" value="Filter">Filtruj</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(x => x.FoodProducts[0].Description)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.FoodProducts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(x => item.Description)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

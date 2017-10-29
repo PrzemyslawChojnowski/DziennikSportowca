@@ -42,7 +42,7 @@ namespace DziennikSportowca
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -61,6 +61,8 @@ namespace DziennikSportowca
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            DbInitializer.CreateRoles(serviceProvider, Configuration).Wait();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 

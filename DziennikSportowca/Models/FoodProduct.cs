@@ -32,6 +32,7 @@ namespace DziennikSportowca.Models
         public double Carbohydrate { get; set; }
 
         public virtual List<DishFoodProduct> Dishes { get; set; } 
+        public FoodProductType Type { get; set; }
     }
 
     public enum Measurement

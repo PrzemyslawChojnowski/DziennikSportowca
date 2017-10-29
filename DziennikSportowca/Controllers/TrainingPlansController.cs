@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,6 +173,7 @@ namespace DziennikSportowca.Models
         public async Task<IActionResult> AddTrainingExercises(int? id)
         {
             IQueryable<string> muscleParts = _context.MuscleParts.Select(x => x.Description);
+            IQueryable<string> activityTypes = _context.ActivityTypes.Select(x => x.Description);
             TrainingPlan plan = await _context.TrainingPlans.FirstOrDefaultAsync(x => x.Id == id);
 
             List<TrainingPlanExercise> exercises = await _context.TrainingPlanExercises.
@@ -187,6 +189,7 @@ namespace DziennikSportowca.Models
 
             TrainingPlanViewModel trainingPlanViewModel = new TrainingPlanViewModel();
             trainingPlanViewModel.MuscleParts = new SelectList(await muscleParts.Distinct().ToListAsync());
+            trainingPlanViewModel.ActivityTypes = new SelectList(await activityTypes.Distinct().ToListAsync());
             plan.Exercises = exercises;
             trainingPlanViewModel.TrainingPlan = plan;
             
@@ -237,11 +240,18 @@ namespace DziennikSportowca.Models
             return RedirectToAction("Index");
         }
 
-        public JsonResult getExercises(string trainingPartName)
+        public JsonResult getExercises(string trainingPartName, string activityType)
         {
-            List<string> exercises = _context.MusclePartExercises
-                .Where(x => x.MusclePart.Description == trainingPartName)
-                .Select(x => x.Exercise.Name).ToList();
+            List<string> exercises = new List<string>();
+
+            if (!String.IsNullOrEmpty(trainingPartName))
+                exercises = _context.MusclePartExercises
+                    .Where(x => x.MusclePart.Description == trainingPartName)
+                    .Select(x => x.Exercise.Name).ToList();
+
+            if (!String.IsNullOrEmpty(activityType))
+                exercises = _context.Exercises.Where(x => x.ActivityType.Description == activityType).Select(x => x.Name).ToList();
+
             return Json(exercises);
         }
     }
