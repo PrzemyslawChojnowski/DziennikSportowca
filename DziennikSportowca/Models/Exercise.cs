@@ -23,10 +23,16 @@ namespace DziennikSportowca.Models
         public string Name { get; set; }
 
         public virtual List<TrainingPlanExercise> TrainingPlans { get; set; }
+        [Display(Name = "Partie mięśniowe")]
         public virtual List<MusclePartExercise> MuscleParts { get; set; }
 
         public int ActivityTypeId { get; set; }
         [ForeignKey("ActivityTypeId")]
         public ActivityType ActivityType { get; set; }
+
+        public int? ExerciseInstructionId { get; set; }
+        [ForeignKey("ExerciseInstructionId")]
+        public ExerciseInstruction ExerciseInstruction { get; set; }
+
     }
 }

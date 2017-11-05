@@ -130,13 +130,51 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<int>("ActivityTypeId");
 
+                    b.Property<int?>("ExerciseInstructionId");
+
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityTypeId");
 
+                    b.HasIndex("ExerciseInstructionId");
+
                     b.ToTable("Exercise");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.ExerciseInstruction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ExerciseId");
+
+                    b.Property<string>("Instructions");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("ExerciseInstruction");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.ExerciseInstructionPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<byte[]>("Content");
+
+                    b.Property<int?>("ExerciseInstructionId");
+
+                    b.Property<string>("PhotoTitle");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseInstructionId");
+
+                    b.ToTable("ExerciseInstructionPhoto");
                 });
 
             modelBuilder.Entity("DziennikSportowca.Models.ExerciseWeight", b =>
@@ -499,6 +537,25 @@ namespace DziennikSportowca.Data.Migrations
                         .WithMany("Exercises")
                         .HasForeignKey("ActivityTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DziennikSportowca.Models.ExerciseInstruction", "ExerciseInstruction")
+                        .WithMany()
+                        .HasForeignKey("ExerciseInstructionId");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.ExerciseInstruction", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.ExerciseInstructionPhoto", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.ExerciseInstruction", "ExerciseInstruction")
+                        .WithMany("Photos")
+                        .HasForeignKey("ExerciseInstructionId");
                 });
 
             modelBuilder.Entity("DziennikSportowca.Models.ExerciseWeight", b =>

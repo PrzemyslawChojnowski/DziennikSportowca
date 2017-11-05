@@ -170,5 +170,45 @@ namespace DziennikSportowca.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> ExerciseAtlas (string id)
+        {
+            if(!String.IsNullOrEmpty(id))
+            {
+                if (_context.MuscleParts.Where(x => x.Description == id).Any())
+                {
+                    List<Exercise> exercises = await _context.MusclePartExercises.Where(x => x.MusclePart.Description == id).
+                                                Select(x => x.Exercise).Include(x => x.MuscleParts).ThenInclude(x => x.MusclePart).
+                                                Include(x => x.ExerciseInstruction).
+                                                //ThenInclude(x => x.Photos).
+                                                ToListAsync();
+
+                    foreach(var exercise in exercises)
+                    {
+                        if (_context.ExerciseInstructionPhotos.Any(x => x.ExerciseInstructionId == exercise.ExerciseInstructionId))
+                            exercise.ExerciseInstruction.Photos = _context.ExerciseInstructionPhotos.Where(x => x.ExerciseInstructionId == exercise.ExerciseInstructionId).ToList();
+                    }
+
+                    //List<Exercise> exercises2 = await _context.Exercises.Where(x => x.Id == 1).
+                    //    Include(x => x.MuscleParts).
+                    //    Include(x => x.ExerciseInstruction).
+                    //    ThenInclude(x => x.Photos).
+                    //    ToListAsync();
+
+                    ExercisesAtlasViewModel model = new ExercisesAtlasViewModel()
+                    {
+                        Exercises = exercises,
+                        MusclePart = id
+                    };
+                    return View(model);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+
+            return View();
+        }
     }
 }

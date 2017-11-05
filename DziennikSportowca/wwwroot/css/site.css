@@ -673,3 +673,185 @@ textarea {
 }
 
 /*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. PRELOADER - KONIEC.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. CARDS - POCZĄTEK.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
+.card {
+    font-size: 1em;
+    overflow: hidden;
+    padding: 0;
+    border: none;
+    border-radius: .28571429rem;
+    box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+}
+
+.card img{
+    width: 100%;
+}
+
+.card-block {
+    font-size: 1em;
+    position: relative;
+    margin: 0;
+    padding: 1em;
+    border: none;
+    border-top: 1px solid rgba(34, 36, 38, .1);
+    box-shadow: none;
+}
+
+.card-img-top {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.card-title {
+    font-size: 1.28571429em;
+    font-weight: 700;
+    line-height: 1.2857em;
+}
+
+.card-text {
+    clear: both;
+    margin-top: .5em;
+    color: rgba(0, 0, 0, .68);
+}
+
+.card-footer {
+    font-size: 1em;
+    position: static;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    padding: .75em 1em;
+    color: rgba(0, 0, 0, .4);
+    border-top: 1px solid rgba(0, 0, 0, .05) !important;
+    background: #fff;
+}
+
+.card-inverse .btn {
+    border: 1px solid rgba(0, 0, 0, .05);
+}
+
+.profile {
+    position: absolute;
+    top: -12px;
+    display: inline-block;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 25px;
+    height: 25px;
+    margin: 0;
+    border: 1px solid #fff;
+    border-radius: 50%;
+}
+
+.profile-avatar {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.profile-inline {
+    position: relative;
+    top: 0;
+    display: inline-block;
+}
+
+.profile-inline ~ .card-title {
+    display: inline-block;
+    margin-left: 4px;
+    vertical-align: top;
+}
+
+.text-bold {
+    font-weight: 700;
+}
+
+.meta {
+    font-size: 1em;
+    color: rgba(0, 0, 0, .4);
+}
+
+.meta a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, .4);
+}
+
+.meta a:hover {
+    color: rgba(0, 0, 0, .87);
+}
+
+.container-cards .row{
+    padding-top:20px;
+}
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. CARDS - KONIEC.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
+
+.striped > exercise:nth-child(2n+1) {
+    background-color: #3bafda;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: #cac8da;
+}
+
+.btn-primary-outline {
+    /*background-color: transparent;*/
+    border-color: #ccc;
+}
+
+.table-striped > tbody > .exercise-info > td {
+    background-color: #fff;
+}
+
+.exercise-info{
+    background-color: #fff;
+    display:none;
+}
+
+.exercise:hover{
+    cursor: pointer;
+}
+
+.padding-0{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.table-row{
+    display:table-row;
+    width: 100%;
+}
+
+.table-cell{
+    display:table-cell;
+}
+
+#toTop {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    cursor: pointer;
+    display: none;
+}
+
+.inline{
+    display: inline;
+}
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. CALCULATORS TAB PANES - POCZĄTEK.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
+
+.calculators { border-bottom: 2px solid #DDD; }
+.calculators > li.active > a, .calculators > li.active > a:focus, .calculators > li.active > a:hover { border-width: 0; }
+.calculators > li > a { border: none; color: #666; }
+.calculators > li.active > a, .calculators > li > a:hover { border: none; color: #4285F4 !important; background: transparent; }
+.calculators > li > a::after { content: ""; background: #4285F4; height: 2px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
+.calculators > li.active > a::after, .calculators > li:hover > a::after { transform: scale(1); }
+.tab-nav > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
+.tab-pane { padding: 15px 0; }
+.tab-content{padding:20px}
+
+.card {background: #FFF none repeat scroll 0% 0%; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3); margin-bottom: 30px; }
+
+/*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. CALCULATORS TAB PANES - KONIEC.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/

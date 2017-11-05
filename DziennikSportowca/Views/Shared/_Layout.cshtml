@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DziennikSportowca</title>
 
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -113,6 +115,7 @@
                                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Strona domowa</a></li>
                                     <li><a asp-area="" asp-controller="Home" asp-action="About">O aplikacji</a></li>
                                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="ExerciseAtlas">Atlas ćwiczeń</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Wyszukiwarka</li>
                                     <form asp-action="Search" asp-controller="Home" class="form" role="search">
@@ -192,6 +195,19 @@
                     $(this).toggleClass('open');
                 }
             );
+
+            $('body').append('<div id="toTop" class="btn btn-info"><span class="glyphicon glyphicon-chevron-up"></span>Powrót na górę strony</div>');
+            $(window).scroll(function () {
+                if ($(this).scrollTop() != 0) {
+                    $('#toTop').fadeIn();
+                } else {
+                    $('#toTop').fadeOut();
+                }
+            });
+            $('#toTop').click(function () {
+                $("html, body").animate({ scrollTop: 0 }, 600);
+                return false;
+            });
         });
 
         jQuery(document).on('click', '.mega-dropdown', function (e) {

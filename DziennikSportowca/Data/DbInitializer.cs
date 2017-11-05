@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Org.BouncyCastle.Asn1.Crmf;
+using Org.BouncyCastle.Bcpg.Attr;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DziennikSportowca.Data
 {
@@ -45,6 +50,14 @@ namespace DziennikSportowca.Data
                     context.MuscleParts.AddRange(muscleParts);
                     context.SaveChanges();
                 }
+
+                //if(!context.ExerciseInstructions.Any())
+                //{
+                //    List<ExerciseInstruction> instructions = new List<ExerciseInstruction>()
+                //    {
+                //        new ExerciseInstruction{ExerciseId = }
+                //    }
+                //}
 
                 if (!context.Exercises.Any())
                 {
@@ -132,6 +145,53 @@ namespace DziennikSportowca.Data
                     new Exercise{Name = "Gra w piłkę siatkową", ActivityType = groupSports, ActivityTypeId = groupSports.Id}
                     };
                     context.Exercises.AddRange(exercises);
+
+                    
+
+                    context.SaveChanges();
+                }
+
+                if(!context.ExerciseInstructions.Any())
+                {
+                    List<ExerciseInstruction> instructions = new List<ExerciseInstruction>()
+                    {
+                        new ExerciseInstruction{ExerciseId = 1, Instructions = "Opis wykonania ćwiczenia"}
+                    };
+                    context.AddRange(instructions);
+                    //var exercise = context.Exercises.FirstOrDefault(x => x.Id == 1);
+                    //exercise.ExerciseInstructionId = 1;
+                    //context.Exercises.Update(exercise);
+                    context.SaveChanges();
+                }
+
+                if (!context.ExerciseInstructionPhotos.Any())
+                {
+                    byte[] selena;
+                    byte[] selena2;
+
+                    MemoryStream ms = new MemoryStream();
+                    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\a.jpg", FileMode.Open))
+                    {
+                        stream.CopyTo(ms);
+                        selena = new byte[stream.Length];
+                        selena = ms.ToArray();
+                    }
+                    MemoryStream ms2 = new MemoryStream();
+                    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\b.jpg", FileMode.Open))
+                    {
+                        stream.CopyTo(ms2);
+                        selena2 = new byte[stream.Length];
+                        selena2 = ms2.ToArray();
+                    }
+
+                    List<ExerciseInstructionPhoto> photos = new List<ExerciseInstructionPhoto>()
+                    {
+                        new ExerciseInstructionPhoto{PhotoTitle = "a", ExerciseInstructionId = 2, Content = selena},
+                        new ExerciseInstructionPhoto{PhotoTitle = "b", ExerciseInstructionId = 2, Content = selena2}
+                    };
+
+                    context.ExerciseInstructionPhotos.AddRange(photos);
+
                     context.SaveChanges();
                 }
 
