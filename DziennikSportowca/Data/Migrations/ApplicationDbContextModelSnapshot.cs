@@ -231,6 +231,32 @@ namespace DziennikSportowca.Data.Migrations
                     b.ToTable("FoodProductType");
                 });
 
+            modelBuilder.Entity("DziennikSportowca.Models.Goal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CompletionDate");
+
+                    b.Property<DateTime>("CreationDate");
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("Result");
+
+                    b.Property<string>("Scope");
+
+                    b.Property<double>("Target");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Goal");
+                });
+
             modelBuilder.Entity("DziennikSportowca.Models.MusclePart", b =>
                 {
                     b.Property<int>("Id")
@@ -571,6 +597,13 @@ namespace DziennikSportowca.Data.Migrations
                     b.HasOne("DziennikSportowca.Models.FoodProductType", "Type")
                         .WithMany("FoodProducts")
                         .HasForeignKey("TypeId");
+                });
+
+            modelBuilder.Entity("DziennikSportowca.Models.Goal", b =>
+                {
+                    b.HasOne("DziennikSportowca.Models.ApplicationUser", "User")
+                        .WithMany("Goals")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("DziennikSportowca.Models.MusclePartExercise", b =>

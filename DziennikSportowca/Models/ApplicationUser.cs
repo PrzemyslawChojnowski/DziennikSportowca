@@ -18,6 +18,7 @@ namespace DziennikSportowca.Models
             UserCircumferences = new List<UserFigure>();
             UserFriends = new List<UserFriend>();
             Users = new List<UserFriend>();
+            Goals = new List<Goal>();
         }
 
         public string Name { get; set; }
@@ -30,14 +31,6 @@ namespace DziennikSportowca.Models
         public virtual List<UserFigure> UserCircumferences { get; set; }
         public virtual List<UserFriend> UserFriends { get; set; }
         public virtual List<UserFriend> Users { get; set; }
-    }
-
-    public enum Gender
-    {
-        [Display(Name = "Kobieta")]
-        Woman = 1,
-
-        [Display(Name = "Mężczyzna")]
-        Man = 2
-    }
+        public virtual List<Goal> Goals { get; set; }
+    }  
 }

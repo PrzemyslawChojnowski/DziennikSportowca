@@ -170,14 +170,14 @@ namespace DziennikSportowca.Data
                     byte[] selena2;
 
                     MemoryStream ms = new MemoryStream();
-                    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\a.jpg", FileMode.Open))
+                    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\selena.jpg", FileMode.Open))
                     {
                         stream.CopyTo(ms);
                         selena = new byte[stream.Length];
                         selena = ms.ToArray();
                     }
                     MemoryStream ms2 = new MemoryStream();
-                    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\b.jpg", FileMode.Open))
+                    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\selena2.jpg", FileMode.Open))
                     {
                         stream.CopyTo(ms2);
                         selena2 = new byte[stream.Length];
@@ -186,8 +186,8 @@ namespace DziennikSportowca.Data
 
                     List<ExerciseInstructionPhoto> photos = new List<ExerciseInstructionPhoto>()
                     {
-                        new ExerciseInstructionPhoto{PhotoTitle = "a", ExerciseInstructionId = 2, Content = selena},
-                        new ExerciseInstructionPhoto{PhotoTitle = "b", ExerciseInstructionId = 2, Content = selena2}
+                        new ExerciseInstructionPhoto{PhotoTitle = "Selena Gomez", ExerciseInstructionId = 2, Content = selena},
+                        new ExerciseInstructionPhoto{PhotoTitle = "Selena Gomez 2", ExerciseInstructionId = 2, Content = selena2}
                     };
 
                     context.ExerciseInstructionPhotos.AddRange(photos);

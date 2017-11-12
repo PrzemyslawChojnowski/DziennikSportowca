@@ -38,7 +38,13 @@ namespace DziennikSportowca
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(SetupConfiguration)                                                  //
                 .UseStartup<Startup>()
                 .Build();
+
+        private static void SetupConfiguration(WebHostBuilderContext context, IConfigurationBuilder builder)    //
+        {                                                                                                       //
+            builder.AddUserSecrets("aspnet-DziennikSportowca-a9373ad2-f006-4b36-95f3-fc870e7dc85e");            //
+        }                                                                                                       //
     }
 }

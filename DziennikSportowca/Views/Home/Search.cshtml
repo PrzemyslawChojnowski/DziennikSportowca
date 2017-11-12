@@ -40,7 +40,7 @@
 }
 
 <h2>Wyniki wyszukiwania</h2>
-<h4><strong>Wyszukiwana fraza: </strong><i>@Html.DisplayFor(x => x.Key)</i></h4>
+<h4><strong>Wyszukiwana fraza: </strong><i id="searchString">@Html.DisplayFor(x => x.Key)</i></h4>
 <h4><strong>Liczba wyników: </strong><i>@resultsCount</i></h4>
 
 <form asp-action="Search" asp-controller="Home" class="form" role="search">
@@ -79,7 +79,7 @@
                 {
                     <tr>
                         <td>
-                            <div class="table-row">
+                            <div class="table-row search-result">
                                 @Html.DisplayFor(x => item.Name)
                             </div>
                         </td>
@@ -107,7 +107,7 @@
                 {
                     <tr>
                         <td>
-                            <div class="table-row">
+                            <div class="table-row search-result">
                                 @Html.DisplayFor(x => item.Description)
                             </div>
                         </td>
@@ -135,7 +135,7 @@
                 {
                     <tr>
                         <td>
-                            <div class="table-row">
+                            <div class="table-row search-result">
                                 @Html.DisplayFor(x => item.Description)
                             </div>
                         </td>
@@ -181,17 +181,17 @@
                             </div>
                         </td>
                         <td>
-                            <div class="table-row">
+                            <div class="table-row search-result">
                                 @Html.DisplayFor(x => item.Name)
                             </div>
                         </td>
                         <td>
-                            <div class="table-row">
+                            <div class="table-row search-result">
                                 @Html.DisplayFor(x => item.Surname)
                             </div>
                         </td>
                         <td>
-                            <div class="table-row">
+                            <div class="table-row search-result">
                                 @Html.DisplayFor(x => item.Email)
                             </div>
                         </td>
@@ -246,7 +246,7 @@
                 {
                     <tr>
                         <td>
-                            <div class="table-row">
+                            <div class="table-row search-result">
                                 @Html.DisplayFor(x => item.Description)
                             </div>
                         </td>
@@ -279,5 +279,16 @@
 
             return false;
         });
+
+        $('.search-result').each(function () {
+            var searchString = $('#searchString').text();
+            var result = boldString($(this).html(), searchString);
+            $(this).html(result);
+        });
     });
+
+    function boldString(str, find) {
+        var re = new RegExp(find, 'gi');
+        return str.replace(re, '<b>' + find + '</b>');
+    }
 </script>

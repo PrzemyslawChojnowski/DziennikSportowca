@@ -1,3 +1,4 @@
+using Org.BouncyCastle.Bcpg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,7 +82,9 @@ namespace DziennikSportowca.Controllers
         {
             if (ModelState.IsValid)
             {
-                userFigure.UserId = await _userManager.GetUserIdAsync(await _userManager.GetUserAsync(User));
+                var userId = await _userManager.GetUserIdAsync(await _userManager.GetUserAsync(User));
+
+                userFigure.UserId = userId;
                 if (files.Any())
                 {
                     foreach (var ph in files)
@@ -99,6 +102,60 @@ namespace DziennikSportowca.Controllers
                     }
                 }
                 _context.Add(userFigure);
+                await _context.SaveChangesAsync();
+
+                var userGoals = await _context.Goal.Where(x => x.UserId == userId && x.Result == false).ToListAsync();
+
+                foreach(var goal in userGoals)
+                {                                     
+                    if (userFigure.Date > goal.CreationDate)
+                    {
+                        var result = JsonConvert.DeserializeObject<dynamic>(goal.Scope);
+                        var goalScope = result.GoalScope;
+                        bool successFlag = false;
+
+                        if (goalScope == 1)
+                        {
+                            var physiqueScope = result.PhysiqueScope;
+
+                            if (physiqueScope == 1 && userFigure.Weight <= goal.Target)
+                                successFlag = true;
+                            else if (physiqueScope == 2 && userFigure.Weight >= goal.Target)
+                                successFlag = true;
+                            else if (physiqueScope == 3 && userFigure.BodyFat <= goal.Target)
+                                successFlag = true;
+                            else if (physiqueScope == 4 && userFigure.BodyFat >= goal.Target)
+                                successFlag = true;
+                            else if (physiqueScope == 5 || physiqueScope == 6)
+                            {
+                                var circumference = result.Circumference;
+
+                                if (circumference == 1 && ((userFigure.ShouldersCircumference <= goal.Target && physiqueScope == 5) || (userFigure.ShouldersCircumference >= goal.Target && physiqueScope == 6)))
+                                    successFlag = true;
+                                else if (circumference == 2 && ((userFigure.ChestCircumference <= goal.Target && physiqueScope == 5) || (userFigure.ShouldersCircumference >= goal.Target && physiqueScope == 6)))
+                                    successFlag = true;
+                                else if (circumference == 3 && ((userFigure.WaistCircumference <= goal.Target && physiqueScope == 5) || (userFigure.ShouldersCircumference >= goal.Target && physiqueScope == 6)))
+                                    successFlag = true;
+                                else if (circumference == 4 && ((userFigure.BicepsCircumference <= goal.Target && physiqueScope == 5) || (userFigure.ShouldersCircumference >= goal.Target && physiqueScope == 6)))
+                                    successFlag = true;
+                                else if (circumference == 5 && ((userFigure.TricepsCircumference <= goal.Target && physiqueScope == 5) || (userFigure.ShouldersCircumference >= goal.Target && physiqueScope == 6)))
+                                    successFlag = true;
+                                else if (circumference == 6 && ((userFigure.ThighCircumference <= goal.Target && physiqueScope == 5) || (userFigure.ShouldersCircumference >= goal.Target && physiqueScope == 6)))
+                                    successFlag = true;
+                                else if (circumference == 7 && ((userFigure.HipCircumference <= goal.Target && physiqueScope == 5) || (userFigure.ShouldersCircumference >= goal.Target && physiqueScope == 6)))
+                                    successFlag = true;
+                            }
+                        }
+
+                        if(successFlag)
+                        {
+                            goal.CompletionDate = userFigure.Date;
+                            goal.Result = true;
+                            _context.Goal.Update(goal);
+                        }
+                    }
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

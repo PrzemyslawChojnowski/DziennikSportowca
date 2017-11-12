@@ -172,16 +172,51 @@ else
     <script type="text/javascript">
         $(document).ready(function () {
             $(".roll-down-button").click(function () {
-                $(this).find("i").toggleClass("fa-chevron-down fa-chevron-up");
-                $(this).parent().parent().find('.exercise-info').slideToggle('slow');
+                toggleExercise($(this));
                 return false;
             });
 
             $(".exercise").click(function () {
-                $(this).find("i").toggleClass("fa-chevron-down fa-chevron-up");
-                $(this).parent().find('.exercise-info').slideToggle('slow');
+                toggleExercise($(this));
                 return false;
             });
+
+            function toggleExercise(currentElement)
+            {
+                $(currentElement).find("i").toggleClass("fa-chevron-down fa-chevron-up");
+                $(currentElement).find("i").parent().parent().parent().find('.exercise-info').slideToggle('slow');
+                if ($(currentElement).find("i").hasClass("fa-chevron-up"))
+                {
+                    var index = $(currentElement).find("i").parent().parent().parent().index();
+                    rollUpOtherExercises(index, currentElement);
+                    highlight($(currentElement).find("i").parent().parent())
+                }
+                else
+                {
+                    unhighlight($(currentElement).find("i").parent().parent());
+                }
+            }
+
+            function rollUpOtherExercises(index, currentElement)
+            {
+                $(".roll-down-button > i").each(function () {
+                    if ($(this).hasClass("fa-chevron-up") && $(this).parent().parent().parent().index() !== index) {
+                        $(this).toggleClass("fa-chevron-down fa-chevron-up");
+                        $(this).parent().parent().parent().find('.exercise-info').slideToggle('slow');
+                        unhighlight($(this).parent().parent());
+                    }
+                });
+            }
+
+            function highlight(currentElement)
+            {
+                $(currentElement).css("background-color", "#ffab40");
+            }
+
+            function unhighlight(oldElement)
+            {
+                $(oldElement).css("background-color", "#fff");
+            }
         });
     </script>
 }
