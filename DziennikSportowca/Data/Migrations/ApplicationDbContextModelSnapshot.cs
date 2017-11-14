@@ -323,11 +323,15 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<int>("ExerciseId");
 
+                    b.Property<int?>("ExerciseLength");
+
                     b.Property<int>("Index");
 
-                    b.Property<int>("RepsNo");
+                    b.Property<int?>("RepsNo");
 
-                    b.Property<int>("SeriesNo");
+                    b.Property<int?>("SeriesNo");
+
+                    b.Property<string>("TrainingPlanExerciseInfo");
 
                     b.Property<int>("TrainingPlanId");
 

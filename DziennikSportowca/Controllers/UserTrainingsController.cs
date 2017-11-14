@@ -305,6 +305,39 @@ namespace DziennikSportowca.Controllers
             _context.UserTrainings.Add(training);
             _context.SaveChanges();
 
+            //var userId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
+            //var userGoals = _context.Goal.Where(x => x.UserId == userId && x.Result == false && x.CreationDate < training.EndDateTime);
+
+            //foreach(var goal in userGoals)
+            //{
+            //    var result = JsonConvert.DeserializeObject<dynamic>(goal.Scope);
+            //    var goalScope = result.GoalScope;
+            //    bool successFlag = false;
+
+            //    if(goalScope == 2)
+            //    {
+            //        var exerciseScope = result.ExerciseScope;
+            //        var exercise = result.Exercise;
+
+            //        if(exerciseScope == 1)
+            //        {
+            //            if(exercise == "All")
+            //            {
+            //                var trainings = await _context.UserTrainings.
+            //                    Include(x => x.Training).
+            //                    Where(x => x.Training.UserId == userId && x.EndDateTime < goal.CreationDate).
+            //                    ToListAsync();
+
+            //                foreach(var selectedTraining in trainings)
+            //                {
+            //                    selectedTraining.UserTrainingsExercisesResults[0].
+            //                }
+                            
+            //            }
+            //        }
+            //    }
+            //}
+
             return new EmptyResult();
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,6 +19,8 @@ namespace DziennikSportowca.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        public int Index { get; set; }
+
         public int ExerciseId { get; set; }
         public virtual Exercise Exercise { get; set; }
 
@@ -27,8 +30,10 @@ namespace DziennikSportowca.Models
 
         public virtual List<UserTrainingExerciseResult> Results { get; set; }
 
-        public int SeriesNo { get; set; }
-        public int RepsNo { get; set; }
-        public int Index { get; set; }
+        public int? SeriesNo { get; set; }
+        public int? RepsNo { get; set; }
+        public int? ExerciseLength { get; set; }
+        
+        public string TrainingPlanExerciseInfo { get; set; }
     }
 }

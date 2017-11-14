@@ -104,7 +104,7 @@ namespace DziennikSportowca.Controllers
                 _context.Add(userFigure);
                 await _context.SaveChangesAsync();
 
-                var userGoals = await _context.Goal.Where(x => x.UserId == userId && x.Result == false).ToListAsync();
+                var userGoals = await _context.Goal.Where(x => x.UserId == userId && x.Result == false && x.CreationDate < userFigure.Date).ToListAsync();
 
                 foreach(var goal in userGoals)
                 {                                     

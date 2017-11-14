@@ -179,6 +179,7 @@ namespace DziennikSportowca.Models
             List<TrainingPlanExercise> exercises = await _context.TrainingPlanExercises.
                                                     Where(x => x.TrainingPlanId == plan.Id).
                                                     Include(x => x.Exercise).
+                                                        ThenInclude(x => x.ActivityType).
                                                     Include(x => x.Exercise.MuscleParts).
                                                     ToListAsync();
 
@@ -199,41 +200,47 @@ namespace DziennikSportowca.Models
         [HttpPost]
         public async Task<IActionResult> AddTrainingExercises(string jsonData, int id)
         {
-            TrainingPlanExercises result = JsonConvert.DeserializeObject<TrainingPlanExercises>(jsonData);
+            var result = JsonConvert.DeserializeAnonymousType(jsonData, new[] { new { rowNo = 0, exercise = "", activityType = "", exerciseInfo = new { exerciseLength = 0, seriesNo = 0, repsNo = 0 } } } );
             TrainingPlan plan = await _context.TrainingPlans.SingleOrDefaultAsync(x => x.Id == id);
             List<TrainingPlanExercise> tpExercises = await _context.TrainingPlanExercises.
                                                 Where(x => x.TrainingPlan.Id == plan.Id).ToListAsync();
 
-            for (int i = 0; i < result.rowNo.Count; i++)
-            {                
-                Exercise exercise = await _context.Exercises.SingleOrDefaultAsync(x => x.Name == result.exercise[i] && 
-                                                x.MuscleParts.Any(z => z.MusclePart.Description == result.musclePart[i]));
-                var tmp = tpExercises.FirstOrDefault(x => x.ExerciseId == exercise.Id && 
-                                                        x.RepsNo == result.repsNo[i] && 
-                                                        x.SeriesNo == result.seriesNo[i]);
+            foreach(var row in result)
+            {
+                Exercise exercise = await _context.Exercises.SingleOrDefaultAsync(x => x.Name == row.exercise);
 
-                if (tmp != null)
+                if (exercise != null)
                 {
+                    var tmp = tpExercises.FirstOrDefault(x => x.ExerciseId == exercise.Id &&
+                                                            ((x.RepsNo == row.exerciseInfo.repsNo &&
+                                                            x.SeriesNo == row.exerciseInfo.seriesNo) || 
+                                                            x.ExerciseLength == row.exerciseInfo.exerciseLength)
+                                                            && x.Index == row.rowNo);
+
+                    if (tmp != null)
+                    {
+                        tpExercises.Remove(tmp);
+                        continue;
+                    }
+
+                    TrainingPlanExercise tpExercise = new TrainingPlanExercise()
+                    {
+                        Exercise = exercise,
+                        ExerciseId = exercise.Id,
+                        TrainingPlanId = id,
+                        TrainingPlan = plan,
+                        SeriesNo = row.exerciseInfo.seriesNo,
+                        RepsNo = row.exerciseInfo.repsNo,
+                        Index = row.rowNo,
+                        ExerciseLength = row.exerciseInfo.exerciseLength
+                    };
+
                     tpExercises.Remove(tmp);
-                    continue;
-                }                   
-
-                TrainingPlanExercise tpExercise = new TrainingPlanExercise()
-                {
-                    Exercise = exercise,
-                    ExerciseId = exercise.Id,
-                    TrainingPlanId = id,
-                    TrainingPlan = plan,
-                    SeriesNo = result.seriesNo[i],
-                    RepsNo = result.repsNo[i],
-                    Index = result.rowNo[i]
-                };
-
-                tpExercises.Remove(tmp);
-                await _context.TrainingPlanExercises.AddAsync(tpExercise);
+                    await _context.TrainingPlanExercises.AddAsync(tpExercise);
+                }
             }
 
-            if (tpExercises.Any())
+            if (tpExercises != null && tpExercises.Any())
                 _context.TrainingPlanExercises.RemoveRange(tpExercises);
 
             await _context.SaveChangesAsync();
@@ -258,10 +265,9 @@ namespace DziennikSportowca.Models
 
     public class TrainingPlanExercises
     {
-        public List<int> rowNo { get; set; }
-        public List<string> musclePart { get; set; }
-        public List<string> exercise { get; set; }
-        public List<int> seriesNo { get; set; }
-        public List<int> repsNo { get; set; }
+        public int rowNo { get; set; }
+        public string exercise { get; set; }
+        public string activityType { get; set; }
+        public string exerciseInfo { get; set; }
     }
 }

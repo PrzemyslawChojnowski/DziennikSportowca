@@ -38,50 +38,56 @@
                 $("#RepsNo").removeClass('hidden');
             }
         }
+        else if ($('#ActivityType').val() === "Ćwiczenia wytrzymałościowe" || $('#ActivityType').val() === "Sporty grupowe") {
+            if ($('#ExerciseTime').hasClass('hidden')) {
+                $('#ExerciseTime').removeClass('hidden');
+            }
+        }
     });
 
-    var tmp = $('#ExercisesTable > tbody > tr > td.ExerciseNo')
-    tmp.each(function () {
-        exercises.rowNo.push(this.innerHTML);
+    var info = {};
+
+    var rows = $('#ExercisesTable > tbody > tr')
+    rows.each(function () {
+        var item = {};
+        item["rowNo"] = parseInt($(this).find('.ExerciseNo').text());
+        item["exercise"] = $(this).find('.Exercise').text();
+        item["activityType"] = $(this).find('.ActivityType').text();
+        item["exerciseInfo"] = {};
+        if ($(this).find('.ActivityType').text() === 'Ćwiczenia siłowe') {
+            var info = {};
+            info["seriesNo"] = parseInt($(this).find('.SeriesNo').text());
+            info["repsNo"] = parseInt($(this).find('.RepsNo').text());
+            item["exerciseInfo"] = info;
+        }
+        else if ($(this).find('.ActivityType').text() === 'Ćwiczenia wytrzymałościowe' || $(this).find('.ActivityType').text() === 'Sporty grupowe') {
+            var info = {};
+            info["exerciseLength"] = parseInt($(this).find('.ExerciseLength').text());
+            item["exerciseInfo"] = info;
+        }
+        exercises.push(item);
     });
-    tmp = $('#ExercisesTable > tbody > tr > td.PartName')
-    tmp.each(function () {
-        exercises.musclePart.push(this.innerHTML);
-    });
-    tmp = $('#ExercisesTable > tbody > tr > td.Exercise')
-    tmp.each(function () {
-        exercises.exercise.push(this.innerHTML);
-    });
-    tmp = $('#ExercisesTable > tbody > tr > td.SeriesNo')
-    tmp.each(function () {
-        exercises.seriesNo.push(this.innerHTML);
-    });
-    tmp = $('#ExercisesTable > tbody > tr > td.RepsNo')
-    tmp.each(function () {
-        exercises.repsNo.push(this.innerHTML);
-    });
+
+    console.log(exercises);
 });
 
-var exercises = {};
-exercises.rowNo = [];
-exercises.musclePart = [];
-exercises.exercise = [];
-exercises.seriesNo = [];
-exercises.repsNo = [];
+var exercises = [];
 
 function newElement() {
     var tr = document.createElement("tr");
     var td1 = document.createElement("td");
     td1.className = "ExerciseNo";
     var td2 = document.createElement("td");
-    td2.className = "PartName";
+    td2.className = "Exercise";
     var td3 = document.createElement("td");
-    td3.className = "Exercise";
+    td3.className = "ExercisesInfo";
     var td4 = document.createElement("td");
-    td4.className = "SeriesNo";
     var td5 = document.createElement("td");
-    td5.className = "RepsNo";
-    var td6 = document.createElement("td");
+    td5.className = "ActivityType";
+    var span1 = document.createElement("span");
+    var span2 = document.createElement("span");
+    var span3 = document.createElement("span");
+    var span4 = document.createElement("span");
 
     var deleteButtonContainer = document.createElement("span");
     deleteButtonContainer.className = "btn btn-default btn-sm remove";
@@ -90,59 +96,135 @@ function newElement() {
     deleteButton.id = "Delete";
     deleteButtonContainer.appendChild(deleteButton);
 
-    var rowsNo = document.getElementById("ExercisesTable").rows.length;
-    var musclePart = $("select[id='MusclePartName'").find('option:selected').text()
-    var exercise = $("select[id='Exercises'").find('option:selected').text()
-    var seriesNo = $("#SeriesNo").val();
-    var repsNo = $("#RepsNo").val();
+    var item = {};
 
-    exercises.rowNo.push(rowsNo);
-    exercises.musclePart.push(musclePart);
-    exercises.exercise.push(exercise);
-    exercises.seriesNo.push(seriesNo);
-    exercises.repsNo.push(repsNo);
+    var rowsNo = document.getElementById("ExercisesTable").rows.length;
+    var activityType = $('#ActivityType').find('option:selected').text();
+    var exercise = $("select[id='Exercises'").find('option:selected').text();
 
     td1.innerHTML = rowsNo;
-    td2.innerHTML = musclePart;
-    td3.innerHTML = exercise;
-    td4.innerHTML = seriesNo;
-    td5.innerHTML = repsNo;
-    td6.appendChild(deleteButtonContainer);
+    td2.innerHTML = exercise;
+    td4.appendChild(deleteButtonContainer);
+    td5.innerHTML = activityType;
 
     tr.appendChild(td1);
     tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
     tr.appendChild(td5);
-    tr.appendChild(td6);
+    tr.appendChild(td3);
 
-    if (musclePart === '' || musclePart === 'Wybierz partie' || exercise === '' || exercise === 'Wybierz cwiczenie'
-        || seriesNo === '' || repsNo === '') {
-        swal("Uwaga!", "Uzupełnij wszystkie pola.", "warning");
-    } else {
-        document.getElementById("ExercisesBody").appendChild(tr);
+    if (activityType === 'Ćwiczenia siłowe') {  
+        var info = {};
+        info["seriesNo"] = $("#SeriesNo").val();
+        info["repsNo"] = $("#RepsNo").val();
+        item["exerciseInfo"] = info;
+
+        span1.className = "SeriesNo";
+        span1.innerHTML = $("#SeriesNo").val();
+
+        span2.className = "RepsNo";
+        span2.innerHTML = $("#RepsNo").val();
+
+        span3.className = "text1";
+        span3.innerHTML = " serie x "
+
+        span4.className = "text2";
+        span4.innerHTML = " powtórzeń";
+
+        td3.appendChild(span1);
+        td3.appendChild(span3);
+        td3.appendChild(span2);
+        td3.appendChild(span4);
+    }
+    else if (activityType === 'Ćwiczenia wytrzymałościowe') {
+        var info = {};
+        info["exerciseLength"] = $("#ExerciseTime").val();
+        item["exerciseInfo"] = info;
+
+        span1.className = "ExerciseLength";
+        span1.innerHTML = $("#ExerciseTime").val();
+
+        span3.className = "text1";
+        span3.innerHTML = "Czas trwania: ";
+
+        span4.className = "text2";
+        span4.innerHTML = " minut";
+
+        td3.appendChild(span3);
+        td3.appendChild(span1);
+        td3.appendChild(span4);
+    }
+    else if (activityType === 'Sporty grupowe') {
+        var info = {};
+        info["exerciseLength"] = $("#ExerciseTime").val();
+        item["exerciseInfo"] = info;
+
+        span1.className = "ExerciseLength";
+        span1.innerHTML = $("#ExerciseTime").val();
+
+        span3.className = "text1";
+        span3.innerHTML = "Czas trwania: "
+
+        span4.className = "text2";
+        span4.innerHTML = " minut";
+
+        td3.appendChild(span3);
+        td3.appendChild(span1);
+        td3.appendChild(span4);
     }
 
-    $("select[id='MusclePartName'").val("Wybierz partie");
-    $('#Exercises')
-        .find('option')
-        .remove()
-        .end()
-        .append('<option value="Wybierz cwiczenie">Wybierz cwiczenie</option>')
-        .val('Wybierz cwiczenie')
-        ;
-    $("#SeriesNo").val('');
-    $("#RepsNo").val('');
+    tr.appendChild(td4);
+
+    item["rowNo"] = rowsNo;
+    item["exercise"] = exercise;
+    item["activityType"] = activityType;    
+
+    if ($('#ActivityType :selected').text() === 'Ćwiczenia siłowe' && ($('#Exercises :selected').val() === '' || $('#RepsNo').val() === '' || $('#SeriesNo').val() === '')) {
+        swal("Uwaga!", "Uzupełnij wszystkie pola.", "warning");
+    } 
+    else if (($('#ActivityType :selected').text() === 'Ćwiczenia wytrzymałościowe' || $('#ActivityType :selected').text() === 'Sporty grupowe') &&
+        (!$('#Exercises :selected').val() || !$('#ExerciseTime').val())) {
+        swal("Uwaga!", "Uzupełnij wszystkie pola.", "warning");
+    }
+    else {
+        document.getElementById("ExercisesBody").appendChild(tr);
+
+        exercises.push(item);
+
+        $("#ActivityType").selectpicker('val', '');
+        $("#MusclePartName").selectpicker('val', '');
+        $('#Exercises')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="Wybierz cwiczenie">Wybierz cwiczenie</option>')
+            .val('Wybierz cwiczenie');
+
+        $("#SeriesNo").val('');
+        $("#RepsNo").val('');
+        $("#ExerciseTime").val('');
+
+        $("#MusclePartName").selectpicker('hide');
+        $('#Exercises').selectpicker('hide');
+
+        if (!$("#SeriesNo").hasClass('hidden')) {
+            $("#SeriesNo").addClass('hidden');
+        }
+        if (!$("#RepsNo").hasClass('hidden')) {
+            $("#RepsNo").addClass('hidden');
+        }
+        if (!$("#ExerciseTime").hasClass('hidden')) {
+            $("#ExerciseTime").addClass('hidden');
+        }
+
+        console.log(exercises);
+    }       
 }
 
 $(function () {
     $("table#ExercisesTable").on("click", ".remove", function () {
         var a = $(this).closest('tr').find('.ExerciseNo').html();
-        exercises.exercise.splice(a - 1, 1);
-        exercises.seriesNo.splice(a - 1, 1);
-        exercises.repsNo.splice(a - 1, 1);
-        exercises.rowNo.splice(a - 1, 1);
-        exercises.musclePart.splice(a - 1, 1);
+        exercises.splice(a - 1, 1);
+        console.log(exercises);
         
         $(this).closest('tr').remove();
         
@@ -152,9 +234,9 @@ $(function () {
             i++;
         });
         
-        for (i = a - 1; i < exercises.rowNo.length; i++)
+        for (i = a - 1; i < exercises.length; i++)
         {
-            exercises.rowNo[i] -= 1;
+            exercises[i]["rowNo"] -= 1;
         }
         
     });

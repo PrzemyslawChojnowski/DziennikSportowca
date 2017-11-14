@@ -34,6 +34,7 @@
 
             <input type="number" class="form-control hidden" placeholder="Liczba serii" id="SeriesNo" />
             <input type="number" class="form-control hidden" placeholder="Liczba powtorzen" id="RepsNo" />
+            <input type="number" class="form-control hidden" placeholder="Czas trwania" id="ExerciseTime" />
 
             <button class="btn btn-default" onclick="newElement()">Add</button>
 
@@ -44,10 +45,9 @@
         <thead>
             <tr>
                 <th>Lp.</th>
-                <th>Partia</th>
                 <th>Cwiczenie</th>
-                <th>Liczba serii</th>
-                <th>Liczba powtorzen</th>
+                <th>Typ aktywności</th>
+                <th>Informacje o ćwiczeniu</th>
                 <th>Usun</th>
             </tr>
         </thead>
@@ -59,10 +59,23 @@
                     {
                         <tr>
                             <td class="ExerciseNo">@i</td>
-                            <td class="PartName">@data.Exercise.MuscleParts[0].MusclePart.Description</td>
                             <td class="Exercise">@data.Exercise.Name</td>
-                            <td class="SeriesNo">@data.SeriesNo</td>
-                            <td class="RepsNo">@data.RepsNo</td>
+                            <td class="ActivityType">@data.Exercise.ActivityType.Description</td>
+                            <td class="ExerciseInfo">
+                                @if (data.Exercise.ActivityType.Description == "Ćwiczenia siłowe")
+                                {
+                                    <span class="SeriesNo">@data.SeriesNo</span>
+                                    <span class="text1"> serie x </span>
+                                    <span class="RepsNo">@data.RepsNo</span>
+                                    <span class="text2"> powtórzeń</span>
+                                }
+                                else if (data.Exercise.ActivityType.Description == "Ćwiczenia wytrzymałościowe" || data.Exercise.ActivityType.Description == "Sporty grupowe")
+                                {
+                                    <span class="text1">Czas trwania: </span>
+                                    <span class="ExerciseLength">@data.ExerciseLength</span>
+                                    <span class="text2"> minut</span>
+                                }
+                            </td>
                             <td>
                                 <span class="btn btn-default btn-sm remove">
                                     <span class="glyphicon glyphicon-trash" id="Delete"></span>
