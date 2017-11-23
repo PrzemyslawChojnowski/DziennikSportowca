@@ -17,9 +17,9 @@
 <div class="card">
     <ul class="nav nav-tabs calculators">
         <li role="presentation" class="active"><a data-toggle="tab" href="#bmiTab" aria-controls="bmiTab role="tab"">BMI</a></li>
-        <li role="presentation"><a data-toggle="tab" href="#pmc" aria-controls="pmc" role="tab">Prawidlowa masa ciala</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#pmc" aria-controls="pmc" role="tab">Prawidłowa masa ciala</a></li>
         <li role="presentation"><a data-toggle="tab" href="#ppm" aria-controls="ppm" role="tab">Podstawowa przemiana materii</a></li>
-        <li role="presentation"><a data-toggle="tab" href="#cpm" aria-controls="cpm" role="tab">Calkowita przemiana materii</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#cpm" aria-controls="cpm" role="tab">Całkowita przemiana materii</a></li>
     </ul>
 
     <div class="tab-content">
@@ -28,32 +28,34 @@
             <form>
                 <div class="form-group">
                     <label>Waga [kg]</label>
-                    <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadz wage w kg" class="form-control" id="weightBMI" placeholder="Waga [kg]" />
+                    <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadź wagę w kg" class="form-control" id="weightBMI" placeholder="Waga [kg]" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
-                    <label>Wzrost [m]</label>
-                    <input type="number" data-toggle="tooltip" title="Wprowadz wzrost w m" class="form-control" id="heightBMI" placeholder="Wzrost [m]" />
+                    <label>Wzrost [cm]</label>
+                    <input type="number" data-toggle="tooltip" title="Wprowadź wzrost w cm" class="form-control" id="heightBMI" placeholder="Wzrost [cm]" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
                     <label>BMI</label>
-                    <input type="number" data-toggle="Twoje BMI" class="form-control" id="bmiResult" placeholder="BMI" readonly />
+                    <input type="number" data-toggle="Twoje BMI" class="form-control" id="bmiResult" placeholder="BMI" readonly min="0"/>
                 </div>
             </form>
         </div>
         <div id="pmc" class="tab-pane fade" role="tabpanel">
-            <h3>Prawidlowa masa ciala</h3>
+            <h3>Prawidłowa masa ciała</h3>
             <form>
                 <div class="form-group">
                     <label>Wzrost [cm]</label>
-                    <input type="number" data-toggle="tooltip" title="Wprowadz wzrost w cm" class="form-control" id="heightPMC" placeholder="Wzrost [cm]" />
+                    <input type="number" data-toggle="tooltip" title="Wprowadź wzrost w cm" class="form-control" id="heightPMC" placeholder="Wzrost [cm]" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
                     <label>PMC</label>
-                    <input type="number" data-toggle="Twoje PMC" class="form-control" id="pmcResult" placeholder="PMC" readonly />
+                    <input type="number" data-toggle="Twoje PMC" class="form-control" id="pmcResult" placeholder="PMC" readonly min="0"/>
                 </div>
 
-                Uwaga!
-                Do obliczenia PMC stosowany jest wzór Amerykańskiego Towarzystwa Ubezpieczeń na życie. Istanieją inne, dlatego też poszczególne wyniki mogą się od siebie różnić.
+                <div class="alert alert-warning" role="alert">
+                    <h4>Uwaga!</h4><br />
+                    Do obliczenia PMC stosowany jest wzór Amerykańskiego Towarzystwa Ubezpieczeń na życie. Istanieją inne, dlatego też poszczególne wyniki mogą się od siebie różnić.
+                </div>
             </form>
         </div>
         <div id="ppm" class="tab-pane fade" role="tabpanel">
@@ -61,58 +63,58 @@
             <form>
                 <div class="form-group">
                     <label>Wzrost [cm]</label>
-                    <input type="number" data-toggle="tooltip" title="Wprowadz wzrost w cm" class="form-control" id="heightPPM" placeholder="Wzrost [cm]" />
+                    <input type="number" data-toggle="tooltip" title="Wprowadź wzrost w cm" class="form-control" id="heightPPM" placeholder="Wzrost [cm]" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
                     <label>Waga [kg]</label>
-                    <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadz wage w kg" class="form-control" id="weightPPM" placeholder="Waga [kg]" />
+                    <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadź wagę w kg" class="form-control" id="weightPPM" placeholder="Waga [kg]" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
                     <label>Wiek</label>
-                    <input type="number" data-toggle="tooltip" title="Wprowadz wiek w latach" class="form-control" id="agePPM" placeholder="Wiek" />
+                    <input type="number" data-toggle="tooltip" title="Wprowadź wiek w latach" class="form-control" id="agePPM" placeholder="Wiek" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
                     <label>Plec</label>
-                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" id="genderPPM" class="gender">
-                        <option>Wybierz plec</option>
+                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" id="genderPPM" class="gender form-control">
+                        <option>Wybierz płeć</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>PPM</label>
-                    <input type="number" data-toggle="Twoje PPM" class="form-control" id="ppmResult" placeholder="PPM" readonly />
+                    <input type="number" data-toggle="Twoje PPM" class="form-control" id="ppmResult" placeholder="PPM" readonly min="0"/>
                 </div>
             </form>
         </div>
         <div id="cpm" class="tab-pane fade" role="tabpanel">
-            <h3>Calkowita przemiana materii</h3>
+            <h3>Całkowita przemiana materii</h3>
             <form>
                 <div class="form-group">
                     <label>Wzrost [cm]</label>
-                    <input type="number" data-toggle="tooltip" title="Wprowadz wzrost w cm" class="form-control" id="heightCPM" placeholder="Wzrost [cm]" />
+                    <input type="number" data-toggle="tooltip" title="Wprowadź wzrost w cm" class="form-control" id="heightCPM" placeholder="Wzrost [cm]" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
                     <label>Waga [kg]</label>
-                    <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadz wage w kg" class="form-control" id="weightCPM" placeholder="Waga [kg]" />
+                    <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadź wagę w kg" class="form-control" id="weightCPM" placeholder="Waga [kg]" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
                     <label>Wiek</label>
-                    <input type="number" data-toggle="tooltip" title="Wprowadz wiek w latach" class="form-control" id="ageCPM" placeholder="Wiek" />
+                    <input type="number" data-toggle="tooltip" title="Wprowadź wiek w latach" class="form-control" id="ageCPM" placeholder="Wiek" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44"/>
                 </div>
                 <div class="form-group">
-                    <label>Plec</label>
-                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" id="genderCPM" class="gender">
-                        <option>Wybierz plec</option>
+                    <label>Płeć</label>
+                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" id="genderCPM" class="gender form-control">
+                        <option>Wybierz płeć</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Aktywnosc fizyczna</label>
-                    <select id="userActivityCPM">
-                        <option>Wybierz typ aktywnosci</option>
-                        <option value="1.2">Pacjent lezacy w lozku</option>
-                        <option value="1.4">Niska aktywnosc fizyczna</option>
-                        <option value="1.6">Umiarkowana aktywnosc fizyczna</option>
-                        <option value="1.75">Aktywny tryb zycia</option>
-                        <option value="2">Bardzo aktywny tryb zycia</option>
+                    <label>Aktywność fizyczna</label>
+                    <select id="userActivityCPM" class="form-control">
+                        <option>Wybierz typ aktywności</option>
+                        <option value="1.2">Pacjent leżący w lóżku</option>
+                        <option value="1.4">Niska aktywność fizyczna</option>
+                        <option value="1.6">Umiarkowana aktywność fizyczna</option>
+                        <option value="1.75">Aktywny tryb życia</option>
+                        <option value="2">Bardzo aktywny tryb życia</option>
                         <option value="2.3">Wyczynowe uprawianie sportu</option>
                     </select>
                 </div>
@@ -124,73 +126,3 @@
         </div>
     </div>
 </div>
-    <!--<div class="Formularz" id="Formularz1">
-        <form>
-            <div class="form-group">
-                <label>Waga [kg]</label>
-                <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadz wage w kg" class="form-control" id="weight" placeholder="Waga [kg]" />
-            </div>
-            <div class="form-group">
-                <label>Wzrost [m]</label>
-                <input type="number" data-toggle="tooltip" title="Wprowadz wzrost w m" class="form-control" id="height" placeholder="Wzrost [m]" />
-            </div>
-            <div class="form-group">
-                <label>BMI</label>
-                <input type="number" data-toggle="Twoje BMI" class="form-control" id="bmi" placeholder="BMI" readonly/>
-            </div>
-        </form>
-    </div>
-
-    <div class="Formularz" id="Formularz2">
-        <form>
-            <div class="form-group">
-                <label>Waga [kg]</label>
-                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()"></select>
-                @*<input asp-for="Weight" type="" data-toggle="tooltip" title="Wprowadz wage w kg" class="form-control" id="weight" placeholder="Waga [kg]" />*@
-            </div>
-            <div class="form-group">
-                <label>Wzrost [m]</label>
-                <input type="number" data-toggle="tooltip" title="Wprowadz wzrost w m" class="form-control" id="height" placeholder="Wzrost [m]" />
-            </div>
-            <div class="form-group">
-                <label>BMI</label>
-                <input type="number" data-toggle="Twoje BMI" class="form-control" id="bmi" placeholder="BMI" readonly />
-            </div>
-        </form>
-    </div>
-
-    <div class="Formularz" id="Formularz3">
-        <form>
-            <div class="form-group">
-                <label>Waga [kg]</label>
-                <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadz wage w kg" class="form-control" id="weight" placeholder="Waga [kg]" />
-            </div>
-            <div class="form-group">
-                <label>Wzrost [m]</label>
-                <input type="number" data-toggle="tooltip" title="Wprowadz wzrost w m" class="form-control" id="height" placeholder="Wzrost [m]" />
-            </div>
-            <div class="form-group">
-                <label>BMI</label>
-                <input type="number" data-toggle="Twoje BMI" class="form-control" id="bmi" placeholder="BMI" readonly />
-            </div>
-        </form>
-    </div>
-
-    <div class="Formularz" id="Formularz4">
-        <form>
-            <div class="form-group">
-                <label>Waga [kg]</label>
-                <input asp-for="Weight" type="number" data-toggle="tooltip" title="Wprowadz wage w kg" class="form-control" id="weight" placeholder="Waga [kg]" />
-            </div>
-            <div class="form-group">
-                <label>Wzrost [m]</label>
-                <input type="number" data-toggle="tooltip" title="Wprowadz wzrost w m" class="form-control" id="height" placeholder="Wzrost [m]" />
-            </div>
-            <div class="form-group">
-                <label>BMI</label>
-                <input type="number" data-toggle="Twoje BMI" class="form-control" id="bmi" placeholder="BMI" readonly />
-            </div>
-        </form>
-    </div>-->
-
-

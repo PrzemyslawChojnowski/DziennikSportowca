@@ -26,8 +26,9 @@ namespace DziennikSportowca.Models
         [ForeignKey("UserTrainingId")]
         public UserTraining UserTraining { get; set; }
 
-        public int RepsNo { get; set; }
-        public int SeriesNo { get; set; }
+        public int? RepsNo { get; set; }
+        public int? SeriesNo { get; set; }
+        public int? ExerciseLength { get; set; }
         public virtual List<ExerciseWeight> Weights { get; set; }
     }
 }

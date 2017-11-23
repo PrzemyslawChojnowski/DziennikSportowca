@@ -27,7 +27,47 @@ namespace DziennikSportowca.Controllers
         // GET: Dishes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Dishes.ToListAsync());
+            var userId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
+            var dishes = await _context.Dishes.Include(x => x.FoodProducts).ThenInclude(x => x.FoodProduct).Where(x => x.UserId == userId).ToListAsync();
+
+            if (dishes == null)
+            {
+                return NotFound();
+            }
+
+            List<DishDetailsViewModel> model = new List<DishDetailsViewModel>();
+
+            if (dishes.Any())
+            {
+                foreach (var dish in dishes)
+                {
+                    double totalProteins = 0;
+                    double totalFat = 0;
+                    double totalCarbs = 0;
+                    double totalEnergy = 0;
+                    double totalWeight = 0;
+
+                    foreach (var product in dish.FoodProducts)
+                    {
+                        totalCarbs += (product.FoodProduct.Carbohydrate * product.FoodProductWeight / 100);
+                        totalFat += (product.FoodProduct.Fat * product.FoodProductWeight / 100);
+                        totalProteins += (product.FoodProduct.Protein * product.FoodProductWeight / 100);
+                        totalEnergy += (product.FoodProduct.Energy * product.FoodProductWeight / 100);
+                        totalWeight += product.FoodProductWeight;
+                    }
+                    DishDetailsViewModel dishVMElement = new DishDetailsViewModel()
+                    {
+                        Dish = dish,
+                        TotalCarbs = totalCarbs,
+                        TotalEnergy = totalEnergy,
+                        TotalFat = totalFat,
+                        TotalProteins = totalProteins,
+                        TotalWeight = totalWeight
+                    };
+                    model.Add(dishVMElement);
+                }
+            }
+            return View(model);
         }
 
         // GET: Dishes/Details/5
@@ -39,13 +79,40 @@ namespace DziennikSportowca.Controllers
             }
 
             var dish = await _context.Dishes
+                .Include(x => x.FoodProducts)
+                    .ThenInclude(x => x.FoodProduct)
+                        .ThenInclude(x => x.Type)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (dish == null)
             {
                 return NotFound();
             }
 
-            return View(dish);
+            double totalProteins = 0;
+            double totalFat = 0;
+            double totalCarbs = 0;
+            double totalEnergy = 0;
+            double totalWeight = 0;
+
+            foreach(var product in dish.FoodProducts)
+            {
+                totalCarbs += (product.FoodProduct.Carbohydrate * product.FoodProductWeight / 100);
+                totalFat += (product.FoodProduct.Fat * product.FoodProductWeight / 100);
+                totalProteins += (product.FoodProduct.Protein * product.FoodProductWeight / 100);
+                totalEnergy += (product.FoodProduct.Energy * product.FoodProductWeight / 100);
+                totalWeight += product.FoodProductWeight;
+            }
+            DishDetailsViewModel model = new DishDetailsViewModel()
+            {
+                Dish = dish,
+                TotalCarbs = totalCarbs,
+                TotalEnergy = totalEnergy,
+                TotalFat = totalFat,
+                TotalProteins = totalProteins,
+                TotalWeight = totalWeight
+            };
+
+            return View(model);
         }
 
         // GET: Dishes/Create
@@ -172,13 +239,40 @@ namespace DziennikSportowca.Controllers
             }
 
             var dish = await _context.Dishes
+                .Include(x => x.FoodProducts)
+                    .ThenInclude(x => x.FoodProduct)
+                        .ThenInclude(x => x.Type)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (dish == null)
             {
                 return NotFound();
             }
 
-            return View(dish);
+            double totalProteins = 0;
+            double totalFat = 0;
+            double totalCarbs = 0;
+            double totalEnergy = 0;
+            double totalWeight = 0;
+
+            foreach (var product in dish.FoodProducts)
+            {
+                totalCarbs += (product.FoodProduct.Carbohydrate * product.FoodProductWeight / 100);
+                totalFat += (product.FoodProduct.Fat * product.FoodProductWeight / 100);
+                totalProteins += (product.FoodProduct.Protein * product.FoodProductWeight / 100);
+                totalEnergy += (product.FoodProduct.Energy * product.FoodProductWeight / 100);
+                totalWeight += product.FoodProductWeight;
+            }
+            DishDetailsViewModel model = new DishDetailsViewModel()
+            {
+                Dish = dish,
+                TotalCarbs = totalCarbs,
+                TotalEnergy = totalEnergy,
+                TotalFat = totalFat,
+                TotalProteins = totalProteins,
+                TotalWeight = totalWeight
+            };
+
+            return View(model);
         }
 
         // POST: Dishes/Delete/5

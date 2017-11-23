@@ -17,7 +17,8 @@
 </div>
 
 <div class="form-horizontal">
-    <input type="text" id="DishName" placeholder="Nazwa posiłku" />
+    <input type="text" id="DishName" placeholder="Nazwa posiłku" class="form-control"/>
+    <br />
     <div class="form-inline">
         <div class="form-inline">
             <select class="selectpicker" id="FoodProductType" data-live-search="true" title="Wybierz typ produktu" asp-items="Model.FoodProductType">
@@ -27,7 +28,7 @@
 
             <input type="number" class="form-control" placeholder="Masa produktu" id="Weight" min="0"/>
 
-            <button class="btn btn-default" id="Create">Dodaj</button>
+            <button class="btn btn-success box curmudgeon" id="Create">Dodaj <i class="fa fa-plus-square-o"></i></button>
 
         </div>
     </div>
@@ -62,7 +63,7 @@
                             <td class="Fat">@data.FoodProduct.Fat</td>
                             <td class="Energy">@data.FoodProduct.Energy</td>
                             <td>
-                                <span class="btn btn-default btn-sm remove">
+                                <span class="btn btn-danger btn-sm remove">
                                     <span class="glyphicon glyphicon-trash" id="Delete"></span>
                                 </span>
                             </td>
@@ -86,7 +87,13 @@
             </tr>
         </tbody>
     </table>
-    <button class="btn btn-default" id="CreateDish">Utwórz posiłek</button>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <button id="CreateDish" class="btn btn-success box bar">Utwórz posiłek <i class="fa fa-check-square-o"></i></button>
+            <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -203,7 +210,7 @@
 
                 var deleteButtonTD = document.createElement("td");
                 var deleteButtonContainer = document.createElement("span");
-                deleteButtonContainer.className = "btn btn-default btn-sm remove";
+                deleteButtonContainer.className = "btn btn-danger btn-sm remove";
                 var deleteButton = document.createElement("span");
                 deleteButton.className = "glyphicon glyphicon-trash";
                 deleteButton.id = "Delete";
@@ -224,7 +231,6 @@
                 product["kcal"] = energy;
 
                 dish.push(product);
-                console.log(dish);
                 $.fn.updateTotals(proteins, carbs, fats, energy, weightOfProduct, '+');
 
                 $('.TotalWeight').text(totalWeight);

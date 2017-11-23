@@ -7,7 +7,6 @@
             data: trainingResults,
             async: true,
             success: function (obj) {
-                console.log("Hello");
                 swal({
                     title: "Powodzenie",
                     text: "Twój trening został zapisany pomyślnie.",
@@ -29,13 +28,12 @@
 
     $('#Edit').click(function () {
         var trainingResults = getData();
+        trainingResults.trainingId = $('#TrainingId').val();
         $.ajax({
             url: '../Edit',
             type: 'POST',
             data: trainingResults,
-            async: true,
             success: function (obj) {
-                console.log("Hello");
                 swal({
                     title: "Powodzenie",
                     text: "Twój trening został zapisany pomyślnie.",
@@ -57,25 +55,28 @@
 
     function getData() {
         var data = [];
-        data.Exercise = {};
-        var exercises = $('#WorkoutTable > tbody > tr > td.Exercise');
-        var series = $('#WorkoutTable > tbody > tr > td.SeriesNo');
-        var reps = $('#WorkoutTable > tbody > tr > td.RepsNo');
-        var weights = $('#WorkoutTable > tbody > tr > td.Weight > input');
-        var i = 0;
-        var k = 0;
-        exercises.each(function () {
+        var rows = $('#WorkoutTable > tbody > tr');
+
+        rows.each(function () {
             var item = {};
-            item["Exercise"] = this.innerHTML;
-            item["SeriesNo"] = parseInt(series[i].innerHTML);
-            item["RepsNo"] = parseInt(reps[i].innerHTML);
-            item["Weight"] = [];
-            var tmp = parseInt(series[i].innerHTML);
-            for (var j = k; j < k + tmp; j++) {
-                item["Weight"].push(parseFloat(weights[j].value));
+            item["Exercise"] = $(this).find('.Exercise').text();
+            item["ActivityType"] = $(this).find('.ActivityType').text();
+            item["ExerciseInfo"] = {};
+            if ($(this).find('.ActivityType').text() === "Ćwiczenia siłowe") {
+                var info = {};
+                info["RepsNo"] = parseInt($(this).find('.RepsNo').text());
+                info["SeriesNo"] = parseInt($(this).find('.SeriesNo').text());
+                info["Weight"] = [];
+                $(this).find('.Weight > input').each(function () {
+                    info["Weight"].push(parseInt($(this).val()));
+                });
+                item["ExerciseInfo"] = info;
+            } else if ($(this).find('.ActivityType').text() === "Ćwiczenia wytrzymałościowe" || $(this).find('.ActivityType').text() === "Sporty grupowe") {
+                var info = {};
+                info["ExerciseLength"] = parseInt($(this).find('.ExerciseLength').text());
+                info["ExerciseLengthAtTraining"] = parseInt($(this).find('.Length > input').val());
+                item["ExerciseInfo"] = info;
             }
-            k += tmp;
-            i++;
             data.push(item);
         });
 
@@ -84,6 +85,7 @@
         trainingResults.id = $('#Id').val();
         trainingResults.startDate = JSON.stringify(createDate($('#startDate').find('input').val()));
         trainingResults.endDate = JSON.stringify(createDate($('#endDate').find('input').val()));
+
         return trainingResults;
     }
 

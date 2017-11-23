@@ -48,11 +48,11 @@ namespace DziennikSportowca.Models
 
     public enum ExerciseScope
     {
-        [Display(Name = "Pokonać określony dystans \"na raz\"")]
-        OvercomeTheSpecifiedDistanceAtOnce = 1,
+        [Display(Name = "Wykonywać sporty grupowe przez określony czas \"na raz\"")]
+        DoGroupSportsForASpecifiedTimeAtOnce = 1,
 
-        [Display(Name = "Pokonać określony dystans \"w sumie\"")]
-        OvercomeTheSpecifiedDistanceAtAll,
+        [Display(Name = "Wykonywać sporty grupowe przez określony czas \"w sumie\"")]
+        DoGroupSportsForASpecifiedTimeAtAll,
 
         [Display(Name = "Wykonywać ćwiczenia wytrzymałościowe przez określony czas \"na raz\"")]
         DoCardioExercisesForASpecifiedTimeAtOnce,

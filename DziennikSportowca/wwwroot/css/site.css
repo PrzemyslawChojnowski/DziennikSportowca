@@ -67,6 +67,38 @@ input[type="date"]::-webkit-input-placeholder {
     }
 }
 
+.table-delete tbody tr:hover td, .table-delete tbody tr:hover th {
+    background-color: #F8F3F3;
+}
+
+.table-info tbody tr:hover td, .table-info tbody tr:hover th {
+    background-color: #F7FBFE;
+}
+
+.panel-subheading-info {
+    background-color: #F7FBFE;
+}
+
+.panel-subheading-delete {
+    background-color: #F8F3F3;
+}
+
+.padding-5 {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
+}
+
+.margin-top-0 {
+    margin-top: 0px;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0px;
+}
 
 /*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. MODAL - KONIEC.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*/
 
@@ -817,6 +849,27 @@ textarea {
 .padding-0{
     padding-left: 0;
     padding-right: 0;
+}
+
+.panel-subheading {
+    margin-left: -15px;
+    margin-right: -15px;
+    border-radius: 0;
+    text-align: center;
+}
+
+.padding-15 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.div-center {
+    margin: 0 auto;
+}
+
+.margin-0 {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .table-row{

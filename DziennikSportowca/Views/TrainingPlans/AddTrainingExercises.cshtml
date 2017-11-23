@@ -35,8 +35,8 @@
             <input type="number" class="form-control hidden" placeholder="Liczba serii" id="SeriesNo" />
             <input type="number" class="form-control hidden" placeholder="Liczba powtorzen" id="RepsNo" />
             <input type="number" class="form-control hidden" placeholder="Czas trwania" id="ExerciseTime" />
-
-            <button class="btn btn-default" onclick="newElement()">Add</button>
+            <br/>
+            <button class="btn btn-info box curmudgeon" onclick="newElement()">Dodaj</button>
 
         </div>
     </div>
@@ -44,11 +44,11 @@
     <table class="table table-hover" id="ExercisesTable">
         <thead>
             <tr>
-                <th>Lp.</th>
-                <th>Cwiczenie</th>
+                <th>#</th>
+                <th>Ćwiczenie</th>
                 <th>Typ aktywności</th>
                 <th>Informacje o ćwiczeniu</th>
-                <th>Usun</th>
+                <th>Usuń</th>
             </tr>
         </thead>
         <tbody id="ExercisesBody">
@@ -77,7 +77,7 @@
                                 }
                             </td>
                             <td>
-                                <span class="btn btn-default btn-sm remove">
+                                <span class="btn btn-danger btn-sm remove">
                                     <span class="glyphicon glyphicon-trash" id="Delete"></span>
                                 </span>
                             </td>
@@ -89,5 +89,10 @@
         </tbody>
     </table>
 
-    <button class="btn btn-default" id="AddExercises">Zapisz cwiczenia</button>
+    <div class="form-group">
+        <div class="col-md-10">
+            <button id="AddExercises" class="btn btn-success box bar">Zapisz cwiczenia <i class="fa fa-check-square-o"></i></button>
+            <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+        </div>
+    </div>
 </div>

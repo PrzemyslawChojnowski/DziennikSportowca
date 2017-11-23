@@ -50,6 +50,11 @@ namespace DziennikSportowca.Controllers
 
             var userTraining = await _context.UserTrainings
                 .Include(u => u.Training)
+                    .ThenInclude(x => x.Exercises)
+                        .ThenInclude(x => x.Exercise)
+                            .ThenInclude(x => x.ActivityType)
+                .Include(x => x.UserTrainingsExercisesResults)
+                    .ThenInclude(x => x.Weights)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (userTraining == null)
             {
@@ -93,8 +98,13 @@ namespace DziennikSportowca.Controllers
                                         .ThenInclude(x => x.Exercises)
                                     .Include(x => x.UserTrainingsExercisesResults)
                                         .ThenInclude(x => x.TrainingPlanExercise)
-                                        .ThenInclude(x => x.Exercise)
-                                        .ThenInclude(x => x.MuscleParts).ThenInclude(x => x.MusclePart)
+                                            .ThenInclude(x => x.Exercise)
+                                                .ThenInclude(x => x.MuscleParts)
+                                                    .ThenInclude(x => x.MusclePart)
+                                    .Include(x => x.UserTrainingsExercisesResults)
+                                        .ThenInclude(x => x.TrainingPlanExercise)
+                                            .ThenInclude(x => x.Exercise)
+                                                .ThenInclude(x => x.ActivityType)
                                     .Include(x => x.UserTrainingsExercisesResults)
                                         .ThenInclude(x => x.Weights)
                                     .FirstOrDefaultAsync(x => x.Training.UserId == loggedUserId);
@@ -109,47 +119,57 @@ namespace DziennikSportowca.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string jsonString, int id, string startDate, string endDate)
+        public async Task<IActionResult> Edit(string jsonString, int id, int trainingId, string startDate, string endDate)
         {
             DateTime localStartDateTime = ((DateTime)JsonConvert.DeserializeObject(startDate)).ToLocalTime();
             DateTime localEndDateTime = ((DateTime)JsonConvert.DeserializeObject(endDate)).ToLocalTime();
 
+            var trainingToUpdate = await _context.UserTrainings.Where(x => x.Id == trainingId)
+                                    .Include(x => x.Training)
+                                        .ThenInclude(x => x.Exercises)
+                                    .Include(x => x.UserTrainingsExercisesResults)
+                                        .ThenInclude(x => x.TrainingPlanExercise)
+                                            .ThenInclude(x => x.Exercise)
+                                                .ThenInclude(x => x.MuscleParts)
+                                                    .ThenInclude(x => x.MusclePart)
+                                    .Include(x => x.UserTrainingsExercisesResults)
+                                        .ThenInclude(x => x.TrainingPlanExercise)
+                                            .ThenInclude(x => x.Exercise)
+                                                .ThenInclude(x => x.ActivityType)
+                                    .Include(x => x.UserTrainingsExercisesResults)
+                                        .ThenInclude(x => x.Weights).
+                                    FirstOrDefaultAsync();
+
             var deserializedJsonData = JsonConvert.DeserializeAnonymousType(jsonString,
                 new[] {
                     new { Exercise = "",
-                        SeriesNo = 0,
-                        RepsNo = 0,
-                        Weight = new List<double>() }
+                        ActivityType = "",
+                        ExerciseInfo = new { RepsNo = 0, SeriesNo = 0, Weight = new List<int>(), ExerciseLength = 0, ExerciseLengthAtTraining = 0 } }
                 }.ToList());
-
-            if(!_context.UserTrainings.Any(x => x.Id == id))
-            {
-                return NotFound();
-            }
-
-            UserTraining userTraining = await _context.UserTrainings.FirstOrDefaultAsync(x => x.Id == id);
-            userTraining.UserTrainingsExercisesResults = await _context.UserTrainingExercisesResults
-                                                        .Where(x => x.UserTrainingId == id)
-                                                        .Include(x => x.Weights)
-                                                        .Include(x => x.TrainingPlanExercise)
-                                                            .ThenInclude(x => x.Exercise)
-                                                        .ToListAsync();
-
-            userTraining.StartDateTime = localStartDateTime;
-            userTraining.EndDateTime = localEndDateTime;
             int i = 0;
-            foreach(var exercise in deserializedJsonData)
+
+            foreach (var exercise in deserializedJsonData)
             {
-                var index = userTraining.UserTrainingsExercisesResults.FindIndex(x => exercise.Exercise == x.TrainingPlanExercise.Exercise.Name);
-                userTraining.UserTrainingsExercisesResults.ElementAt(index).TrainingPlanExercise.RepsNo = exercise.RepsNo;
-                userTraining.UserTrainingsExercisesResults.ElementAt(index).TrainingPlanExercise.SeriesNo = exercise.SeriesNo;
-                for (int j = 0; j < exercise.Weight.Count; j++)
-                    userTraining.UserTrainingsExercisesResults.ElementAt(index).Weights[j].Weight = exercise.Weight[j];
+                if (exercise.ActivityType == "Æwiczenia si³owe")
+                {
+                    int j = 0;
+                    foreach (var weightResult in exercise.ExerciseInfo.Weight)
+                    {
+                        trainingToUpdate.UserTrainingsExercisesResults[i].Weights[j].Result = weightResult;
+                        j++;
+                    }
+                }
+                else if (exercise.ActivityType == "Æwiczenia wytrzyma³oœciowe" || exercise.ActivityType == "Sporty grupowe")
+                {
+                    trainingToUpdate.UserTrainingsExercisesResults[i].Weights[0].Result = exercise.ExerciseInfo.ExerciseLengthAtTraining;
+                }
                 i++;
             }
 
-            _context.UserTrainings.Update(userTraining);
+            trainingToUpdate.StartDateTime = localStartDateTime;
+            trainingToUpdate.EndDateTime = localEndDateTime;
+
+            _context.UserTrainings.Update(trainingToUpdate);
             _context.SaveChanges();
 
             return new EmptyResult();
@@ -165,6 +185,11 @@ namespace DziennikSportowca.Controllers
 
             var userTraining = await _context.UserTrainings
                 .Include(u => u.Training)
+                    .ThenInclude(x => x.Exercises)
+                        .ThenInclude(x => x.Exercise)
+                            .ThenInclude(x => x.ActivityType)
+                .Include(x => x.UserTrainingsExercisesResults)
+                    .ThenInclude(x => x.Weights)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (userTraining == null)
             {
@@ -216,7 +241,7 @@ namespace DziennikSportowca.Controllers
             List<TrainingPlanExercise> exercises = await _context.TrainingPlanExercises.
                                                     Where(x => x.TrainingPlanId == selectedTraining.Id).
                                                     Include(x => x.Exercise).
-                                                    Include(x => x.Exercise.MuscleParts).
+                                                        ThenInclude(x => x.ActivityType).
                                                     ToListAsync();
 
             foreach (var exercise in exercises)
@@ -234,75 +259,15 @@ namespace DziennikSportowca.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveTrainingResults(string jsonString, int id, string startDate, string endDate)
         {
-            DateTime localStartDateTime = ((DateTime)JsonConvert.DeserializeObject(startDate)).ToLocalTime();
-            DateTime localEndDateTime = ((DateTime)JsonConvert.DeserializeObject(endDate)).ToLocalTime();
+            var functionResult = await CreateUserTrainingObjectInstance(jsonString, id, startDate, endDate);
 
-            var deserializedJsonData = JsonConvert.DeserializeAnonymousType(jsonString,
-                new[] {
-                    new { Exercise = "",
-                        SeriesNo = 0,
-                        RepsNo = 0,
-                        Weight = new List<double>() }
-                }.ToList());
-
-            TrainingPlan tp = await _context.TrainingPlans.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (tp == null)
-            {
+            if (functionResult.Item1 == null || functionResult.Item2 == null)
                 return NotFound();
-            }
 
-            UserTraining training = new UserTraining()
-            {
-                Training = tp,
-                TrainingId = tp.Id,
-                StartDateTime = localStartDateTime,
-                EndDateTime = localEndDateTime
-            };
+            _context.UserTrainingExercisesResults.AddRange(functionResult.Item2);
+            functionResult.Item1.UserTrainingsExercisesResults = functionResult.Item2;
 
-            List<UserTrainingExerciseResult> results = new List<UserTrainingExerciseResult>();
-
-            foreach (var exercise in deserializedJsonData)
-            {
-                TrainingPlanExercise tpExercise = await _context.TrainingPlanExercises.FirstOrDefaultAsync
-                    (x => x.TrainingPlanId == tp.Id && x.Exercise.Name == exercise.Exercise);
-                tpExercise.Exercise = await _context.Exercises.FirstOrDefaultAsync(x => x.Id == tpExercise.ExerciseId);
-
-                if (tpExercise == null)
-                {
-                    return NotFound();
-                }
-
-                UserTrainingExerciseResult result = new UserTrainingExerciseResult()
-                {
-                    UserTraining = training,
-                    UserTrainingId = training.Id,
-                    RepsNo = exercise.RepsNo,
-                    SeriesNo = exercise.SeriesNo,
-                    TrainingPlanExercise = tpExercise,
-                    TrainingPlanExerciseId = tpExercise.Id
-                };
-
-                List<ExerciseWeight> weights = new List<ExerciseWeight>();
-
-                foreach (var weightResult in exercise.Weight)
-                {
-                    ExerciseWeight weight = new ExerciseWeight()
-                    {
-                        UserTrainingExerciseResult = result,
-                        UserTrainingExerciseResultId = result.Id,
-                        Weight = weightResult
-                    };
-                    weights.Add(weight);
-                }
-
-                _context.ExercisesWeights.AddRange(weights);
-                result.Weights = weights;
-                results.Add(result);
-            }
-            _context.UserTrainingExercisesResults.AddRange(results);
-            training.UserTrainingsExercisesResults = results;
-            _context.UserTrainings.Add(training);
+            _context.UserTrainings.Add(functionResult.Item1);
             _context.SaveChanges();
 
             //var userId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
@@ -339,6 +304,103 @@ namespace DziennikSportowca.Controllers
             //}
 
             return new EmptyResult();
+        }
+
+        public async Task<(UserTraining,List<UserTrainingExerciseResult>)> CreateUserTrainingObjectInstance(string jsonString, int id, string startDate, string endDate)
+        {
+            DateTime localStartDateTime = ((DateTime)JsonConvert.DeserializeObject(startDate)).ToLocalTime();
+            DateTime localEndDateTime = ((DateTime)JsonConvert.DeserializeObject(endDate)).ToLocalTime();
+
+            var deserializedJsonData = JsonConvert.DeserializeAnonymousType(jsonString,
+                new[] {
+                    new { Exercise = "",
+                        ActivityType = "",
+                        ExerciseInfo = new { RepsNo = 0, SeriesNo = 0, Weight = new List<int>(), ExerciseLength = 0, ExerciseLengthAtTraining = 0 } }
+                }.ToList());
+
+            TrainingPlan tp = await _context.TrainingPlans.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (tp == null)
+            {
+                return (null,null);
+            }
+
+            UserTraining training = new UserTraining()
+            {
+                Training = tp,
+                TrainingId = tp.Id,
+                StartDateTime = localStartDateTime,
+                EndDateTime = localEndDateTime
+            };
+
+            List<UserTrainingExerciseResult> results = new List<UserTrainingExerciseResult>();
+
+            foreach (var exercise in deserializedJsonData)
+            {
+                TrainingPlanExercise tpExercise = await _context.TrainingPlanExercises.FirstOrDefaultAsync
+                    (x => x.TrainingPlanId == tp.Id && x.Exercise.Name == exercise.Exercise);
+                tpExercise.Exercise = await _context.Exercises.FirstOrDefaultAsync(x => x.Id == tpExercise.ExerciseId);
+
+                if (tpExercise == null)
+                {
+                    return (null, null);
+                }
+
+                UserTrainingExerciseResult result = new UserTrainingExerciseResult();
+                List<ExerciseWeight> weights = new List<ExerciseWeight>();
+
+                if (exercise.ActivityType == "Æwiczenia si³owe")
+                {
+                    var tmp = new UserTrainingExerciseResult()
+                    {
+                        UserTraining = training,
+                        UserTrainingId = training.Id,
+                        RepsNo = exercise.ExerciseInfo.RepsNo,
+                        SeriesNo = exercise.ExerciseInfo.SeriesNo,
+                        TrainingPlanExercise = tpExercise,
+                        TrainingPlanExerciseId = tpExercise.Id
+                    };
+                    result = tmp;
+
+                    foreach (var weightResult in exercise.ExerciseInfo.Weight)
+                    {
+                        ExerciseWeight weight = new ExerciseWeight()
+                        {
+                            UserTrainingExerciseResult = result,
+                            UserTrainingExerciseResultId = result.Id,
+                            Result = weightResult
+                        };
+                        weights.Add(weight);
+                    }
+                }
+                else if (exercise.ActivityType == "Æwiczenia wytrzyma³oœciowe" || exercise.ActivityType == "Sporty grupowe")
+                {
+                    var tmp = new UserTrainingExerciseResult()
+                    {
+                        UserTraining = training,
+                        UserTrainingId = training.Id,
+                        RepsNo = exercise.ExerciseInfo.RepsNo,
+                        SeriesNo = exercise.ExerciseInfo.SeriesNo,
+                        TrainingPlanExercise = tpExercise,
+                        TrainingPlanExerciseId = tpExercise.Id
+                    };
+                    result = tmp;
+
+                    ExerciseWeight weight = new ExerciseWeight()
+                    {
+                        UserTrainingExerciseResult = result,
+                        UserTrainingExerciseResultId = result.Id,
+                        Result = exercise.ExerciseInfo.ExerciseLengthAtTraining
+                    };
+                    weights.Add(weight);
+                }
+
+                _context.ExercisesWeights.AddRange(weights);
+                result.Weights = weights;
+                results.Add(result);
+            }
+
+            return (training,results);
         }
     }
 }

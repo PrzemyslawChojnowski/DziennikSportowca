@@ -9,7 +9,7 @@ namespace DziennikSportowca.Models
     public class ExerciseWeight
     {
         public int Id { get; set; }
-        public double Weight { get; set; }
+        public double Result { get; set; }
 
         public int UserTrainingExerciseResultId { get; set; }
         [ForeignKey("UserTrainingExerciseResultId")]

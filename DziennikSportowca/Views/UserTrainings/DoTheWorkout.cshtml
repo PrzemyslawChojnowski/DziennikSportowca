@@ -3,13 +3,30 @@
 @{
     ViewData["Title"] = "DoTheWorkout";
 }
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
-<script src="~/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-<script src="~/lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.pl.js"></script>
-<link rel="stylesheet" href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" />
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
-<script type="text/javascript" src="~/js/UserTrainings/DoTheWorkout.js"></script>
+
+@section Scripts { 
+    <script src="~/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="~/lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.pl.js"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
+    <script type="text/javascript" src="~/js/UserTrainings/DoTheWorkout.js"></script>
+
+    <script type="text/javascript">
+        $('[data-toggle="tooltip"]').tooltip();
+
+            $(".date").datetimepicker({
+                format: "dd/mm/yyyy - hh:ii",
+                language: "pl",
+                autoclose: true,
+                calendarWeeks: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                minuteStep: 1,
+                fontAwesome: true
+            });
+    </script>
+}
 
 <div class="container-breadcrumb">
     <ol class="breadcrumb breadcrumb-arrow">
@@ -23,7 +40,7 @@
     <label asp-for="@Model.StartTime" class="col-md-2 control-label"></label>
     <div class="col-xs-3">
         <div class="input-group date" id="startDate">
-            <input class="form-control" />
+            <input class="form-control" placeholder="Czas rozpoczęcia" data-toggle="tooltip" title="Czas rozpoczęcie"/>
             <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
         </div>
     </div>
@@ -33,7 +50,7 @@
     <label asp-for="@Model.EndTime" class="col-md-2 control-label"></label>
     <div class="col-xs-3">
         <div class="input-group date" id="endDate">
-            <input class="form-control" />
+            <input class="form-control" placeholder="Czas zakończenia" data-toggle="tooltip" title="Czas zakończenia"/>
             <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
         </div>
     </div>
@@ -43,12 +60,11 @@
     <table class="table table-hover" id="WorkoutTable">
         <thead>
             <tr>
-                <th>Lp.</th>
-                <th>Partia</th>
+                <th>#</th>
                 <th>Cwiczenie</th>
-                <th>Liczba serii</th>
-                <th>Liczba powtorzen</th>
-                <th>Obciazenie</th>
+                <th>Typ aktywności</th>
+                <th>Informacje o ćwiczeniu</th>
+                <th>Wykonanie ćwiczenia</th>
             </tr>
         </thead>
         <tbody id="WorkoutBody">
@@ -59,16 +75,35 @@
                     {
                         <tr>
                             <td class="ExerciseNo">@i</td>
-                            <td class="PartName" value="">@data.Exercise.MuscleParts[0].MusclePart.Description</td>
                             <td class="Exercise">@data.Exercise.Name</td>
-                            <td class="SeriesNo">@data.SeriesNo</td>
-                            <td class="RepsNo">@data.RepsNo</td>
-                            @for (int j = 0; j < data.SeriesNo; j++)
-                            {
-                            <td class="Weight">
-                                <input asp-for="@Model.Weight" class="form-control" />
-                            </td>
-                            }
+                            <td class="ActivityType">@data.Exercise.ActivityType.Description</td>
+                            
+                                @if (data.Exercise.ActivityType.Description == "Ćwiczenia siłowe")
+                                {
+                                    <td class="ExerciseInfo">
+                                        <span class="SeriesNo">@data.SeriesNo</span>
+                                        <span class="text1"> serie x </span>
+                                        <span class="RepsNo">@data.RepsNo</span>
+                                        <span class="text2"> powtórzeń</span>
+                                    </td>
+                                    <td class="Weight form-inline col-xs-4">
+                                        @for (int j = 0; j < data.SeriesNo; j++)
+                                        {
+                                            <input asp-for="@Model.Weight" class="form-control input-sm" style="width: 60px;" placeholder="Obciążenie" data-toggle="tooltip" title="Obciążenie [kg]"/>
+                                        }
+                                    </td>
+                                }
+                                else if (data.Exercise.ActivityType.Description == "Ćwiczenia wytrzymałościowe" || data.Exercise.ActivityType.Description == "Sporty grupowe")
+                                {
+                                    <td class="ExerciseInfo">
+                                        <span class="text1">Czas trwania: </span>
+                                        <span class="ExerciseLength">@data.ExerciseLength</span>
+                                        <span class="text2"> minut</span>
+                                    </td>
+                                    <td class="Length form-inline col-xs-4">
+                                        <input asp-for="@Model.ExerciseLength" class="form-control input-sm" style="width: 60px;" placeholder="Czas" data-toggle="tooltip" title="Czas trwania [min]"/>
+                                    </td>
+                                }
                         </tr>
                         i++;
                     }
@@ -77,21 +112,12 @@
         </tbody>
     </table>
 </div>
-<button type="button" class="btn btn-default" id="Save" value="@Model.TrainingPlan.Id">Zapisz trening</button>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="form-group">
+    <div class="col-md-10">
+        <button type="button" class="btn btn-success box bar" id="Save" value="@Model.TrainingPlan.Id">Zapisz trening <i class="fa fa-check-square-o"></i></button>
+        <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+    </div>
 </div>
+<br /><br />
 
-<script type="text/javascript">
-    $(".date").datetimepicker({
-        format: "dd/mm/yyyy - hh:ii",
-        language: "pl",
-        autoclose: true,
-        calendarWeeks: true,
-        todayHighlight: true,
-        todayBtn: "linked",
-        minuteStep: 1,
-        fontAwesome: true
-    });
-</script>

@@ -182,9 +182,9 @@ namespace DziennikSportowca.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("UserTrainingExerciseResultId");
+                    b.Property<double>("Result");
 
-                    b.Property<double>("Weight");
+                    b.Property<int>("UserTrainingExerciseResultId");
 
                     b.HasKey("Id");
 
@@ -331,8 +331,6 @@ namespace DziennikSportowca.Data.Migrations
 
                     b.Property<int?>("SeriesNo");
 
-                    b.Property<string>("TrainingPlanExerciseInfo");
-
                     b.Property<int>("TrainingPlanId");
 
                     b.HasKey("Id");
@@ -416,9 +414,11 @@ namespace DziennikSportowca.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("RepsNo");
+                    b.Property<int?>("ExerciseLength");
 
-                    b.Property<int>("SeriesNo");
+                    b.Property<int?>("RepsNo");
+
+                    b.Property<int?>("SeriesNo");
 
                     b.Property<int>("TrainingPlanExerciseId");
 

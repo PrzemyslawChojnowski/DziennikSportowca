@@ -44,7 +44,12 @@ namespace DziennikSportowca.Models
 
             var trainingPlan = await _context.TrainingPlans
                 .Include(t => t.User)
+                .Include(x => x.Exercises)
+                    .ThenInclude(x => x.Exercise)
+                        .ThenInclude(x => x.ActivityType)
+                .Include(x => x.UserTrainings)
                 .SingleOrDefaultAsync(m => m.Id == id);
+
             if (trainingPlan == null)
             {
                 return NotFound();
@@ -87,7 +92,7 @@ namespace DziennikSportowca.Models
                 return NotFound();
             }
 
-            var trainingPlan = await _context.TrainingPlans.SingleOrDefaultAsync(m => m.Id == id);
+            var trainingPlan = await _context.TrainingPlans.Include(x => x.User).SingleOrDefaultAsync(m => m.Id == id);
             if (trainingPlan == null)
             {
                 return NotFound();
@@ -142,6 +147,10 @@ namespace DziennikSportowca.Models
 
             var trainingPlan = await _context.TrainingPlans
                 .Include(t => t.User)
+                .Include(x => x.Exercises)
+                    .ThenInclude(x => x.Exercise)
+                        .ThenInclude(x => x.ActivityType)
+                .Include(x => x.UserTrainings)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (trainingPlan == null)
             {

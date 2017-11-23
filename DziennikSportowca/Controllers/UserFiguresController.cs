@@ -194,6 +194,7 @@ namespace DziennikSportowca.Controllers
             {
                 try
                 {
+                    userFigure.User = await _userManager.GetUserAsync(User);
                     _context.Update(userFigure);
                     await _context.SaveChangesAsync();
                 }

@@ -16,7 +16,6 @@
     </ol>
 </div>
 
-<h4>Goal</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -58,7 +57,8 @@
                 <span asp-validation-for="Target" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" id="saveButton"/>
+                <button type="submit" value="Create" class="btn btn-success box bar" id="saveButton">Zapisz <i class="fa fa-check-square-o"></i></button>
+                <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
             </div>
         </form>
     </div>
@@ -72,7 +72,7 @@
         {
             hideElement('#physiqueScopeDropDown');
             hideElement('#exerciseScopeDropDown');
-            //hideElement('#exercisesDropDown');
+            hideElement('#exercisesDropDown');
             hideElement('#circumferencesDropDown');
 
             if ($('#goalScopeDropDown').find(':selected').val() == 1) {
@@ -102,14 +102,15 @@
             var selectedGoalScope = $(this).find(':selected').val();
             switch (selectedGoalScope) {
                 case "1":
-                    showElement('#physiqueScopeDropDown');
+                    showElement('#physiqueScopeDropDown');                    
                     hideElement('#exerciseScopeDropDown');
                     $('#exerciseScopeDropDown').find('select').selectpicker('val', '');
                     hideElement('#circumferencesDropDown');
+                    hideElement('#exercisesDropDown');
                     $('#circumferencesDropDown').find('select').selectpicker('val', '');
                     break;
                 case "2":
-                    showElement('#exerciseScopeDropDown');
+                    showElement('#exerciseScopeDropDown');                    
                     hideElement('#physiqueScopeDropDown');
                     $('#physiqueScopeDropDown').find('select').selectpicker('val', '');
                     hideElement('#circumferencesDropDown');
@@ -133,7 +134,44 @@
                     showElement("#circumferencesDropDown");
                     break;
             }
+        });
 
+        $('#exerciseScopeDropDown').change(function () {
+            var selectedExerciseScope = $(this).find(':selected').val();
+            var data = {};
+            if (selectedExerciseScope == 1 || selectedExerciseScope == 2) {
+                data.activityType = "Sporty grupowe";
+            }
+            else if (selectedExerciseScope == 3 || selectedExerciseScope == 4) {
+                data.activityType = "Ćwiczenia wytrzymałościowe";
+            }
+            else if (selectedExerciseScope == 5) {
+                data.activityType = "Ćwiczenia siłowe";
+            }
+
+            $.ajax({
+                url: './getExercises',
+                type: 'GET',
+                data: data,
+                async: false,
+                success: function (obj) {
+                    if ($('#exercisesDropDown').find('option').length > 0) {
+                        $('#exercisesDropDown').find('option').remove().end();
+                    }
+
+                    $.each(obj, function (key, value) {
+                        $('#exercisesDropDown').find('select').append($("<option/>", {
+                            value: key,
+                            text: value
+                        }));
+                    });
+                    showElement('#exercisesDropDown');
+                    $('#exercisesDropDown').find('select').selectpicker('refresh');
+                },
+                error: function (obj) {
+                    swal("Niepowodzenie", "Napotkano nieoczekiwany błąd. Spróbuj ponownie.", "error");
+                }
+            });
         });
 
         function showElement(name) {
@@ -149,8 +187,3 @@
         }
     });
 </script>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

@@ -33,7 +33,5 @@ namespace DziennikSportowca.Models
         public int? SeriesNo { get; set; }
         public int? RepsNo { get; set; }
         public int? ExerciseLength { get; set; }
-        
-        public string TrainingPlanExerciseInfo { get; set; }
     }
 }

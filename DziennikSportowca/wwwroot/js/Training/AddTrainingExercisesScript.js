@@ -6,13 +6,13 @@
         
         $("#Exercises").selectpicker('show');
 
-        var musclePartName = $('#MusclePartName').find(":selected").text();
-        var muscle = {};
-        muscle.trainingPartName = musclePartName;
+        var musclePartName = $('#MusclePartName').find(":selected").text();         
+        var muscle = {};                                                           
+        muscle.trainingPartName = musclePartName;                                   
         $.ajax({
             url: '../getExercises',
             type: 'GET',
-            data: muscle,
+            data: muscle,                                                           
             async: false,
             success: function (obj) {
                 $.each(obj, function (key, value) {
@@ -67,8 +67,6 @@
         }
         exercises.push(item);
     });
-
-    console.log(exercises);
 });
 
 var exercises = [];
@@ -90,7 +88,7 @@ function newElement() {
     var span4 = document.createElement("span");
 
     var deleteButtonContainer = document.createElement("span");
-    deleteButtonContainer.className = "btn btn-default btn-sm remove";
+    deleteButtonContainer.className = "btn btn-danger btn-sm remove";
     var deleteButton = document.createElement("span");
     deleteButton.className = "glyphicon glyphicon-trash";
     deleteButton.id = "Delete";

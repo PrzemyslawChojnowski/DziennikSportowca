@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Edit";
 }
-<script type="text/javascript" src="~/js/UserFigure/Indexes.js"></script>
+
+@section Scripts{
+    <script src="~/js/UserFigure/EditUserFigureCircumferences.js" type="text/javascript"></script>
+}
 
 <div class="container-breadcrumb">
     <ol class="breadcrumb breadcrumb-arrow">
@@ -12,80 +15,142 @@
     </ol>
 </div>
 
-<form asp-action="Edit">
+<form enctype="multipart/form-data" asp-action="Edit">
     <div class="form-horizontal">
         <h4>UserFigure</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Id" />
         <div class="form-group">
             <label asp-for="Date" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <div class="input-group date" data-provide="datepicker" id="datepicker">
+                    <div class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </div>
+                    <input asp-for="Date" type="text" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="ShouldersCircumference" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ShouldersCircumference" class="form-control" />
-                <span asp-validation-for="ShouldersCircumference" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <img src="~/images/Icons/shoulders.png" class="icon-img" />
+                    </div>
+                    <input asp-for="ShouldersCircumference" type="number" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44" class="form-control" />
+                    <span asp-validation-for="ShouldersCircumference" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="ChestCircumference" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ChestCircumference" class="form-control" />
-                <span asp-validation-for="ChestCircumference" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <img src="~/images/Icons/chest.png" class="icon-img" />
+                    </div>
+                    <input asp-for="ChestCircumference" type="number" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44" class="form-control" />
+                    <span asp-validation-for="ChestCircumference" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="WaistCircumference" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="WaistCircumference" class="form-control" />
-                <span asp-validation-for="WaistCircumference" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <img src="~/images/Icons/glutes.png" class="icon-img" />
+                    </div>
+                    <input asp-for="WaistCircumference" type="number" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44" class="form-control" id="WaistCircumference" />
+                    <span asp-validation-for="WaistCircumference" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="BicepsCircumference" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="BicepsCircumference" class="form-control" />
-                <span asp-validation-for="BicepsCircumference" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <img src="~/images/Icons/biceps.png" class="icon-img" />
+                    </div>
+                    <input asp-for="BicepsCircumference" type="number" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44" class="form-control" />
+                    <span asp-validation-for="BicepsCircumference" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="TricepsCircumference" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="TricepsCircumference" class="form-control" />
-                <span asp-validation-for="TricepsCircumference" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <img src="~/images/Icons/triceps.png" class="icon-img" />
+                    </div>
+                    <input asp-for="TricepsCircumference" type="number" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44" class="form-control" />
+                    <span asp-validation-for="TricepsCircumference" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="ThighCircumference" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ThighCircumference" class="form-control" />
-                <span asp-validation-for="ThighCircumference" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <img src="~/images/Icons/hamstrings.png" class="icon-img" />
+                    </div>
+                    <input asp-for="ThighCircumference" type="number" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44" class="form-control" />
+                    <span asp-validation-for="ThighCircumference" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="HipCircumference" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="HipCircumference" class="form-control" />
-                <span asp-validation-for="HipCircumference" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <img src="~/images/Icons/glutes.png" class="icon-img" />
+                    </div>
+                    <input asp-for="HipCircumference" type="number" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44" class="form-control" />
+                    <span asp-validation-for="HipCircumference" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Weight" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Weight" class="form-control" />
-                <span asp-validation-for="Weight" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="fa fa-balance-scale icon-img"></span>
+                    </div>
+                    <input asp-for="Weight" min="0" onkeypress="return event.charCode >= 48 || event.charCode == 44" class="form-control" id="Weight" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="BodyFat" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="BodyFat" class="form-control" />
-                <span asp-validation-for="BodyFat" class="text-danger"></span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="fa fa-percent"></span>
+                    </div>
+                    <input asp-for="BodyFat" min="0" class="form-control" id="BodyFat" readonly />
+                    <span asp-validation-for="BodyFat" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Photos" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="fa fa-photo"></span>
+                    </div>
+                    <input type="file" class="form-control" name="files" id="files" multiple />
+                </div>
+                @*<span asp-validation-for="Photos" class="text-danger"></span>*@
             </div>
         </div>
         <div class="form-group">

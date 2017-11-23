@@ -1,29 +1,139 @@
-﻿@model DziennikSportowca.Models.Dish
+﻿@model DziennikSportowca.Models.ViewModels.DishDetailsViewModel
 
 @{
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Posiłki</a></li>
+        <li class="active"><span>Usuwanie posiłku</span></li>
+    </ol>
+</div>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3 class="text-danger">Jesteś pewien, że chcesz usunąć wybrany posiłek?</h3>
 <div>
-    <h4>Dish</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <input type="hidden" asp-for="Id" />
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
+    <input type="hidden" asp-for="Dish.Id" />
+
+    <div class="panel panel-danger">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Dane posiłku</div>
+        <div class="panel-body">
+            <div class="col-md-12 padding-0">
+                <div class="well well-sm panel-subheading panel-subheading-delete"><label>PODSTAWOWE INFORMACJE</label></div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <label class="inline">Nazwa: </label>
+                <p class="inline">@Html.DisplayFor(x => x.Dish.Description)</p>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-4 padding-0">
+                    <label class="inline">Całkowita waga: </label>
+                    <p class="inline">@Html.DisplayFor(x => x.TotalWeight)</p>
+                </div>
+                <div class="col-md-4 padding-0">
+                    <label class="inline">Suma białka: </label>
+                    <p class="inline">@Html.DisplayFor(x => x.TotalProteins)</p>
+                </div>
+                <div class="col-md-4 padding-0">
+                    <label class="inline">Suma węglowodanów: </label>
+                    <p class="inline">@Html.DisplayFor(x => x.TotalCarbs)</p>
+                </div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-4 padding-0">
+                    <label class="inline">Suma tłuszczów: </label>
+                    <p class="inline">@Html.DisplayFor(x => x.TotalFat)</p>
+                </div>
+                <div class="col-md-4 padding-0">
+                    <label class="inline">Wartość odżywcza: </label>
+                    <p class="inline">@Html.DisplayFor(x => x.TotalEnergy)</p>
+                </div>
+            </div>
+        </div>
     
+        <div class="col-md-12 padding-0">
+            <div class="well well-sm panel-subheading margin-0 panel-subheading-delete"><label>INFORMACJE O PRODUKTACH</label></div>
+        </div>
+
+        @if (Model.Dish.FoodProducts != null && Model.Dish.FoodProducts.Any())
+        {
+            <table class="table table-hover table-responsive table-delete">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Typ produktu</th>
+                        <th>Produkt</th>
+                        <th>Waga produktu [g]</th>
+                        <th>Białko [g]</th>
+                        <th>Węglowodany [g]</th>
+                        <th>Tłuszcz [g]</th>
+                        <th>kcal</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        int  i = 1;
+                        foreach (var foodProduct in Model.Dish.FoodProducts)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(x => i)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(x => foodProduct.FoodProduct.Type.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(x => foodProduct.FoodProduct.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(x => foodProduct.FoodProductWeight)
+                                </td>
+                                <td>
+                                    @{ 
+                                        double proteins = foodProduct.FoodProduct.Protein * foodProduct.FoodProductWeight / 100;                                    
+                                    }
+                                    @Html.DisplayFor(x => proteins)
+                                </td>
+                                <td>
+                                    @{
+                                        double carbs = foodProduct.FoodProduct.Carbohydrate * foodProduct.FoodProductWeight / 100;
+                                    }
+                                    @Html.DisplayFor(x => carbs)
+                                </td>
+                                <td>
+                                    @{
+                                        double fats = foodProduct.FoodProduct.Fat * foodProduct.FoodProductWeight / 100;
+                                    }
+                                    @Html.DisplayFor(x => fats)
+                                </td>
+                                <td>
+                                    @{
+                                        double energy = foodProduct.FoodProduct.Energy * foodProduct.FoodProductWeight / 100;
+                                    }
+                                    @Html.DisplayFor(x => energy)
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h4 class="inline"><label class="text-warning text-center">Ten posiłek nie zawiera żadnych produktów...</label></h4>
+            <a asp-action="Edit" asp-route-id="@Model.Dish.Id" class="btn btn-primary box foo margin-left-20">Dodaj produkty <i class="fa fa-plus-square-o"></i></a>
+        }
+    </div>
+
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+            <button type="submit" value="Delete" class="btn-danger box bar">Usuń <i class="fa fa-trash"></i></button>
+            <button asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></button>
         </div>
     </form>
 </div>

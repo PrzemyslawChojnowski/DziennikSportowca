@@ -11,6 +11,9 @@ namespace DziennikSportowca.Models.ViewModels
 {
     public class UserGoalsViewModel
     {
+        public int? Id { get; set; }
+        public string UserId { get; set; }
+
         public SelectList ExerciseList { get; set; }
 
         [Required(ErrorMessage = "Pole \"Nazwa celu\" jest wymagane")]

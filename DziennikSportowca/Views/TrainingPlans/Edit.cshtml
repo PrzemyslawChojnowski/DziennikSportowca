@@ -13,10 +13,11 @@
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>TrainingPlan</h4>
+        <h4>Zmiana nazwy planu</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="UserId" />
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -25,23 +26,13 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="UserId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <button type="submit" value="Save" class="btn btn-success box bar">Zapisz <i class="fa fa-check-square-o"></i></button>
+                <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
             </div>
         </div>
     </div>
 </form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

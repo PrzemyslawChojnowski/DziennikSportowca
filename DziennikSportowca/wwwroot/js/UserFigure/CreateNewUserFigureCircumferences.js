@@ -1,9 +1,4 @@
-﻿//Dropzone.autoDiscover = false;
-//jQuery(document).ready(function () {
-    
-    
-//});
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $('#datepicker').datepicker({
         autoclose: true,
         calendarWeeks: true,
@@ -13,13 +8,6 @@ $(document).ready(function () {
         todayBtn: "linked",
         todayHighlight: true
     });
-
-    //$(function () {
-    //    $("#dropzone").dropzone({
-    //        url: "/file/post",
-    //        dictDefaultMessage: "Drop files here or<br>click to upload..."
-    //    });
-    //});
 
     var userGender;
     var userWeight;
