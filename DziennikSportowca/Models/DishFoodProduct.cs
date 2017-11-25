@@ -9,6 +9,9 @@ namespace DziennikSportowca.Models
 {
     public class DishFoodProduct
     {
+        [Key]
+        public int Id { get; set; }
+
         public int FoodProductId { get; set; }
         [ForeignKey("FoodProductId")]
         public virtual FoodProduct FoodProduct { get; set; }

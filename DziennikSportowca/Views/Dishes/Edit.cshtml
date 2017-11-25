@@ -1,33 +1,98 @@
-﻿@model DziennikSportowca.Models.Dish
+﻿@model DziennikSportowca.Models.ViewModels.DishViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+@section Scripts{
+    <script src="~/lib/bootstrap-select-1.13.0-alpha/bootstrap-select-1.13.0-alpha/js/bootstrap-select.js" type="text/javascript"></script>
+    <link href="~/lib/bootstrap-select-1.13.0-alpha/bootstrap-select-1.13.0-alpha/css/bootstrap-select.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/js/Dishes/EditDish.js"></script>
+}
 
-<form asp-action="Edit">
-    <div class="form-horizontal">
-        <h4>Dish</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-        <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Posiłki</a></li>
+        <li class="active"><span>Edycja posiłku</span></li>
+    </ol>
 </div>
 
+<div class="form-horizontal">
+    <input type="hidden" asp-for="Dish.Id" id="DishId" />
+    <input asp-for="Dish.Description" type="text" id="DishName" placeholder="Nazwa posiłku" class="form-control" />
+    <br />
+    <div class="form-inline">
+        <div class="form-inline">
+            <select class="selectpicker" id="FoodProductType" data-live-search="true" title="Wybierz typ produktu" asp-items="Model.FoodProductType"></select>
+
+            <select class="selectpicker" id="FoodProduct" data-live-search="true" title="Wybierz produkt"></select>
+
+            <input type="number" class="form-control" placeholder="Masa produktu" id="Weight" min="0" />
+
+            <button class="btn btn-success box curmudgeon" id="Create">Dodaj <i class="fa fa-plus-square-o"></i></button>
+
+        </div>
+    </div>
+
+    <table class="table table-hover" id="DishesTable">
+        <thead>
+            <tr>
+                <th>Lp.</th>
+                <th>Typ produktu</th>
+                <th>Produkt</th>
+                <th>Masa produktu</th>
+                <th>Białko</th>
+                <th>Węglowodany</th>
+                <th>Tłuszcz</th>
+                <th>kcal</th>
+                <th>Usuń</th>
+            </tr>
+        </thead>
+        <tbody id="DishesBody">
+            @{ int i = 1;
+                if (Model.Dish != null && Model.Dish.FoodProducts.Any())
+                {
+                    foreach (var data in Model.Dish.FoodProducts)
+                    {
+                        <tr>
+                            <td class="FoodProductNo">@i</td>
+                            <td class="ProductType">@data.FoodProduct.Type.Description</td>
+                            <td class="ProductName">@data.FoodProduct.Description</td>
+                            <td class="ProductWeight">@data.FoodProductWeight</td>
+                            <td class="Proteins">@data.FoodProduct.Protein</td>
+                            <td class="Carbohydrates">@data.FoodProduct.Carbohydrate</td>
+                            <td class="Fat">@data.FoodProduct.Fat</td>
+                            <td class="Energy">@data.FoodProduct.Energy</td>
+                            <td>
+                                <span class="btn btn-danger btn-sm remove">
+                                    <span class="glyphicon glyphicon-trash" id="Delete"></span>
+                                </span>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            }
+        </tbody>
+        <tbody id="TotalNutritions">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="TotalWeight"></td>
+                <td class="TotalProteins"></td>
+                <td class="TotalCarbs"></td>
+                <td class="TotalFat"></td>
+                <td class="TotalEnergy"></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <button id="CreateDish" class="btn btn-success box bar">Zapisz posiłek <i class="fa fa-check-square-o"></i></button>
+            <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+        </div>
+    </div>
+</div>

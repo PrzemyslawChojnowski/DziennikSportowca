@@ -49,7 +49,7 @@ namespace DziennikSportowca.Data
                 .HasForeignKey(m => m.ExerciseId);
 
             builder.Entity<DishFoodProduct>()
-                .HasKey(d => new { d.DishId, d.FoodProductId });
+                .HasKey(d => new { d.Id });
 
             builder.Entity<DishFoodProduct>()
                 .HasOne(d => d.FoodProduct)

@@ -187,47 +187,112 @@ namespace DziennikSportowca.Controllers
                 return NotFound();
             }
 
-            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.Id == id);
+            var dish = await _context.Dishes.
+                            Include(x => x.FoodProducts).
+                                ThenInclude(x => x.FoodProduct).
+                                    ThenInclude(x => x.Type).
+                            Include(x => x.User).
+                            SingleOrDefaultAsync(m => m.Id == id);           
+
             if (dish == null)
             {
                 return NotFound();
             }
-            return View(dish);
+
+            SelectList foodProductTypes = new SelectList(_context.FoodProductsTypes.Select(x => x.Description));
+            DishViewModel model = new DishViewModel()
+            {
+                Dish = dish,
+                FoodProductType = foodProductTypes
+            };
+
+            return View(model);
         }
 
         // POST: Dishes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description")] Dish dish)
+        public async Task<IActionResult> Edit(string jsonData, string dishName, int? id)
         {
-            if (id != dish.Id)
-            {
+            if (String.IsNullOrEmpty(jsonData) || String.IsNullOrEmpty(dishName) || !id.HasValue)
                 return NotFound();
+
+            ApplicationUser user = await _manager.GetUserAsync(User);
+
+            var dish = await _context.Dishes.
+                            Include(x => x.FoodProducts).
+                                ThenInclude(x => x.FoodProduct).
+                                    ThenInclude(x => x.Type).
+                            Include(x => x.User).
+                            FirstOrDefaultAsync(x => x.Id == (int)id && x.UserId == user.Id);          
+
+            if (dish == null)
+                return NotFound();
+
+            if (dish.Description != dishName)
+            {
+                dish.Description = dishName;
+                _context.Dishes.Update(dish);
+                await _context.SaveChangesAsync();
             }
 
-            if (ModelState.IsValid)
+            List<DishFoodProduct> actualDishFoodProducts = new List<DishFoodProduct>();
+
+            if (dish.FoodProducts != null && dish.FoodProducts.Any())
+                actualDishFoodProducts.AddRange(dish.FoodProducts.ToList());
+
+            var deserializedDishProducts = JsonConvert.DeserializeAnonymousType(jsonData,
+                new[] {
+                    new { foodType = "",
+                        name = "",
+                        weight = (double)0,
+                        protein = (double)0,
+                        carbohydrates = (double)0,
+                        fat = (double)0,
+                        kcal = (double)0
+                    }
+                }.ToList());
+
+            foreach (var element in deserializedDishProducts)
             {
+                var ifElementExists = actualDishFoodProducts.FirstOrDefault(x => x.FoodProductWeight == element.weight 
+                                                                            && x.FoodProduct.Description == element.name 
+                                                                            && x.FoodProduct.Type.Description == element.foodType);
+
+                if (ifElementExists != null)
+                {
+                    actualDishFoodProducts.Remove(ifElementExists);
+                    continue;
+                }
+                
+                FoodProduct product = await _context.FoodProducts.FirstOrDefaultAsync(x => x.Description == element.name &&
+                                                                                        x.Type.Description == element.foodType);
+
+                DishFoodProduct dishProduct = new DishFoodProduct()
+                {
+                    FoodProduct = product,
+                    FoodProductId = product.Id,
+                    Dish = dish,
+                    DishId = dish.Id,
+                    FoodProductWeight = element.weight
+                };
+
                 try
                 {
-                    _context.Update(dish);
-                    await _context.SaveChangesAsync();
+                    _context.DishFoodProducts.Add(dishProduct);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch(Exception ex)
                 {
-                    if (!DishExists(dish.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+
                 }
-                return RedirectToAction("Index");
             }
-            return View(dish);
+            if (actualDishFoodProducts.Any())
+                _context.DishFoodProducts.RemoveRange(actualDishFoodProducts);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         // GET: Dishes/Delete/5

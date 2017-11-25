@@ -110,13 +110,18 @@ namespace DziennikSportowca.Data.Migrations
 
             modelBuilder.Entity("DziennikSportowca.Models.DishFoodProduct", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<int>("DishId");
 
                     b.Property<int>("FoodProductId");
 
                     b.Property<double>("FoodProductWeight");
 
-                    b.HasKey("DishId", "FoodProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("DishId");
 
                     b.HasIndex("FoodProductId");
 
