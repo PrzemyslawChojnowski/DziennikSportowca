@@ -270,39 +270,210 @@ namespace DziennikSportowca.Controllers
             _context.UserTrainings.Add(functionResult.Item1);
             _context.SaveChanges();
 
-            //var userId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
-            //var userGoals = _context.Goal.Where(x => x.UserId == userId && x.Result == false && x.CreationDate < training.EndDateTime);
+            var userId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
+            var userGoals = _context.Goal.Where(x => x.UserId == userId && x.Result == false && x.CreationDate < functionResult.Item1.EndDateTime);
 
-            //foreach(var goal in userGoals)
-            //{
-            //    var result = JsonConvert.DeserializeObject<dynamic>(goal.Scope);
-            //    var goalScope = result.GoalScope;
-            //    bool successFlag = false;
+            if (userGoals != null && userGoals.Any())
+            {
+                foreach (var goal in userGoals)
+                {
+                    var result = JsonConvert.DeserializeObject<dynamic>(goal.Scope);
+                    var goalScope = result.GoalScope;
+                    bool successFlag = false;
 
-            //    if(goalScope == 2)
-            //    {
-            //        var exerciseScope = result.ExerciseScope;
-            //        var exercise = result.Exercise;
+                    if (goalScope == 2)
+                    {
+                        var exerciseScope = result.ExerciseScope;
+                        var exercise = result.ExerciseName.ToString();
 
-            //        if(exerciseScope == 1)
-            //        {
-            //            if(exercise == "All")
-            //            {
-            //                var trainings = await _context.UserTrainings.
-            //                    Include(x => x.Training).
-            //                    Where(x => x.Training.UserId == userId && x.EndDateTime < goal.CreationDate).
-            //                    ToListAsync();
+                        if (exerciseScope == 1)
+                        {
+                            if (exercise == "All")
+                            {
+                                var actualTrainingGroupSports = functionResult.Item2.Where(x => x.TrainingPlanExercise.Exercise.ActivityType.Description == "Sporty grupowe").ToList();
 
-            //                foreach(var selectedTraining in trainings)
-            //                {
-            //                    selectedTraining.UserTrainingsExercisesResults[0].
-            //                }
-                            
-            //            }
-            //        }
-            //    }
-            //}
+                                if (actualTrainingGroupSports != null && actualTrainingGroupSports.Any())
+                                {
+                                    foreach (var actualTrainingExercise in actualTrainingGroupSports)
+                                    {
+                                        if (actualTrainingExercise.Weights.Any(x => x.Result >= goal.Target))
+                                            successFlag = true;
+                                    }
+                                }
+                            }
+                            else if (exercise != null)
+                            {
+                                var actualTrainingExercises = functionResult.Item2.Where(x => x.TrainingPlanExercise.Exercise.Name == (string)exercise &&
+                                                                                            x.TrainingPlanExercise.Exercise.ActivityType.Description == "Sporty grupowe").ToList();
+                                if (actualTrainingExercises != null && actualTrainingExercises.Any())
+                                {
+                                    foreach (var actualExercise in actualTrainingExercises)
+                                    {
+                                        if (actualExercise.Weights.Any(x => x.Result >= goal.Target))
+                                            successFlag = true;
+                                    }
+                                }
+                            }
+                        }
+                        else if(exerciseScope == 2)
+                        {
+                            if(exercise == "All")
+                            {
+                                var resultsSum = _context.ExercisesWeights
+                                                .Include(x => x.UserTrainingExerciseResult)
+                                                    .ThenInclude(x => x.TrainingPlanExercise)
+                                                        .ThenInclude(x => x.Exercise)
+                                                            .ThenInclude(x => x.ActivityType)
+                                                .Include(x => x.UserTrainingExerciseResult.UserTraining)
+                                                    .ThenInclude(x => x.Training)
+                                                        .ThenInclude(x => x.User)
+                                                .Where(x => x.UserTrainingExerciseResult.TrainingPlanExercise.Exercise.ActivityType.Description == "Sporty grupowe"
+                                                    && x.UserTrainingExerciseResult.UserTraining.Training.UserId == userId)
+                                                .Select(x => x.Result)
+                                                .Sum();
 
+                                if (resultsSum >= goal.Target)
+                                    successFlag = true;
+                            }
+                            else if(exercise != null)
+                            {
+                                string exerciseName = exercise.ToString();
+
+                                var resultsSum = _context.ExercisesWeights
+                                                .Include(x => x.UserTrainingExerciseResult)
+                                                    .ThenInclude(x => x.TrainingPlanExercise)
+                                                        .ThenInclude(x => x.Exercise)
+                                                            .ThenInclude(x => x.ActivityType)
+                                                .Include(x => x.UserTrainingExerciseResult.UserTraining)
+                                                    .ThenInclude(x => x.Training)
+                                                        .ThenInclude(x => x.User)
+                                                .Where(x => x.UserTrainingExerciseResult.TrainingPlanExercise.Exercise.ActivityType.Description == "Sporty grupowe"
+                                                    && x.UserTrainingExerciseResult.UserTraining.Training.UserId == userId
+                                                    && x.UserTrainingExerciseResult.TrainingPlanExercise.Exercise.Name == exerciseName)
+                                                .Select(x => x.Result)
+                                                .Sum();
+
+                                if (resultsSum >= goal.Target)
+                                    successFlag = true;
+                            }
+                        }
+                        else if (exerciseScope == 3)
+                        {
+                            if (exercise == "All")
+                            {
+                                var actualTrainingGroupSports = functionResult.Item2.Where(x => x.TrainingPlanExercise.Exercise.ActivityType.Description == "Æwiczenia wytrzyma³oœciowe").ToList();
+
+                                if (actualTrainingGroupSports != null && actualTrainingGroupSports.Any())
+                                {
+                                    foreach (var actualTrainingExercise in actualTrainingGroupSports)
+                                    {
+                                        if (actualTrainingExercise.Weights.Any(x => x.Result >= goal.Target))
+                                            successFlag = true;
+                                    }
+                                }
+                            }
+                            else if (exercise != null)
+                            {
+                                var actualTrainingExercises = functionResult.Item2.Where(x => x.TrainingPlanExercise.Exercise.Name == (string)exercise &&
+                                                                                            x.TrainingPlanExercise.Exercise.ActivityType.Description == "Æwiczenia wytrzyma³oœciowe").ToList();
+                                if (actualTrainingExercises != null && actualTrainingExercises.Any())
+                                {
+                                    foreach (var actualExercise in actualTrainingExercises)
+                                    {
+                                        if (actualExercise.Weights.Any(x => x.Result >= goal.Target))
+                                            successFlag = true;
+                                    }
+                                }
+                            }
+                        }
+                        else if (exerciseScope == 4)
+                        {
+                            if (exercise == "All")
+                            {
+                                var resultsSum = _context.ExercisesWeights
+                                                .Include(x => x.UserTrainingExerciseResult)
+                                                    .ThenInclude(x => x.TrainingPlanExercise)
+                                                        .ThenInclude(x => x.Exercise)
+                                                            .ThenInclude(x => x.ActivityType)
+                                                .Include(x => x.UserTrainingExerciseResult.UserTraining)
+                                                    .ThenInclude(x => x.Training)
+                                                        .ThenInclude(x => x.User)
+                                                .Where(x => x.UserTrainingExerciseResult.TrainingPlanExercise.Exercise.ActivityType.Description == "Æwiczenia wytrzyma³oœciowe"
+                                                    && x.UserTrainingExerciseResult.UserTraining.Training.UserId == userId)
+                                                .Select(x => x.Result)
+                                                .Sum();
+
+                                if (resultsSum >= goal.Target)
+                                    successFlag = true;
+                            }
+                            else if (exercise != null)
+                            {
+                                string exerciseName = exercise.ToString();
+
+                                var resultsSum = _context.ExercisesWeights
+                                                .Include(x => x.UserTrainingExerciseResult)
+                                                    .ThenInclude(x => x.TrainingPlanExercise)
+                                                        .ThenInclude(x => x.Exercise)
+                                                            .ThenInclude(x => x.ActivityType)
+                                                .Include(x => x.UserTrainingExerciseResult.UserTraining)
+                                                    .ThenInclude(x => x.Training)
+                                                        .ThenInclude(x => x.User)
+                                                .Where(x => x.UserTrainingExerciseResult.TrainingPlanExercise.Exercise.ActivityType.Description == "Æwiczenia wytrzyma³oœciowe"
+                                                    && x.UserTrainingExerciseResult.UserTraining.Training.UserId == userId
+                                                    && x.UserTrainingExerciseResult.TrainingPlanExercise.Exercise.Name == exerciseName)
+                                                .Select(x => x.Result)
+                                                .Sum();
+
+                                if (resultsSum >= goal.Target)
+                                    successFlag = true;
+                            }
+                        }
+                        else if (exerciseScope == 5)
+                        {
+                            if (exercise == "All")
+                            {
+                                var actualTrainingGroupSports = functionResult.Item2.Where(x => x.TrainingPlanExercise.Exercise.ActivityType.Description == "Æwiczenia si³owe").ToList();
+
+                                if (actualTrainingGroupSports != null && actualTrainingGroupSports.Any())
+                                {
+                                    foreach (var actualTrainingExercise in actualTrainingGroupSports)
+                                    {
+                                        if (actualTrainingExercise.Weights.Any(x => x.Result >= goal.Target))
+                                            successFlag = true;
+                                    }
+                                }
+                            }
+                            else if (exercise != null)
+                            {
+                                var actualTrainingExercises = functionResult.Item2.Where(x => x.TrainingPlanExercise.Exercise.Name == (string)exercise &&
+                                                                                            x.TrainingPlanExercise.Exercise.ActivityType.Description == "Æwiczenia si³owe").ToList();
+                                if (actualTrainingExercises != null && actualTrainingExercises.Any())
+                                {
+                                    foreach (var actualExercise in actualTrainingExercises)
+                                    {
+                                        if (actualExercise.Weights.Any(x => x.Result >= goal.Target))
+                                            successFlag = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if(successFlag)
+                    {
+                        try
+                        {
+                            goal.Result = true;
+                            goal.CompletionDate = functionResult.Item1.EndDateTime;
+                            _context.Goal.Update(goal);                            
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine("Error updating goal result to true. Error: " + ex.Message);
+                        }
+                    }
+                }
+            }
+            _context.SaveChanges();
             return new EmptyResult();
         }
 
@@ -339,7 +510,7 @@ namespace DziennikSportowca.Controllers
             {
                 TrainingPlanExercise tpExercise = await _context.TrainingPlanExercises.FirstOrDefaultAsync
                     (x => x.TrainingPlanId == tp.Id && x.Exercise.Name == exercise.Exercise);
-                tpExercise.Exercise = await _context.Exercises.FirstOrDefaultAsync(x => x.Id == tpExercise.ExerciseId);
+                tpExercise.Exercise = await _context.Exercises.Include(X => X.ActivityType).FirstOrDefaultAsync(x => x.Id == tpExercise.ExerciseId);
 
                 if (tpExercise == null)
                 {

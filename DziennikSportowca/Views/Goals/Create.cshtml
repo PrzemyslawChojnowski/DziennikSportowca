@@ -159,9 +159,13 @@
                         $('#exercisesDropDown').find('option').remove().end();
                     }
 
+                    $('#exercisesDropDown').find('select').append($("<option/>", {
+                        value: "All",
+                        text: "Dowolne"
+                    }));
                     $.each(obj, function (key, value) {
                         $('#exercisesDropDown').find('select').append($("<option/>", {
-                            value: key,
+                            value: value,
                             text: value
                         }));
                     });

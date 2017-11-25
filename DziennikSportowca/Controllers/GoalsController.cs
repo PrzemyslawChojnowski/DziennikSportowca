@@ -74,7 +74,14 @@ namespace DziennikSportowca.Controllers
                 else if(goalScope == 2)
                 {
                     var exerciseScope = result.ExerciseScope;
-                    goalInfo = ((ExerciseScope)exerciseScope).GetDisplayName() + " (" + result.ExerciseName + "): " + goal.Target.ToString();
+                    goalInfo = ((ExerciseScope)exerciseScope).GetDisplayName() + " (";
+
+                    if (result.ExerciseName == "All")
+                        goalInfo += "Dowolne";
+                    else
+                        goalInfo += result.ExerciseName;
+
+                    goalInfo += "): " + goal.Target.ToString();
                 }
 
                 tmp.GoalScope = goalInfo;
@@ -124,7 +131,14 @@ namespace DziennikSportowca.Controllers
             else if (goalScope == 2)
             {
                 var exerciseScope = result.ExerciseScope;
-                goalInfo = ((ExerciseScope)exerciseScope).GetDisplayName() + " (" + result.ExerciseName + "): " + goal.Target.ToString();
+                goalInfo = ((ExerciseScope)exerciseScope).GetDisplayName() + " (";
+
+                if (result.ExerciseName == "All")
+                    goalInfo += "Dowolne";
+                else
+                    goalInfo += result.ExerciseName;
+
+                goalInfo += "): " + goal.Target.ToString();
             }
 
             GoalDetailsViewModel model = new GoalDetailsViewModel()
@@ -293,7 +307,14 @@ namespace DziennikSportowca.Controllers
             else if (goalScope == 2)
             {
                 var exerciseScope = result.ExerciseScope;
-                goalInfo = ((ExerciseScope)exerciseScope).GetDisplayName() + " (" + result.ExerciseName + "): " + goal.Target.ToString();
+                goalInfo = ((ExerciseScope)exerciseScope).GetDisplayName() + " (";
+
+                if (result.ExerciseName == "All")
+                    goalInfo += "Dowolne";
+                else
+                    goalInfo += result.ExerciseName;
+
+                goalInfo += "): " + goal.Target.ToString();
             }
 
             GoalDetailsViewModel model = new GoalDetailsViewModel()
@@ -423,7 +444,7 @@ namespace DziennikSportowca.Controllers
             }
             else if (goalScope == 2)
             {
-                int exerciseScope = (int)goal.GoalScope;
+                int exerciseScope = (int)goal.ExerciseScope;
                 var scopes = new { GoalScope = goalScope, ExerciseScope = exerciseScope, ExerciseName = goal.ExerciseName };
                 jsonString = JsonConvert.SerializeObject(scopes, Formatting.Indented);
                 newUserGoal.Scope = jsonString;

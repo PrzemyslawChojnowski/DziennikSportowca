@@ -22,7 +22,7 @@ namespace DziennikSportowca.Models
         Physique = 1,
 
         [Display(Name = "Osiągnięcia w ćwiczeniach")]
-        ExercisesGoals
+        ExercisesGoals = 2
     }
 
     public enum PhysiqueScope
@@ -31,19 +31,19 @@ namespace DziennikSportowca.Models
         LoseWeight = 1,
 
         [Display(Name = "Przybrać na wadze")]
-        GainWeight,
+        GainWeight = 2,
 
         [Display(Name = "Zmniejszyć Body Fat")]
-        ReduceBF,
+        ReduceBF = 3,
 
         [Display(Name = "Zwiększyć Body Fat")]
-        IncreaseBF,
+        IncreaseBF = 4,
 
         [Display(Name = "Zmniejszyć rozmiar części ciała")]
-        DecreaseCircumference,
+        DecreaseCircumference = 5,
 
         [Display(Name = "Zwiększyć rozmiar części ciała")]
-        IncreaseCircumference
+        IncreaseCircumference = 6
     }
 
     public enum ExerciseScope
@@ -52,16 +52,16 @@ namespace DziennikSportowca.Models
         DoGroupSportsForASpecifiedTimeAtOnce = 1,
 
         [Display(Name = "Wykonywać sporty grupowe przez określony czas \"w sumie\"")]
-        DoGroupSportsForASpecifiedTimeAtAll,
+        DoGroupSportsForASpecifiedTimeAtAll = 2,
 
         [Display(Name = "Wykonywać ćwiczenia wytrzymałościowe przez określony czas \"na raz\"")]
-        DoCardioExercisesForASpecifiedTimeAtOnce,
+        DoCardioExercisesForASpecifiedTimeAtOnce = 3,
 
         [Display(Name = "Wykonywać ćwiczenia wytrzymałościowe przez określony czas \"w sumie\"")]
-        DoCardioExercisesForASpecifiedTimeAtAll,
+        DoCardioExercisesForASpecifiedTimeAtAll = 4,
 
         [Display(Name = "Podnieść jednorazowo określony ciężar")]
-        PickUpTheSpecifiedWeight
+        PickUpTheSpecifiedWeight = 5
     }
 
     public enum Circumferences
@@ -70,22 +70,22 @@ namespace DziennikSportowca.Models
         ShouldersCircumference = 1,
 
         [Display(Name = "Obwód klatki piersiowej")]
-        ChestCircumference,
+        ChestCircumference = 2,
 
         [Display(Name = "Obwód talii")]
-        WaistCircumference,
+        WaistCircumference = 3,
 
         [Display(Name = "Obwód bicepsa")]
-        BicepsCircumference,
+        BicepsCircumference = 4,
 
         [Display(Name = "Obwód tricepsa")]
-        TricepsCircumference,
+        TricepsCircumference = 5,
 
         [Display(Name = "Obwód uda")]
-        ThighCircumference,
+        ThighCircumference = 6,
 
         [Display(Name = "Obwód bioder")]
-        HipCircumference
+        HipCircumference = 7
     }
 
     public static class EnumExtensions
