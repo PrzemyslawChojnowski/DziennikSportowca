@@ -3,15 +3,21 @@
     ViewData["Title"] = "Send Verification Code";
 }
 
-<h2>@ViewData["Title"].</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Home</a></li>
+        <li><a asp-action="Login" asp-controller="Account">Logowanie</a></li>
+        <li class="active"><span>Wysyłanie kodu weryfikacyjnego</span></li>
+    </ol>
+</div>
 
 <form asp-controller="Account" asp-action="SendCode" asp-route-returnurl="@Model.ReturnUrl" method="post" class="form-horizontal">
     <input asp-for="RememberMe" type="hidden" />
     <div class="row">
         <div class="col-md-8">
-            Select Two-Factor Authentication Provider:
+            Wybierz sposób autentykacji dwuetapowej:
             <select asp-for="SelectedProvider" asp-items="Model.Providers"></select>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-info box curmudgeon">Wyślij</button>
         </div>
     </div>
 </form>

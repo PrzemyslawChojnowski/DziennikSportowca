@@ -37,15 +37,47 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="col-md-12">
-                <button type="submit" class="box bar btn btn-success btn-lg btn-block">Zaloguj sie</button>
+                <button type="submit" class="box bar btn btn-success btn-lg btn-block">Zaloguj się</button>
             </div>
-        </div>
+        </div>        
         <div>
-            <button id="login_lost_btn" type="button" class="btn btn-link">Zapomnialem/-am hasla</button>
-            <button id="login_register_btn" type="button" class="btn btn-link">Zarejestruj sie</button>
+            <button id="login_lost_btn" type="button" class="btn btn-link">Zapomniałem/-am hasła</button>
+            <button id="login_register_btn" type="button" class="btn btn-link">Zarejestruj się</button>
         </div>
     </div>
 </form>
+
+<div class="modal-body">
+    <section>
+        <h4>Zewnętrzny dostawca tożsamości</h4>
+        @{
+            var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            if (loginProviders.Count == 0)
+            {
+                <div>
+                    <p>
+                        Brak dostępnych zewnętrznych dostawców tożsamości
+                    </p>
+                </div>
+            }
+            else
+            {
+                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                    <div>
+                        <p>
+                            @foreach (var provider in loginProviders)
+                            {
+                                <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
+                            }
+                        </p>
+                    </div>
+                </form>
+            }
+        }
+    </section>
+</div>
+
+
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

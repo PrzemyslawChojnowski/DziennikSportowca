@@ -222,11 +222,7 @@ function drawChart(json) {
             },
             legend: {
                 position: 'right'
-            }//,
-            //zoom: {
-            //    enabled: true,
-            //    mode: 'xy'
-            //}
+            }
         }
     });
 

@@ -3,7 +3,13 @@
     ViewData["Title"] = "Verify";
 }
 
-<h2>@ViewData["Title"].</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Home</a></li>
+        <li><a asp-action="Login" asp-controller="Account">Logowanie</a></li>
+        <li class="active"><span>Potwierdzenie kodu weryfikacyjnego</span></li>
+    </ol>
+</div>
 
 <form asp-controller="Account" asp-action="VerifyCode" asp-route-returnurl="@Model.ReturnUrl" method="post" class="form-horizontal">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -28,7 +34,7 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-info box curmudgeon">Wyślij</button>
         </div>
     </div>
 </form>

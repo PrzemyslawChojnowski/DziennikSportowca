@@ -164,36 +164,36 @@ namespace DziennikSportowca.Data
                     context.SaveChanges();
                 }
 
-                if (!context.ExerciseInstructionPhotos.Any())
-                {
-                    byte[] selena;
-                    byte[] selena2;
+                //if (!context.ExerciseInstructionPhotos.Any())
+                //{
+                //    byte[] selena;
+                //    byte[] selena2;
 
-                    MemoryStream ms = new MemoryStream();
-                    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\selena.jpg", FileMode.Open))
-                    {
-                        stream.CopyTo(ms);
-                        selena = new byte[stream.Length];
-                        selena = ms.ToArray();
-                    }
-                    MemoryStream ms2 = new MemoryStream();
-                    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\selena2.jpg", FileMode.Open))
-                    {
-                        stream.CopyTo(ms2);
-                        selena2 = new byte[stream.Length];
-                        selena2 = ms2.ToArray();
-                    }
+                //    MemoryStream ms = new MemoryStream();
+                //    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\selena.jpg", FileMode.Open))
+                //    {
+                //        stream.CopyTo(ms);
+                //        selena = new byte[stream.Length];
+                //        selena = ms.ToArray();
+                //    }
+                //    MemoryStream ms2 = new MemoryStream();
+                //    using (FileStream stream = new FileStream("C:\\Users\\przem\\Desktop\\Nowy folder\\selena2.jpg", FileMode.Open))
+                //    {
+                //        stream.CopyTo(ms2);
+                //        selena2 = new byte[stream.Length];
+                //        selena2 = ms2.ToArray();
+                //    }
 
-                    List<ExerciseInstructionPhoto> photos = new List<ExerciseInstructionPhoto>()
-                    {
-                        new ExerciseInstructionPhoto{PhotoTitle = "Selena Gomez", ExerciseInstructionId = 2, Content = selena},
-                        new ExerciseInstructionPhoto{PhotoTitle = "Selena Gomez 2", ExerciseInstructionId = 2, Content = selena2}
-                    };
+                //    List<ExerciseInstructionPhoto> photos = new List<ExerciseInstructionPhoto>()
+                //    {
+                //        new ExerciseInstructionPhoto{PhotoTitle = "Selena Gomez", ExerciseInstructionId = 2, Content = selena},
+                //        new ExerciseInstructionPhoto{PhotoTitle = "Selena Gomez 2", ExerciseInstructionId = 2, Content = selena2}
+                //    };
 
-                    context.ExerciseInstructionPhotos.AddRange(photos);
+                //    context.ExerciseInstructionPhotos.AddRange(photos);
 
-                    context.SaveChanges();
-                }
+                //    context.SaveChanges();
+                //}
 
                 if (!context.MusclePartExercises.Any())
                 {

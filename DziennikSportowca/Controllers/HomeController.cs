@@ -13,9 +13,10 @@ using System.Net.Mail;
 using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DziennikSportowca.Controllers
-{
+{   
     public class HomeController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
