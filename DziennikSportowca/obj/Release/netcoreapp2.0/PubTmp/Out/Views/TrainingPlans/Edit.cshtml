@@ -1,0 +1,39 @@
+﻿@model DziennikSportowca.Models.TrainingPlan
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Plany Treningowe</a></li>
+        <li class="active"><span>Edycja planu</span></li>
+    </ol>
+</div>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Zmiana nazwy planu</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="UserId" />
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Save" class="btn btn-success box bar">Zapisz <i class="fa fa-check-square-o"></i></button>
+                <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

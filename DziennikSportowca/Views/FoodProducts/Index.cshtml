@@ -1,0 +1,804 @@
+﻿@model DziennikSportowca.Models.ViewModels.FoodProductsViewModel
+@using DziennikSportowca.Data;
+@inject ApplicationDbContext _context
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li class="active"><span>Produkty żywieniowe</span></li>
+    </ol>
+</div>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary box foo">Utwórz nowy produkt <i class="fa fa-plus-square"></i></a>
+</p>
+
+<div class="card col-md-12">
+    <ul class="nav nav-tabs" id="navTabs">
+        <li role="presentation" class="active"><a data-toggle="tab" href="#milkEggsTab" aria-controls="milkEggsTab" role="tab">Nabiał i jaja</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#cerealTab" aria-controls="cerealTab" role="tab">Produkty zbożowe</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#meatTab" aria-controls="meatTab" role="tab">Mięso, wędliny i dania mięsne</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#sweetsTab" aria-controls="sweetsTab" role="tab">Słodycze i przekąski</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#bakalsTab" aria-controls="bakalsTab" role="tab">Bakalie i nasiona</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#drinksTab" aria-controls="drinksTab" role="tab">Napoje</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#fruitsTab" aria-controls="fruitsTab" role="tab">Owoce i ich przetwory</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#preparedTab" aria-controls="preparedTab" role="tab">Produkty gotowe</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#fishesTab" aria-controls="fishesTab" role="tab">Ryby i dania rybne</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#fatsTab" aria-controls="fatsTab" role="tab">Tłuszcze</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#vegetablesTab" aria-controls="vegetablesTab" role="tab">Warzywa i ich przetwory</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="milkEggsTab" class="tab-pane fade in active" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="milkEggsProducts">
+                    @foreach (var item in Model.MilkEggsProducts)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="milkEggsProductsPagerContainer">
+                <ul class="pagination pagination-lg pager" id="milkEggsProductsPager"></ul>
+            </div>
+        </div>
+        <div id="cerealTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="cerealProducts">
+                    @foreach (var item in Model.CerealProducts)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="cerealProductsPagerContainer">
+                <ul class="pagination pagination-lg pager" id="cerealProductsPager"></ul>
+            </div>
+        </div>
+
+        <div id="meatTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="meatProducts">
+                    @foreach (var item in Model.MeatProducts)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="meatProductsPagerContainer">
+                <ul class="pagination pagination-lg pager" id="meatProductsPager"></ul>
+            </div>
+        </div>
+
+        <div id="sweetsTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="sweets">
+                    @foreach (var item in Model.Sweets)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="sweetsPagerContainer">
+                <ul class="pagination pagination-lg pager" id="sweetsPager"></ul>
+            </div>
+        </div>
+
+        <div id="bakalsTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="bakals">
+                    @foreach (var item in Model.Bakals)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="bakalsPagerContainer">
+                <ul class="pagination pagination-lg pager" id="bakalsPager"></ul>
+            </div>
+        </div>
+
+        <div id="drinksTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="drinks">
+                    @foreach (var item in Model.Drinks)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="drinksPagerContainer">
+                <ul class="pagination pagination-lg pager" id="drinksPager"></ul>
+            </div>
+        </div>
+
+        <div id="fruitsTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="fruits">
+                    @foreach (var item in Model.Fruits)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="fruitsPagerContainer">
+                <ul class="pagination pagination-lg pager" id="fruitsPager"></ul>
+            </div>
+        </div>
+
+        <div id="preparedTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="preparedProducts">
+                    @foreach (var item in Model.PreparedProducts)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="preparedProductsPagerContainer">
+                <ul class="pagination pagination-lg pager" id="preparedProductsPager"></ul>
+            </div>
+        </div>
+
+        <div id="fishesTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="fishes">
+                    @foreach (var item in Model.Fishes)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="fishesPagerContainer">
+                <ul class="pagination pagination-lg pager" id="fishesPager"></ul>
+            </div>
+        </div>
+
+        <div id="fatsTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="fats">
+                    @foreach (var item in Model.Fats)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="fatsPagerContainer">
+                <ul class="pagination pagination-lg pager" id="fatsPager"></ul>
+            </div>
+        </div>
+
+        <div id="vegetablesTab" class="tab-pane fade" role="tabpanel">
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Energia
+                        </th>
+                        <th>
+                            Białko
+                        </th>
+                        <th>
+                            Tłuszcze
+                        </th>
+                        <th>
+                            Cukry
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="vegetables">
+                    @foreach (var item in Model.Vegetables)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Energy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Protein)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Carbohydrate)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                                @if (!_context.DishFoodProducts.Any(x => x.FoodProductId == item.Id))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="col-md-12 text-center" id="vegetablesPagerContainer">
+                <ul class="pagination pagination-lg pager" id="vegetablesPager"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        $.fn.pageMe = function (opts) {
+            var $this = this,
+                defaults = {
+                    perPage: 7,
+                    showPrevNext: false,
+                    hidePageNumbers: false
+                },
+                settings = $.extend(defaults, opts);
+
+            var listElement = $this;
+            var perPage = settings.perPage;
+            var children = listElement.children();
+            var pager = $('.pager');
+
+            if (typeof settings.childSelector != "undefined") {
+                children = listElement.find(settings.childSelector);
+            }
+
+            if (typeof settings.pagerSelector != "undefined") {
+                pager = $(settings.pagerSelector);
+            }
+
+            var numItems = children.size();
+            var numPages = Math.ceil(numItems / perPage);
+
+            pager.data("curr", 0);
+
+            if (settings.showPrevNext) {
+                $('<li><a href="#" class="prev_link">«</a></li>').appendTo(pager);
+            }
+
+            var curr = 0;
+            while (numPages > curr && (settings.hidePageNumbers == false)) {
+                $('<li><a href="#" class="page_link">' + (curr + 1) + '</a></li>').appendTo(pager);
+                curr++;
+            }
+
+            if (settings.showPrevNext) {
+                $('<li><a href="#" class="next_link">»</a></li>').appendTo(pager);
+            }
+
+            pager.find('.page_link:first').addClass('active');
+            pager.find('.prev_link').hide();
+            if (numPages <= 1) {
+                pager.find('.next_link').hide();
+            }
+            pager.children().eq(1).addClass("active");
+
+            children.hide();
+            children.slice(0, perPage).show();
+
+            pager.find('li .page_link').click(function () {
+                var clickedPage = $(this).html().valueOf() - 1;
+                goTo(clickedPage, perPage);
+                return false;
+            });
+            pager.find('li .prev_link').click(function () {
+                previous();
+                return false;
+            });
+            pager.find('li .next_link').click(function () {
+                next();
+                return false;
+            });
+
+            function previous() {
+                var goToPage = parseInt(pager.data("curr")) - 1;
+                goTo(goToPage);
+            }
+
+            function next() {
+                goToPage = parseInt(pager.data("curr")) + 1;
+                goTo(goToPage);
+            }
+
+            function goTo(page) {
+                var startAt = page * perPage,
+                    endOn = startAt + perPage;
+
+                children.css('display', 'none').slice(startAt, endOn).show();
+
+                if (page >= 1) {
+                    pager.find('.prev_link').show();
+                }
+                else {
+                    pager.find('.prev_link').hide();
+                }
+
+                if (page < (numPages - 1)) {
+                    pager.find('.next_link').show();
+                }
+                else {
+                    pager.find('.next_link').hide();
+                }
+
+                pager.data("curr", page);
+                pager.children().removeClass("active");
+                pager.children().eq(page + 1).addClass("active");
+
+            }
+        };
+
+        $(document).ready(function () {
+            debugger;
+            $('#milkEggsProducts').pageMe({ pagerSelector: '#milkEggsProductsPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#cerealProducts').pageMe({ pagerSelector: '#cerealProductsPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#meatProducts').pageMe({ pagerSelector: '#meatProductsPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#sweets').pageMe({ pagerSelector: '#sweetsPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#bakals').pageMe({ pagerSelector: '#bakalsPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#drinks').pageMe({ pagerSelector: '#drinksPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#fruits').pageMe({ pagerSelector: '#fruitsPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#preparedProducts').pageMe({ pagerSelector: '#preparedProductsPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#fishes').pageMe({ pagerSelector: '#fishesPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#fats').pageMe({ pagerSelector: '#fatsPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#vegetables').pageMe({ pagerSelector: '#vegetablesPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+        });
+    </script>
+}

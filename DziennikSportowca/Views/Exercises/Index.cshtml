@@ -35,6 +35,9 @@
                         <th>
                             Nazwa ćwiczenia
                         </th>
+                        <th>
+                            Partia
+                        </th>
                         <th class="col-md-4"></th>
                     </tr>
                 </thead>
@@ -44,6 +47,14 @@
                         <tr class="exerciseRow showRow">
                             <td class="exerciseName">
                                 <p>@item.Name</p>
+                            </td>
+                            <td class="exerciseMusclePartName">
+                                @if (item.MuscleParts != null && item.MuscleParts.Any())
+                                {
+
+                                    <p>@item.MuscleParts[0].MusclePart.Description</p>
+
+                                }
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
@@ -243,8 +254,8 @@
         $(document).ready(function () {
 
             $('#strengthExercises').pageMe({ pagerSelector: '#strengthExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
-            $('#groupExercises').pageMe({ pagerSelector: '#groupExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 1 });
-            $('#cardioExercises').pageMe({ pagerSelector: '#cardioExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 1 });
+            $('#groupExercises').pageMe({ pagerSelector: '#groupExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
+            $('#cardioExercises').pageMe({ pagerSelector: '#cardioExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
 
             $("#searchBox").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
@@ -298,7 +309,7 @@
                         pager.className = "pagination pagination-lg pager";
                         pager.id = "cardioExercisesPager";
                         $('#cardioExercisesPagerContainer').append('<ul class="pagination pagination-lg pager" id="cardioExercisesPager"></ul>');
-                        $('#cardioExercises').pageMe({ pagerSelector: '#cardioExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 1 });
+                        $('#cardioExercises').pageMe({ pagerSelector: '#cardioExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
                         break;
                     case "#groupExercises":
                         $('#groupExercisesPager').remove();
@@ -306,7 +317,7 @@
                         pager.className = "pagination pagination-lg pager";
                         pager.id = "groupExercisesPager";
                         $('#groupExercisesPagerContainer').append('<ul class="pagination pagination-lg pager" id="groupExercisesPager"></ul>');
-                        $('#groupExercises').pageMe({ pagerSelector: '#groupExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 1 });
+                        $('#groupExercises').pageMe({ pagerSelector: '#groupExercisesPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 });
                         break;               
                 }
             }            

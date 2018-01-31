@@ -1,0 +1,157 @@
+﻿@model DziennikSportowca.Models.TrainingPlan
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Plany Treningowe</a></li>
+        <li class="active"><span>Usuwanie planu</span></li>
+    </ol>
+</div>
+
+<h3 class="text-danger">Jesteś pewien, że chcesz usunąć wybrany treninig?</h3>
+<div>
+    <hr />
+    <input type="hidden" asp-for="Id" />
+
+    <div class="panel panel-danger">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Dane planu</div>
+        <div class="panel-body">
+            <div class="col-md-12 padding-0">
+                <div class="well well-sm panel-subheading panel-subheading-delete"><label>PODSTAWOWE INFORMACJE</label></div>
+            </div>
+            <div class="col-md-12 padding-0">
+
+                <div class="col-md-6 padding-0">
+                    <label>@Html.DisplayNameFor(x => x.Description): </label>
+                    @Html.DisplayFor(x => x.Description)
+                </div>
+                <div class="col-md-6 padding-0">
+                    <label>@Html.DisplayNameFor(x => x.CreationDate): </label>
+                    @Html.DisplayFor(x => x.CreationDate)
+                </div>
+            </div>
+            <div class="col-md-12 padding-0 padding-15">
+                <div class="well well-sm panel-subheading panel-subheading-delete"><label>INFORMACJE TRENINGOWE</label></div>
+            </div>
+            <div class="col-md-12 padding-0">
+                @{
+                    if (Model.UserTrainings != null && Model.UserTrainings.Any())
+                    {
+                        DateTime? firstTrainingDate = Model.UserTrainings.OrderBy(x => x.StartDateTime).FirstOrDefault().StartDateTime;
+                        <div class="col-md-4 padding-0">
+                            <label>Data pierwszego treningu: </label>
+                            @if (firstTrainingDate != null)
+                            {
+                                <span class="text-success">@firstTrainingDate</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">Brak danych</span>
+                            }
+                        </div>
+
+                        DateTime lastTrainingDate = Model.UserTrainings.OrderBy(x => x.StartDateTime).LastOrDefault().StartDateTime;
+                        <div class="col-md-4 padding-0">
+                            <label>Data ostatniego treningu: </label>
+                            @if (firstTrainingDate != null)
+                            {
+                                <span class="text-success">@lastTrainingDate</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">Brak danych</span>
+                            }
+                        </div>
+
+                        int? trainingsCount = Model.UserTrainings.Count();
+                        <div class="col-md-4 padding-0">
+                            <label>Liczba wykonanych treningów: </label>
+                            @if (trainingsCount != null)
+                            {
+                                <span class="text-success">@trainingsCount</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">Brak danych</span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-4 padding-0">
+                            <label>Data pierwszego treningu: </label>
+                            <span class="text-danger">Nie wykonano żadnego treningu</span>
+                        </div>
+                        <div class="col-md-4 padding-0">
+                            <label>Data ostatniego treningu: </label>
+                            <span class="text-danger">Nie wykonano żadnego treningu</span>
+                        </div>
+                        <div class="col-md-4 padding-0">
+                            <label>Liczba treningów: </label>
+                            <span class="text-danger">0</span>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="col-md-12 padding-0">
+            <div class="well well-sm panel-subheading margin-0 panel-subheading-delete"><label>INFORMACJE O ĆWICZENIACH</label></div>
+        </div>
+
+        @if (Model.Exercises != null && Model.Exercises.Any())
+            {
+            <table class="table table-hover table-responsive table-delete">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ćwiczenie</th>
+                        <th>Typ aktywności</th>
+                        <th>Informacje o ćwiczeniu</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        int  i = 0;
+                        foreach (var exercise in Model.Exercises)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i.</td>
+                                <td>@exercise.Exercise.Name</td>
+                                <td>@exercise.Exercise.ActivityType.Description</td>
+                                @if (exercise.Exercise.ActivityType.Description == "Ćwiczenia siłowe")
+                                {
+                                    <td>@exercise.SeriesNo serie po @exercise.RepsNo powtórzeń</td>
+                                }
+                                else if (exercise.Exercise.ActivityType.Description == "Ćwiczenia wytrzymałościowe" || exercise.Exercise.ActivityType.Description == "Sporty grupowe")
+                                {
+                                    <td>Czas trwania: @exercise.ExerciseLength minut</td>
+                                }
+                                
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h4><label class="text-warning text-center">Ten plan treningowy nie zawiera żadnych ćwiczeń...</label></h4>
+        }
+    </div>
+
+
+
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <button type="submit" value="Delete" class="btn-danger box bar">Usuń <i class="fa fa-trash"></i></button>
+            <button asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></button>
+        </div>
+    </form>
+</div>

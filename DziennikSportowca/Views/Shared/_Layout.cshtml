@@ -48,6 +48,11 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">@*<i class="fa fa-home"></i>*@Strona domowa</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">@*<i class="fa fa-info-circle"></i>*@O aplikacji</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">@*<i class="fa fa-address-card"></i>*@Kontakt</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a asp-area="" asp-controller="Exercises" asp-action="Index">Ćwiczenia</a></li>
+                        <li><a asp-area="" asp-controller="FoodProducts" asp-action="Index">Produkty</a></li>
+                    }
                     <li class="dropdown2 mega-dropdown">
                         <a href="#" id="mega" class="dropdown-toggle" data-toggle="dropdown">Więcej <span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
                         <ul class="dropdown-menu mega-dropdown-menu row">

@@ -1,0 +1,99 @@
+﻿@model DziennikSportowca.Models.ViewModels.GoalDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/UserGoals/Index.css">
+    <script src="~/js/UserGoals/Index.js"></script>
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+    </script>
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Cele</a></li>
+        <li class="active"><span>Szczegóły celu</span></li>
+    </ol>
+</div>
+
+<div class="panel panel-info">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Dane celu</div>
+    <div class="panel-body">
+        <div class="col-md-12 padding-0">
+            <div class="well well-sm panel-subheading panel-subheading-info"><label>PODSTAWOWE INFORMACJE</label></div>
+        </div>
+        <div class="col-md-12 padding-0">
+            <label>@Html.DisplayNameFor(x => x.Goal.Description): </label>
+            @Html.DisplayFor(x => x.Goal.Description)
+        </div>
+        <hr class="col-md-12 padding-0 margin-bottom-0 margin-top-0"/>
+        <div class="col-md-12 padding-0">
+            <div class="col-md-4 padding-0">
+                <label>@Html.DisplayNameFor(x => x.Goal.CreationDate): </label>
+                @Html.DisplayFor(x => x.Goal.CreationDate)
+            </div>
+            <div class="col-md-4 padding-0">
+                <label>@Html.DisplayNameFor(x => x.Goal.CompletionDate): </label>
+                @Html.DisplayFor(x => x.Goal.CreationDate)
+            </div>
+            <div class="col-md-4 padding-0">
+                <label class="inline">Czas trwania: </label>
+               @if (Model.Goal.CompletionDate.HasValue)
+               {
+                   TimeSpan duration = Model.Goal.CompletionDate.Value.Subtract(Model.Goal.CreationDate);
+                <p class="inline">@duration.ToString("%d") dni @duration.ToString(@"hh\:mm\:ss") h</p>
+               }
+               else
+               {
+                   TimeSpan duration = DateTime.Now.Subtract(Model.Goal.CreationDate);
+                <p class="inline">@duration.ToString("%d") dni @duration.ToString(@"hh\:mm\:ss") h</p>
+               }
+            </div>
+        </div>
+        <div class="col-md-12 padding-0 padding-15">
+            <div class="well well-sm panel-subheading panel-subheading-info"><label>SZCZEGÓŁOWE INFORMACJE</label></div>
+        </div>
+        <div class="col-md-12 padding-0">
+            <div class="col-md-6">
+                <label class="inline">Opis celu: </label>
+                @Html.DisplayFor(x => x.GoalInfo)
+            </div>
+            <div class="col-md-6">
+                <label class="inline">Status zaliczenia: </label>
+                @if (Model.Goal.Result)
+                {
+                    <p class="inline">Zaliczono </p>
+                    <div class="circle-loader inline" style="bottom: 5px">
+                        <div class="checkmark draw"></div>
+                    </div>
+                }
+                else
+                {
+                    <p class="inline">Nie zaliczono</p>
+                    <div class="circle-loader-2 inline" style="bottom: 5px">
+                        <div class="close-icon-line-1 draw-2"></div>
+                        <div class="close-icon-line-2 draw-2"></div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <form>
+        @if (Model.Goal.Result)
+        {
+            <button asp-action="Edit" asp-route-id="@Model.Goal.Id" class="btn btn-success box curmudgeon" disabled>Edytuj <i class="fa fa-pencil-square-o"></i></button>
+        }
+        else
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Goal.Id" class="btn-success box curmudgeon">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+        }
+        <a asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+    </form>
+</div>

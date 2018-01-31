@@ -1,0 +1,181 @@
+﻿@model DziennikSportowca.Models.ViewModels.UserGoalsViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Cele</a></li>
+        <li class="active"><span>Edycja celu</span></li>
+    </ol>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <div class="form-group">
+                <label asp-for="GoalDescription" class="control-label"></label>
+                <input asp-for="GoalDescription" class="form-control"/>
+                <span asp-validation-for="GoalDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="goalScopeDropDown">
+                <label asp-for="GoalScope" class="control-label"></label>
+                <select asp-for="GoalScope" class="selectpicker form-control" asp-items="Html.GetEnumSelectList<GoalScope>()" title="Wybierz zakres celu"></select>
+                <span asp-validation-for="GoalScope" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="physiqueScopeDropDown">
+                <label asp-for="PhysiqueScope" class="control-label"></label>
+                <select asp-for="PhysiqueScope" class="selectpicker form-control" asp-items="Html.GetEnumSelectList<PhysiqueScope>()" title="Wybierz cel"></select>
+                <span asp-validation-for="PhysiqueScope" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="exerciseScopeDropDown">
+                <label asp-for="ExerciseScope" class="control-label"></label>
+                <select asp-for="ExerciseScope" class="selectpicker form-control" asp-items="Html.GetEnumSelectList<ExerciseScope>()" title="Wybierz cel"></select>
+                <span asp-validation-for="ExerciseScope" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="exercisesDropDown">
+                <label asp-for="ExerciseName" class="control-label"></label>
+                <select asp-for="ExerciseName" class="selectpicker form-control" asp-items="Model.ExerciseList" data-live-search="true" title="Wybierz ćwiczenie"></select>
+                <span asp-validation-for="ExerciseName" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="circumferencesDropDown">
+                <label asp-for="Circumference" class="control-label"></label>
+                <select asp-for="Circumference" class="selectpicker form-control" asp-items="Html.GetEnumSelectList<Circumferences>()" title="Wybierz część ciała"></select>
+                <span asp-validation-for="Circumference" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="target">
+                <label asp-for="Target" class="control-label"></label>
+                <input asp-for="Target" class="form-control" type="number" />
+                <span asp-validation-for="Target" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Save" class="btn btn-success box bar">Zapisz <i class="fa fa-check-square-o"></i></button>
+                <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/bootstrap-select-1.13.0-alpha/bootstrap-select-1.13.0-alpha/js/bootstrap-select.js" type="text/javascript"></script>
+    <link href="~/lib/bootstrap-select-1.13.0-alpha/bootstrap-select-1.13.0-alpha/css/bootstrap-select.css" rel="stylesheet" />
+    <script>
+        initialize();
+
+        function initialize()
+        {
+            hideElement('#physiqueScopeDropDown');
+            hideElement('#exerciseScopeDropDown');
+            hideElement('#exercisesDropDown');
+            hideElement('#circumferencesDropDown');
+
+            var goalScope = $('#goalScopeDropDown :selected').val();
+            if (goalScope == 1) {
+                showElement('#physiqueScopeDropDown');
+            }
+            else if (goalScope == 2) {
+                showElement('#exerciseScopeDropDown');
+                showElement('#exercisesDropDown');
+            }
+
+            var physiqueScope = $('#physiqueScopeDropDown :selected').val();
+            if (physiqueScope == 5 || physiqueScope == 6) {
+                showElement('#circumferencesDropDown');
+            }
+        }
+
+        $('#goalScopeDropDown').change(function () {
+            var selectedGoalScope = $(this).find(':selected').val();
+            switch (selectedGoalScope) {
+                case "1":
+                    showElement('#physiqueScopeDropDown');
+                    hideElement('#exerciseScopeDropDown');
+                    $('#exerciseScopeDropDown').find('select').selectpicker('val', '');
+                    hideElement('#circumferencesDropDown');
+                    hideElement('#exercisesDropDown');
+                    $('#circumferencesDropDown').find('select').selectpicker('val', '');
+                    break;
+                case "2":
+                    showElement('#exerciseScopeDropDown');
+                    hideElement('#physiqueScopeDropDown');
+                    $('#physiqueScopeDropDown').find('select').selectpicker('val', '');
+                    hideElement('#circumferencesDropDown');
+                    $('#circumferencesDropDown').find('select').selectpicker('val', '');
+                    break;
+            }
+        });
+
+        $('#physiqueScopeDropDown').change(function () {
+            var selectedPhysiqueScope = $(this).find(':selected').val();
+            switch (selectedPhysiqueScope) {
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                    hideElement('#circumferencesDropDown');
+                    $('#circumferencesDropDown').find('select').selectpicker('val', '');
+                    break;
+                case "5":
+                case "6":
+                    showElement("#circumferencesDropDown");
+                    break;
+            }
+
+        });
+
+        $('#exerciseScopeDropDown').change(function () {
+            var selectedExerciseScope = $(this).find(':selected').val();
+            var data = {};
+            if (selectedExerciseScope == 1 || selectedExerciseScope == 2) {
+                data.activityType = "Sporty grupowe";
+            }
+            else if (selectedExerciseScope == 3 || selectedExerciseScope == 4) {
+                data.activityType = "Ćwiczenia wytrzymałościowe";
+            }
+            else if (selectedExerciseScope == 5) {
+                data.activityType = "Ćwiczenia siłowe";
+            }
+
+            $.ajax({
+                url: '../getExercises',
+                type: 'GET',
+                data: data,
+                async: false,
+                success: function (obj) {
+                    if ($('#exercisesDropDown').find('option').length > 0) {
+                        $('#exercisesDropDown').find('option').remove().end();
+                    }
+
+                    $.each(obj, function (key, value) {
+                        $('#exercisesDropDown').find('select').append($("<option/>", {
+                            value: key,
+                            text: value
+                        }));
+                    });
+                    showElement('#exercisesDropDown');
+                    $('#exercisesDropDown').find('select').selectpicker('refresh');
+                },
+                error: function (obj) {
+                    swal("Niepowodzenie", "Napotkano nieoczekiwany błąd. Spróbuj ponownie.", "error");
+                }
+            });
+        });
+
+        function showElement(name) {
+            if ($(name).hasClass('hidden')) {
+                $(name).removeClass('hidden');
+            }
+        }
+
+        function hideElement(name) {
+            if (!$(name).hasClass('hidden')) {
+                $(name).addClass('hidden');
+            }
+        }
+    </script>
+}

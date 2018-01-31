@@ -1,4 +1,5 @@
 ﻿@model IndexViewModel
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Manage your account";
 }
@@ -82,6 +83,17 @@
                 </div>                
             </div>
         </div>
+
+        @{
+            var user = await UserManager.FindByIdAsync(UserManager.GetUserId(User));
+        }
+
+        <div class="col-md-12">
+            <a asp-area="" asp-controller="Account" asp-action="EditProfile" asp-route-id="@user.Id" title="Edytuj profil" class="btn btn-info box bar">
+                Edycja danych
+            </a>
+        </div>
+
     </div>
 </div>
 

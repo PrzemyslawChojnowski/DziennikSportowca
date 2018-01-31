@@ -241,7 +241,7 @@ namespace DziennikSportowca.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -477,12 +477,17 @@ namespace DziennikSportowca.Controllers
 
             var user = await _userManager.FindByIdAsync(id);
 
+            string gender = null;
+            if (user.Gender != 0)
+                gender = user.Gender.GetDisplayName();
+
             EditProfileViewModel model = new EditProfileViewModel()
             {
                 Id = user.Id,
                 ActualUserName = user.Name,
                 ActualUserSurname = user.Surname,
-                ActualUserProfilePicture = user.ProfilePicture
+                ActualUserProfilePicture = user.ProfilePicture,
+                ActualUserGender = gender
             };
 
             return View(model);
@@ -490,7 +495,7 @@ namespace DziennikSportowca.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(string id, [Bind("Id,NewUserName,NewUserSurname,NewProfilePicture")] EditProfileViewModel model)
+        public async Task<IActionResult> EditProfile(string id, [Bind("Id,NewUserName,NewUserSurname,NewProfilePicture,NewUserGender")] EditProfileViewModel model)
         {
             if (id != model.Id)
                 return NotFound();
@@ -505,6 +510,8 @@ namespace DziennikSportowca.Controllers
                         user.Name = model.NewUserName;
                     if (model.NewUserSurname != null) 
                         user.Surname = model.NewUserSurname;
+                    if (model.NewUserGender != 0)
+                        user.Gender = model.NewUserGender;
                     if (model.NewProfilePicture != null)
                     {
                         using (var memoryStream = new MemoryStream())

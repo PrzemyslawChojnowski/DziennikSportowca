@@ -12,15 +12,24 @@
         <li class="active"><span>Edycja profilu</span></li>
     </ol>
 </div>
+
+<div class="col-md-12">
+    <a asp-action="Index" asp-controller="Manage" class="btn btn-info box curmudgeon">Dodatkowe ustawienia</a>
+</div>
+
 <div class="col-md-12">
     <div class="form-horizontal col-md-6">
-        <div class="form-group">
+        <div class="form-group">            
             <label asp-for="ActualUserName" class="col-md-4 control-label"></label>
-            <label class="col-md-8">@Model.ActualUserName</label>
+            <label class="col-md-8" style="margin-bottom: 0;padding-top: 7px;">@Model.ActualUserName</label>
         </div>
         <div class="form-group">
             <label asp-for="ActualUserSurname" class="col-md-4 control-label"></label>
-            <label class="col-md-8">@Model.ActualUserSurname</label>
+            <label class="col-md-8" style="margin-bottom: 0;padding-top: 7px;">@Model.ActualUserSurname</label>
+        </div>
+        <div class="form-group">
+            <label asp-for="ActualUserGender" class="col-md-4 control-label"></label>
+            <label class="col-md-8" style="margin-bottom: 0;padding-top: 7px;">@Model.ActualUserGender</label>
         </div>
         <div class="form-group">
             <label asp-for="ActualUserProfilePicture" class="col-md-4 control-label"></label>
@@ -67,6 +76,15 @@
                 </div>
             </div>
             <div class="form-group">
+                <label asp-for="NewUserGender" class="col-md-4 control-label"></label>
+                <div class="col-md-8">
+                    <select asp-for="NewUserGender" class="form-control" asp-items="@Html.GetEnumSelectList<Gender>()">
+                        <option value="0">Wybierz płeć</option>
+                    </select>
+                    <span asp-validation-for="NewUserGender" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
                 <label asp-for="NewProfilePicture" class="col-md-4 control-label"></label>
                 <div class="col-md-8">
                     <input asp-for="NewProfilePicture" type="file" accept="image/*" class="form-control" />
@@ -75,7 +93,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-4 col-md-8">
-                    <button type="submit" class="btn btn-default">Zapisz</button>
+                    <button type="submit" class="btn btn-success box bar">Zapisz <i class="fa fa-check-square-o"></i></button>
                 </div>
             </div>
         </div>

@@ -1,0 +1,66 @@
+﻿@model DziennikSportowca.Models.FoodProduct
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Produkty żywieniowe</a></li>
+        <li class="active"><span>Usuwanie produktu</span></li>
+    </ol>
+</div>
+
+<h3 class="text-danger">Jesteś pewien, że chcesz usunąć wybrany produkt?</h3>
+<div>
+    <hr />
+    <div class="panel panel-danger">
+        <div class="panel-heading">Dane produktu</div>
+        <div class="panel-body">
+            <div class="col-md-12 padding-0">
+                <div class="well well-sm panel-subheading panel-subheading-delete"><label>PODSTAWOWE INFORMACJE</label></div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Nazwa: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Description)</p>
+                </div>
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Typ produktu: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Type.Description)</p>
+                </div>
+            </div>
+            <br />
+            <div class="col-md-12 padding-0">
+                <div class="well well-sm panel-subheading panel-subheading-delete"><label>SZCZEGÓŁOWE INFORMACJE</label></div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Węglowodany: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Carbohydrate) [g]</p>
+                </div>
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Białko: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Protein) [g]</p>
+                </div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Tłuszcze: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Fat) [g]</p>
+                </div>
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Energia: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Energy) [g]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" value="Delete" class="btn-danger box bar">Usuń <i class="fa fa-trash"></i></button>
+            <button asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></button>
+        </div>
+    </form>
+</div>

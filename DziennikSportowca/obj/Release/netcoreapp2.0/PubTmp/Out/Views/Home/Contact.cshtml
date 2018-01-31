@@ -1,0 +1,84 @@
+﻿@model DziennikSportowca.Models.ViewModels.ContactViewModel
+
+@{
+    ViewData["Title"] = "Contact";
+
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Home</a></li>
+        <li class="active"><span>Kontakt</span></li>
+    </ol>
+</div>
+
+<link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Teko:400,700" rel="stylesheet" />
+<link href="~/css/Contact.css" rel="stylesheet" />
+
+@if (!String.IsNullOrEmpty(ViewData["Success"].ToString()))
+{
+    if (ViewData["Success"].ToString() == "Success")
+    {
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Hurra!</strong> @ViewData["InfoMessage"]
+        </div>
+    }
+    else if (ViewData["Success"].ToString() == "Failure")
+    {
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Ostrzeżenie!</strong> @ViewData["InfoMessage"]
+        </div>
+    }
+}
+
+<section id="contact">
+    <div class="section-content">
+        <h1 class="section-header">Skontaktuj Sie <span class="content-header wow fadeIn " data-wow-delay="0.2s" data-wow-duration="2s"> Z Nami!</span></h1>
+        <h3>Jezeli masz jakis problem - nie krepuj sie i napisz do nas wiadomosc!</h3>
+    </div>
+    <div class="contact-section">
+        <div class="container">
+            <form asp-action="Contact">
+                <div class="col-md-6 form-line">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label asp-for="@Model.Name"></label>
+                            <input asp-for="@Model.Name" type="text" class="form-control" id="" placeholder="Wpisz imie" />
+                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Email"></label>
+                            <input asp-for="@Model.Email" type="email" class="form-control" id="exampleInputEmail" placeholder="Wpisz adres e-mail" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.PhoneNumber"></label>
+                            <input asp-for="@Model.PhoneNumber" type="tel" class="form-control" id="telephone" placeholder="Wpisz numer telefonu" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="line"></div>
+                <div class="col-md-6">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label asp-for="@Model.Message"></label>
+                            <textarea asp-for="@Model.Message" class="form-control" id="description" placeholder="Wpisz swoja wiadomosc"></textarea>
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <button type="submit" value="Send" class="btn btn-default submit"><i class="fa fa-paper-plane" aria-hidden="true"></i>Wyslij wiadomosc</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

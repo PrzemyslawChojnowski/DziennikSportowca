@@ -14,6 +14,8 @@ namespace DziennikSportowca.Models.AccountViewModels
         public string ActualUserName { get; set; }
         [Display(Name = "Aktualne nazwisko")]
         public string ActualUserSurname { get; set; }
+        [Display(Name = "Płeć")]
+        public string ActualUserGender { get; set; }
         [Display(Name = "Aktualne zdjęcie profilowe")]
         public byte[] ActualUserProfilePicture { get; set; }
 
@@ -21,6 +23,8 @@ namespace DziennikSportowca.Models.AccountViewModels
         public string NewUserName { get; set; }
         [Display(Name = "Nowe nazwisko")]
         public string NewUserSurname { get; set; }
+        [Display(Name = "Płeć")]
+        public Gender NewUserGender { get; set; }
         [Display(Name = "Nowe zdjęcie profilowe")]
         public IFormFile NewProfilePicture { get; set; }
     }

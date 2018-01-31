@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA2zq2aeZfN0m4zoWeErSsNgAAAAACAAAAAAAQZgAAAAEAACAAAADhofZkhUBRZqy/9qmWQeRoPRbL0PO/p2iNzic/kFuScwAAAAAOgAAAAAIAACAAAACbosV0wgnXbOgO9eeNxbM2ko2zHG5Yfqqie6MTtfmEBoAAAABId0AlqxBZvyGRrrUbeSJE9OW90vGW13kMNjPkDWu76OQ6aBI4ZlpjkX8/yQ4WiF4EwcjCaNF5zEZ7bvN+JrKj6z76t9ZMzF7ovKmysjrFK3KGfBt7C38xJkSg1BfpOQ0HA3of6h5OJR4X0oijJzEtVtGO09Ovw7qnEqzQzIcGxkAAAACQ7dOM2pCUqC0fz/a9av5O31SjIt2MiRYUtw7kZmBPtQixXnLKIU7KlQR6GY8WuD9rcARJbWxTwAJpG+a8LNZ1</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=tcp:dzienniksportowca20180121021657dbserver.database.windows.net,1433;Initial Catalog=DziennikSportowca20180121021657_db;User Id=przemekch17@dzienniksportowca20180121021657dbserver;Password=Ronaldo7</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

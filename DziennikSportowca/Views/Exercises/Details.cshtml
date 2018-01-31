@@ -1,36 +1,42 @@
 ﻿@model DziennikSportowca.Models.Exercise
-
 @{
     ViewData["Title"] = "Details";
 }
-
-<h2>Details</h2>
-
-<div>
-    <h4>Exercise</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ActivityType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ActivityType.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ExerciseInstruction)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ExerciseInstruction.Id)
-        </dd>
-    </dl>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Ćwiczenia</a></li>
+        <li class="active"><span>Szczegóły ćwiczenia</span></li>
+    </ol>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="panel panel-info">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Dane ćwiczenia</div>
+    <div class="panel-body">
+        <div class="col-md-12 padding-0">
+            <div class="well well-sm panel-subheading panel-subheading-info"><label>PODSTAWOWE INFORMACJE</label></div>
+        </div>
+        <div class="col-md-12 padding-0">
+            <div class="col-md-6 padding-0">
+                <label class="inline">Nazwa: </label>
+                <p class="inline">@Html.DisplayFor(x => x.Name)</p>
+            </div>
+            <div class="col-md-6 padding-0">
+                <label class="inline">Typ aktywności: </label>
+                <p class="inline">@Html.DisplayFor(model => model.ActivityType.Description)</p>
+            </div>
+        </div>
+        @if (Model.MuscleParts != null && Model.MuscleParts.Any())
+        {
+            <div class="col-md-12 padding-0">
+                <div class="col-md-6 padding-0 col-md-offset-6">
+                    <label class="inline">Partia mięśniowa: </label>
+                    <p class="inline">@Html.DisplayFor(x => x.MuscleParts[0].MusclePart.Description)</p>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+<form>
+    <button asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></button>
+</form>

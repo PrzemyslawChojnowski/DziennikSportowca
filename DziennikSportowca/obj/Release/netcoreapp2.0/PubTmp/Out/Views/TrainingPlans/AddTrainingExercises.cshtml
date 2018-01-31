@@ -1,0 +1,98 @@
+﻿@model DziennikSportowca.Models.ViewModels.TrainingPlanViewModel
+
+@{
+    ViewData["Title"] = "AddTrainingExercises";
+}
+
+@section Scripts{ 
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
+    <script src="~/js/Training/AddTrainingExercisesScript.js" type="text/javascript"></script>
+    <script src="~/lib/bootstrap-select-1.13.0-alpha/bootstrap-select-1.13.0-alpha/js/bootstrap-select.js" type="text/javascript"></script>
+    <link href="~/lib/bootstrap-select-1.13.0-alpha/bootstrap-select-1.13.0-alpha/css/bootstrap-select.css" rel="stylesheet" />
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Plany Treningowe</a></li>
+        <li class="active"><span>Dodawanie ćwiczeń do planu</span></li>
+    </ol>
+</div>
+
+<div class="form-horizontal">
+    <div class="form-inline">
+        <div class="form-inline">
+            <input type="hidden" asp-for="TrainingPlan.Id" id="Id"/>
+            
+            <select class="selectpicker" id="ActivityType" data-live-search="true" title="Wybierz typ aktywności" asp-items="Model.ActivityTypes">
+            </select>
+
+            <select class="selectpicker" asp-items="Model.MuscleParts" id="MusclePartName" data-live-search="true" title="Wybierz partię">
+            </select>
+
+            <select class="selectpicker" id="Exercises" data-live-search="true" title="Wybierz ćwiczenie">
+            </select>
+
+            <input type="number" class="form-control hidden" placeholder="Liczba serii" id="SeriesNo" />
+            <input type="number" class="form-control hidden" placeholder="Liczba powtorzen" id="RepsNo" />
+            <input type="number" class="form-control hidden" placeholder="Czas trwania" id="ExerciseTime" />
+            <br/>
+            <button class="btn btn-info box curmudgeon" onclick="newElement()">Dodaj</button>
+
+        </div>
+    </div>
+
+    <table class="table table-hover" id="ExercisesTable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ćwiczenie</th>
+                <th>Typ aktywności</th>
+                <th>Informacje o ćwiczeniu</th>
+                <th>Usuń</th>
+            </tr>
+        </thead>
+        <tbody id="ExercisesBody">
+            @{ int i = 1;
+                if (Model.TrainingPlan.Exercises.Any())
+                {
+                    foreach (var data in Model.TrainingPlan.Exercises)
+                    {
+                        <tr>
+                            <td class="ExerciseNo">@i</td>
+                            <td class="Exercise">@data.Exercise.Name</td>
+                            <td class="ActivityType">@data.Exercise.ActivityType.Description</td>
+                            <td class="ExerciseInfo">
+                                @if (data.Exercise.ActivityType.Description == "Ćwiczenia siłowe")
+                                {
+                                    <span class="SeriesNo">@data.SeriesNo</span>
+                                    <span class="text1"> serie x </span>
+                                    <span class="RepsNo">@data.RepsNo</span>
+                                    <span class="text2"> powtórzeń</span>
+                                }
+                                else if (data.Exercise.ActivityType.Description == "Ćwiczenia wytrzymałościowe" || data.Exercise.ActivityType.Description == "Sporty grupowe")
+                                {
+                                    <span class="text1">Czas trwania: </span>
+                                    <span class="ExerciseLength">@data.ExerciseLength</span>
+                                    <span class="text2"> minut</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="btn btn-danger btn-sm remove">
+                                    <span class="glyphicon glyphicon-trash" id="Delete"></span>
+                                </span>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <button id="AddExercises" class="btn btn-success box bar">Zapisz cwiczenia <i class="fa fa-check-square-o"></i></button>
+            <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿@model List<DziennikSportowca.Models.ViewModels.DishDetailsViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li class="active"><span>Posiłki</span></li>
+    </ol>
+</div>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary box foo">Utwórz nowy posiłek <i class="fa fa-plus-square"></i></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nazwa
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].TotalWeight) [g]
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].TotalCarbs) [g]
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].TotalProteins) [g]
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].TotalFat) [g]
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].TotalEnergy) [kcal]
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <strong>@Html.DisplayFor(modelItem => item.Dish.Description)</strong>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalWeight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalCarbs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalProteins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalFat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalEnergy)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Dish.Id" class="btn btn-success box curmudgeon btn-xs padding-5">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+                <a asp-action="Details" asp-route-id="@item.Dish.Id" class="btn btn-info box foo btn-xs padding-5">Szczegóły <i class="fa fa-info-circle"></i></a>
+                <a asp-action="Delete" asp-route-id="@item.Dish.Id" class="btn btn-danger box bar btn-xs padding-5">Usuń <i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

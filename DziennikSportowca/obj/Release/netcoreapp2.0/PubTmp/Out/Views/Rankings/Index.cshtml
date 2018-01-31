@@ -1,0 +1,335 @@
+﻿@model DziennikSportowca.Models.ViewModels.RankingsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="card">
+    <ul class="nav nav-tabs calculators">
+        <li role="presentation" class="active"><a data-toggle="tab" href="#trainingsCountTab" aria-controls="trainingsCountTab" role="tab">@Model.RankingName1</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#cardioTotalTimeTab" aria-controls="cardioTotalTimeTab" role="tab">@Model.RankingName2</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#groupSportsTotalTimeTab" aria-controls="groupSportsTotalTimeTab" role="tab">@Model.RankingName3</a></li>
+        <li role="presentation"><a data-toggle="tab" href="#cpm" aria-controls="cpm" role="tab">Czwarty ranking</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="trainingsCountTab" class="tab-pane fade in active" role="tabpanel">
+            @{
+                int  i = 1;
+                if (Model != null)
+                {
+                    if(Model.Trainings1 != null && Model.Trainings1.Any())
+                    {                        
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1">#</th>
+                                        <th class="col-md-1">Ilość</th>
+                                        <th class="col-md-10">Użytkownik</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="doneTrainingsRanking">
+                                    @{
+                                        foreach (var element in Model.Trainings1)
+                                        {
+                                            <tr>
+                                                <td>@i.</td>
+                                                <td>@element.Count()</td>
+                                                <td>@element.Key.Name @element.Key.Surname</td>
+                                            </tr>
+                                            if (element.Key.Id == Model.AlreadyLoggedUserId)
+                                            {
+                                                Model.LoggedUserPosition1 = i;
+                                            }
+                                            i++;
+                                            Model.AllUsers1.Remove(element.Key);
+                                        }
+                                        if (Model.AllUsers1 != null && Model.AllUsers1.Any())
+                                        {
+                                            foreach (var user in Model.AllUsers1)
+                                            {
+                                                <tr>
+                                                    <td>@i.</td>
+                                                    <td>0</td>
+                                                    <td>@user.Name @user.Surname</td>
+                                                </tr>
+                                                if(user.Id == Model.AlreadyLoggedUserId)
+                                                {
+                                                    Model.LoggedUserPosition1 = i;
+                                                }
+                                                i++;
+                                            }
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <span>Twoja pozycja: <span id="userPosition1">@Model.LoggedUserPosition1</span></span>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <ul class="pagination pagination-lg pager" id="doneTrainingsRankingPager"></ul>
+                        </div>
+                    }
+                }
+            }
+        </div>
+
+        <div id="cardioTotalTimeTab" class="tab-pane fade in" role="tabpanel">
+            @{
+                i = 1;
+                if (Model != null)
+                {
+                    if(Model.Trainings2 != null && Model.Trainings2.Any())
+                    {                        
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1">#</th>
+                                        <th class="col-md-1">Łączny czas</th>
+                                        <th class="col-md-10">Użytkownik</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cardioTotalTimeRanking">
+                                    @{
+                                        foreach (var element in Model.Trainings2)
+                                        {
+                                            <tr>
+                                                <td>@i.</td>
+                                                <td>@element.Sum</td>
+                                                <td>@element.Key.Name @element.Key.Surname</td>
+                                            </tr>
+                                            if (element.Key.Id == Model.AlreadyLoggedUserId)
+                                            {
+                                                Model.LoggedUserPosition2 = i;
+                                            }
+                                            i++;
+                                            Model.AllUsers2.Remove(element.Key);
+                                        }
+                                        if (Model.AllUsers2 != null && Model.AllUsers2.Any())
+                                        {
+                                            foreach (var user in Model.AllUsers2)
+                                            {
+                                                <tr>
+                                                    <td>@i.</td>
+                                                    <td>0</td>
+                                                    <td>@user.Name @user.Surname</td>
+                                                </tr>
+                                                if(user.Id == Model.AlreadyLoggedUserId)
+                                                {
+                                                    Model.LoggedUserPosition2 = i;
+                                                }
+                                                i++;
+                                            }
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <span>Twoja pozycja: <span id="userPosition2">@Model.LoggedUserPosition2</span></span>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <ul class="pagination pagination-lg pager" id="cardioTotalTimeRankingPager"></ul>
+                        </div>
+                    }
+                }
+            }
+        </div>
+
+        <div id="groupSportsTotalTimeTab" class="tab-pane fade in" role="tabpanel">
+            @{
+                i = 1;
+                if (Model != null)
+                {
+                    if(Model.Trainings3 != null && Model.Trainings3.Any())
+                    {                        
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1">#</th>
+                                        <th class="col-md-1">Łączny czas</th>
+                                        <th class="col-md-10">Użytkownik</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="groupSportsTotalTimeRanking">
+                                    @{
+                                        foreach (var element in Model.Trainings3)
+                                        {
+                                            <tr>
+                                                <td>@i.</td>
+                                                <td>@element.Sum</td>
+                                                <td>@element.Key.Name @element.Key.Surname</td>
+                                            </tr>
+                                            if (element.Key.Id == Model.AlreadyLoggedUserId)
+                                            {
+                                                Model.LoggedUserPosition3 = i;
+                                            }
+                                            i++;
+                                            Model.AllUsers3.Remove(element.Key);
+                                        }
+                                        if (Model.AllUsers3 != null && Model.AllUsers3.Any())
+                                        {
+                                            foreach (var user in Model.AllUsers3)
+                                            {
+                                                <tr>
+                                                    <td>@i.</td>
+                                                    <td>0</td>
+                                                    <td>@user.Name @user.Surname</td>
+                                                </tr>
+                                                if(user.Id == Model.AlreadyLoggedUserId)
+                                                {
+                                                    Model.LoggedUserPosition3 = i;
+                                                }
+                                                i++;
+                                            }
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <span>Twoja pozycja: <span id="userPosition3">@Model.LoggedUserPosition3</span></span>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <ul class="pagination pagination-lg pager" id="groupSportsTotalTimeRankingPager"></ul>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{ 
+    <script>
+        $.fn.pageMe = function(opts){
+            var $this = this,
+                defaults = {
+                    perPage: 7,
+                    showPrevNext: false,
+                    hidePageNumbers: false
+                },
+                settings = $.extend(defaults, opts);
+
+            var listElement = $this;
+            var perPage = settings.perPage;
+            var children = listElement.children();
+            var pager = $('.pager');
+
+            if (typeof settings.childSelector!="undefined") {
+                children = listElement.find(settings.childSelector);
+            }
+
+            if (typeof settings.pagerSelector!="undefined") {
+                pager = $(settings.pagerSelector);
+            }
+
+            var numItems = children.size();
+            var numPages = Math.ceil(numItems/perPage);
+
+            pager.data("curr",0);
+
+            if (settings.showPrevNext){
+                $('<li><a href="#" class="prev_link">«</a></li>').appendTo(pager);
+            }
+
+            var curr = 0;
+            while(numPages > curr && (settings.hidePageNumbers==false)){
+                $('<li><a href="#" class="page_link">'+(curr+1)+'</a></li>').appendTo(pager);
+                curr++;
+            }
+
+            if (settings.showPrevNext){
+                $('<li><a href="#" class="next_link">»</a></li>').appendTo(pager);
+            }
+
+            pager.find('.page_link:first').addClass('active');
+            pager.find('.prev_link').hide();
+            if (numPages<=1) {
+                pager.find('.next_link').hide();
+            }
+              pager.children().eq(1).addClass("active");
+
+            children.hide();
+            children.slice(0, perPage).show();
+
+            pager.find('li .page_link').click(function(){
+                var clickedPage = $(this).html().valueOf()-1;
+                goTo(clickedPage,perPage);
+                return false;
+            });
+            pager.find('li .prev_link').click(function(){
+                previous();
+                return false;
+            });
+            pager.find('li .next_link').click(function(){
+                next();
+                return false;
+            });
+
+            function previous(){
+                var goToPage = parseInt(pager.data("curr")) - 1;
+                goTo(goToPage);
+            }
+
+            function next(){
+                goToPage = parseInt(pager.data("curr")) + 1;
+                goTo(goToPage);
+            }
+
+            function goTo(page){
+                var startAt = page * perPage,
+                    endOn = startAt + perPage;
+
+                children.css('display','none').slice(startAt, endOn).show();
+
+                if (page>=1) {
+                    pager.find('.prev_link').show();
+                }
+                else {
+                    pager.find('.prev_link').hide();
+                }
+
+                if (page<(numPages-1)) {
+                    pager.find('.next_link').show();
+                }
+                else {
+                    pager.find('.next_link').hide();
+                }
+
+                pager.data("curr",page);
+      	        pager.children().removeClass("active");
+                pager.children().eq(page+1).addClass("active");
+
+            }
+        };
+
+        $(document).ready(function(){
+
+            $('#doneTrainingsRanking').pageMe({ pagerSelector: '#doneTrainingsRankingPager', showPrevNext: true, hidePageNumbers: false, perPage: 3 });            
+            $('#cardioTotalTimeRanking').pageMe({ pagerSelector: '#cardioTotalTimeRankingPager', showPrevNext: true, hidePageNumbers: false, perPage: 3 });
+            $('#groupSportsTotalTimeRanking').pageMe({ pagerSelector: '#groupSportsTotalTimeRankingPager', showPrevNext: true, hidePageNumbers: false, perPage: 3 });
+
+            var userPosition = parseInt($('#userPosition1').text());
+            $('#doneTrainingsRanking > tr').eq(userPosition - 1).children('td')
+                .each(function () {
+                    $(this).addClass('text-bold');
+                });
+
+            userPosition = parseInt($('#userPosition2').text());
+            $('#cardioTotalTimeRanking > tr').eq(userPosition - 1).children('td')
+                .each(function () {
+                    $(this).addClass('text-bold');
+                });
+
+            userPosition = parseInt($('#userPosition3').text());
+            $('#groupSportsTotalTimeRanking > tr').eq(userPosition - 1).children('td')
+                .each(function () {
+                    $(this).addClass('text-bold');
+                });
+        });
+    </script>
+}

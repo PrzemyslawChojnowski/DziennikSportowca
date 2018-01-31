@@ -1,0 +1,224 @@
+﻿@inject UserManager<ApplicationUser> _manager
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DziennikSportowca</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" type="text/css" href="~/lib/sweetalert/dist/sweetalert.css">
+        <link rel="stylesheet" href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap4c-dropzone/dist/css/component-dropzone.css" />
+        <link rel="stylesheet" href="~/lib/nanogallery2-1.4.0/src/css/nanogallery2.css" type="text/css"/>
+        @*<link rel="stylesheet" href="~/lib/dropzonejs/dist/dropzone.css" />*@
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Dziennik Sportowca</a>
+            </div>
+            <div class="navbar-collapse collapse" id="bs-megadropdown-tabs" style="padding-left: 0px;">
+                <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">@*<i class="fa fa-home"></i>*@Strona domowa</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">@*<i class="fa fa-info-circle"></i>*@O aplikacji</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">@*<i class="fa fa-address-card"></i>*@Kontakt</a></li>
+                    <li class="dropdown2 mega-dropdown">
+                        <a href="#" id="mega" class="dropdown-toggle" data-toggle="dropdown">Więcej <span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+                        <ul class="dropdown-menu mega-dropdown-menu row">
+                            <li class="col-sm-3">
+                                <ul>
+                                    <li class="dropdown-header">Nowosci w aplikacji</li>
+                                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <div class="item active">
+                                                <a href="#"><img src="http://placehold.it/254x150/3498db/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 1"></a>
+                                                <h4><small>Summer dress floral prints</small></h4>
+                                                <button class="btn btn-primary" type="button">49,99 €</button>
+                                                <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
+                                            </div>
+                                            <!-- End Item -->
+                                            <div class="item">
+                                                <a href="#"><img src="http://placehold.it/254x150/ef5e55/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 2"></a>
+                                                <h4><small>Gold sandals with shiny touch</small></h4>
+                                                <button class="btn btn-primary" type="button">9,99 €</button>
+                                                <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
+                                            </div>
+                                            <!-- End Item -->
+                                            <div class="item">
+                                                <a href="#"><img src="http://placehold.it/254x150/2ecc71/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 3"></a>
+                                                <h4><small>Denin jacket stamped</small></h4>
+                                                <button class="btn btn-primary" type="button">49,99 €</button>
+                                                <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
+                                            </div>
+                                            <!-- End Item -->
+                                        </div>
+                                        <!-- End Carousel Inner -->
+                                    </div>
+                                    <!-- /.carousel -->
+                                    <li class="divider"></li>
+                                    <li><a href="#">View all Collection <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                                </ul>
+                            </li>
+                            <li class="col-sm-3">
+                                <ul>
+                                    <li class="dropdown-header">Moje Plany</li>
+                                    <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Index">Przeglądaj</a></li>
+                                    <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Create">Dodaj nowy</a></li>
+                                    <li class="divider"></li>
+                                    <li class="dropdown-header">Moje Treningi</li>
+                                    <li><a asp-area="" asp-controller="UserTrainings" asp-action="Index">Przeglądaj</a></li>
+                                    <li><a asp-area="" asp-controller="TrainingPlans" asp-action="Index">Wykonaj trening</a></li>
+                                    <li class="divider"></li>
+                                    <li class="dropdown-header">Moje Cele</li>
+                                    <li><a asp-area="" asp-controller="Goals" asp-action="Index">Przeglądaj</a></li>
+                                    <li><a asp-area="" asp-controller="Goals" asp-action="Create">Utwórz nowy cel</a></li>
+                                </ul>
+                            </li>
+                            <li class="col-sm-3">
+                                <ul>
+                                    <li class="dropdown-header">Moje pomiary</li>
+                                    <li><a asp-area="" asp-controller="UserFigures" asp-action="Index">Przeglądaj</a></li>
+                                    <li><a asp-area="" asp-controller="UserFigures" asp-action="Create">Wykonaj nowy pomiar</a></li>
+                                    <li><a asp-area="" asp-controller="UserFigures" asp-action="Calculators">Kalkulatory</a></li>
+                                    <li class="divider"></li>
+                                    <li class="dropdown-header">Moje Posiłki</li>
+                                    <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Przeglądaj</a></li>
+                                    <li><a asp-area="" asp-controller="Dishes" asp-action="Create">Utwórz posiłek</a></li>
+                                    <li><a asp-area="" asp-controller="Dishes" asp-action="NutritionFacts">Sprawdź wartości odżywcze</a></li>
+                                </ul>
+                            </li>
+                            <li class="col-sm-3">
+                                <ul>
+                                    <li class="dropdown-header">Inne</li>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Strona domowa</a></li>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="About">O aplikacji</a></li>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Kontakt</a></li>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="ExerciseAtlas">Atlas ćwiczeń</a></li>
+                                    <li><a asp-area="" asp-controller="Rankings" asp-action="Index">Rankingi</a></li>
+                                    <li class="divider"></li>
+                                    <li class="dropdown-header">Wyszukiwarka</li>
+                                    <form asp-action="Search" asp-controller="Home" class="form" role="search">
+                                        <div class="form-group">
+                                            <label class="sr-only">Wpisz szukana fraze</label>
+                                            <input type="text" class="form-control" id="key" name="key" placeholder="Szukaj">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="sr-only">Wybierz zakres poszukiwań</label>
+                                            <select name="type" class="form-control">
+                                                <option value="All">Wszystkie</option>
+                                                <option value="Exercises">Ćwiczenia</option>
+                                                <option value="MuscleParts">Partie mięśniowe</option>
+                                                <option value="TrainingPlans">Plany treningowe</option>
+                                                <option value="Users">Użytkownicy</option>
+                                                <option value="FoodProducts">Żywność</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="box bar btn btn-primary btn-block" value="Szukaj">Szukaj</button>
+                                    </form>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                @await Html.PartialAsync("_LoginPartial")
+            </div>
+        </div>
+    </nav>    
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2017 - DziennikSportowca</p>
+        </footer>
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+        <script src="~/lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.pl.js"></script>
+        <script src="~/lib/dropzone/dist/dropzone.js"></script>
+        <script type="text/javascript" src="~/lib/nanogallery2-1.4.0/src/jquery.nanogallery2.core.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".dropdown").hover(
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+                    $(this).toggleClass('open');
+                },
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).delay(100).slideUp("fast");
+                    $(this).toggleClass('open');
+                }
+            );
+
+            $('body').append('<div id="toTop" class="btn btn-info box foo"><span class="glyphicon glyphicon-chevron-up"></span></div>');
+            $(window).scroll(function () {
+                if ($(this).scrollTop() != 0) {
+                    $('#toTop').fadeIn();
+                } else {
+                    $('#toTop').fadeOut();
+                }
+            });
+            $('#toTop').click(function () {
+                $("html, body").animate({ scrollTop: 0 }, 600);
+                return false;
+            });
+        });
+
+        jQuery(document).on('click', '.mega-dropdown', function (e) {
+            e.stopPropagation()
+        })
+    </script>
+
+</body>
+</html>

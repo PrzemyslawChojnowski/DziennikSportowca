@@ -323,15 +323,15 @@ namespace DziennikSportowca.Data
 
                 var powerUser = new ApplicationUser()
                 {
-                    Email = configuration.GetSection("PowerUser")["AdminEmail"],
-                    Name = configuration.GetSection("PowerUser")["AdminName"],
-                    UserName = configuration.GetSection("PowerUser")["AdminEmail"],
-                    Surname = configuration.GetSection("PowerUser")["AdminSurname"],
+                    Email = "dziennik.sportowca@gmail.com",//configuration.GetSection("PowerUser")["AdminEmail"],
+                    Name = "Admin",//configuration.GetSection("PowerUser")["AdminName"],
+                    UserName = "dziennik.sportowca@gmail.com",//configuration.GetSection("PowerUser")["AdminEmail"],
+                    Surname = "Admin",//configuration.GetSection("PowerUser")["AdminSurname"],
                     Gender = Gender.Man
                 };
 
                 var manager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                string powerUserPassword = configuration.GetSection("PowerUser")["AdminPassword"];
+                string powerUserPassword = "#Dziennik.sportowca.app123";//configuration.GetSection("PowerUser")["AdminPassword"];
                 var user = await manager.FindByEmailAsync(configuration.GetSection("PowerUser")["AdminEmail"]);
 
                 if (user == null) 

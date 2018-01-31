@@ -2,8 +2,6 @@
 @inject DziennikSportowca.Data.ApplicationDbContext context
 @inject UserManager<ApplicationUser> userManager
 
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
-
 @{
     ViewData["Title"] = "Search";
 }
@@ -206,7 +204,7 @@
                                             (x.FriendId == loggedUserId && x.UserId == item.Id)).Any()
                                             && item.Id != loggedUserId)
                                         {
-                                            <a asp-action="SendInvitationToFriendship" asp-controller="ApplicationUsers" asp-route-id="@item.Id" class="btn btn-default">Zaproś do znajomych</a>
+                                            @*<a asp-action="SendInvitationToFriendship" asp-controller="ApplicationUsers" asp-route-id="@item.Id" class="btn btn-default">Zaproś do znajomych</a>*@
                                         }
                                         else if (context.UsersFriends.Where(x => (x.FriendId == item.Id && x.UserId == loggedUserId && x.FriendshipStatus == FriendshipStatus.Friends)
                                                  || (x.FriendId == loggedUserId && x.UserId == item.Id && x.FriendshipStatus == FriendshipStatus.Friends)).Any())
@@ -271,24 +269,26 @@
     }
 </style>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(".head").click(function () {
-            $(this).find("span > i").toggleClass("fa-chevron-down fa-chevron-up");
-            $(this).parent().parent().parent().find("tbody > tr").fadeToggle("slow");
+@section Scripts{ 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".head").click(function () {
+                $(this).find("span > i").toggleClass("fa-chevron-down fa-chevron-up");
+                $(this).parent().parent().parent().find("tbody > tr").fadeToggle("slow");
 
-            return false;
+                return false;
+            });
+
+            $('.search-result').each(function () {
+                var searchString = $('#searchString').text();
+                var result = boldString($(this).html(), searchString);
+                $(this).html(result);
+            });
         });
 
-        $('.search-result').each(function () {
-            var searchString = $('#searchString').text();
-            var result = boldString($(this).html(), searchString);
-            $(this).html(result);
-        });
-    });
-
-    function boldString(str, find) {
-        var re = new RegExp(find, 'gi');
-        return str.replace(re, '<b>' + find + '</b>');
-    }
-</script>
+        function boldString(str, find) {
+            var re = new RegExp(find, 'gi');
+            return str.replace(re, '<b>' + find + '</b>');
+        }
+    </script>
+}

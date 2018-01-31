@@ -1,0 +1,222 @@
+﻿@model DziennikSportowca.Models.ViewModels.ExercisesAtlasViewModel
+
+@{
+    ViewData["Title"] = "ExerciseAtlas";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Home</a></li>
+        @if (Model != null)
+        {
+            <li><a asp-action="ExerciseAtlas" asp-route-id="">Atlas ćwiczeń</a></li>
+            <li class="active"><span>@Model.MusclePart</span></li>
+        }
+        else
+        {
+            <li class="active"><span>Atlas ćwiczeń</span></li>
+        }
+        
+    </ol>
+</div>
+
+@if (Model == null)
+{
+    <div class="container-cards">
+        <div class="row" >
+            <a asp-action="ExerciseAtlas" asp-controller="Home" asp-route-id="Ramiona">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-8">
+                    <div class="card">
+                        <img class="card-img-top" src="~/images/Icons/arms.png">
+                        <div class="card-block">
+                            <h5 class="text-bold">Ćwiczenia na mięśnie ramion</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a asp-action="ExerciseAtlas" asp-controller="Home" asp-route-id="Przedramiona">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-8">
+                    <div class="card">
+                        <img class="card-img-top" src="~/images/Icons/forearm.png">
+                        <div class="card-block">
+                            <h5 class="text-bold">Ćwiczenia na mięśnie przedramion</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a asp-action="ExerciseAtlas" asp-controller="Home" asp-route-id="Barki">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-8">
+                    <div class="card">
+                        <img class="card-img-top" src="~/images/Icons/shoulders.png">
+                        <div class="card-block">
+                            <h5 class="text-bold">Ćwiczenia na mięsnie barków</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a asp-action="ExerciseAtlas" asp-controller="Home" asp-route-id="Klatka piersiowa">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-8">
+                    <div class="card">
+                        <img class="card-img-top" src="~/images/Icons/chest.png">
+                        <div class="card-block">
+                            <h5 class="text-bold">Ćwiczenia na mięsnie klatki piersiowej</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="row">
+            <a asp-action="ExerciseAtlas" asp-controller="Home" asp-route-id="Plecy">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-8">
+                    <div class="card">
+                        <img class="card-img-top" src="~/images/Icons/bodybuilder.png">
+                        <div class="card-block">
+                            <h5 class="text-bold">Ćwiczenia na mięsnie pleców</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a asp-action="ExerciseAtlas" asp-controller="Home" asp-route-id="Łydki">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-8">
+                    <div class="card">
+                        <img class="card-img-top" src="~/images/Icons/calves.png">
+                        <div class="card-block">
+                            <h5 class="text-bold">Ćwiczenia na mięsnie łydek</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a asp-action="ExerciseAtlas" asp-controller="Home" asp-route-id="Uda i pośladki">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-8">
+                    <div class="card">
+                        <img class="card-img-top" src="~/images/Icons/hamstrings.png">
+                        <div class="card-block">
+                            <h5 class="text-bold">Ćwiczenia na mięśnie ud i pośladków</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a asp-action="ExerciseAtlas" asp-controller="Home" asp-route-id="Brzuch">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-8">
+                    <div class="card">
+                        <img class="card-img-top" src="~/images/Icons/prelum.png">
+                        <div class="card-block">
+                            <h5 class="text-bold">Ćwiczenia na mięsnie brzucha</h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+else if(!Model.Exercises.Any())
+{
+    <h2 class="text-center">Ups! Nie znaleziono żadnych ćwiczeń...</h2>
+}
+else
+{
+    <div class="table table-condensed table-responsive" title="Zbiór ćwiczeń">
+        <div class="col-md-12 padding-0 calculators">
+            <span class="col-md-8 text-bold padding-0">@Html.DisplayNameFor(x => x.Exercises[0].Name)</span>
+            <span class="col-md-3 text-bold padding-0">@Html.DisplayNameFor(x => x.Exercises[0].MuscleParts)</span>
+            <span class="col-md-1 text-bold padding-0"></span>
+        </div>
+        @foreach (var exercise in Model.Exercises)
+        {
+            <div class="col-md-12 padding-0">
+                <div class="exercise">
+                    <span class="col-md-8 padding-0">@Html.DisplayFor(x => exercise.Name)</span>
+                    <span class="col-md-3 padding-0">
+                        @foreach (var musclePart in exercise.MuscleParts)
+                        {
+                            @Html.DisplayFor(x => musclePart.MusclePart.Description)
+                        }
+                    </span>
+                    <div type="button" class="btn btn-xs btn-primary-outline roll-down-button padding-0"><i class="fa fa-chevron-down"></i></div>
+                </div>
+                <div class="exercise-info">
+                    @if(exercise.ExerciseInstruction != null)
+                    { 
+                        <span class="normal text-center">@exercise.ExerciseInstruction.Instructions</span>
+                    
+                        if(exercise.ExerciseInstruction.Photos != null && exercise.ExerciseInstruction.Photos.Any())
+                        { 
+                            <div id="nanogallery2" data-nanogallery2='{
+                            "thumbnailWidth": "200",
+                            "thumbnailDisplayTransition": "randomScale",
+                            "thumbnailDisplayTransitionDuration": 1500,
+                            "thumbnailHoverEffect2": "image_rotateZ_0deg_5deg_400|image_scale_1_1.3_400",
+                            "thumbnailAlignment": "center"
+                            }'>
+                                @foreach (var photo in exercise.ExerciseInstruction.Photos)
+                                {
+                                    var base64 = Convert.ToBase64String(photo.Content);
+                                    var picture = String.Format("data:image/jpeg;base64,{0}", base64);
+
+                                    <a href=@picture data-ngThumb=@picture class="figurePicture">@photo.PhotoTitle</a>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    { 
+                        <span class="text-justify text-danger text-bold">Niestety, ale w bazie nie ma informacji odnośnie sposobu wykonania tegoż ćwiczenia</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts{ 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".roll-down-button").click(function () {
+                toggleExercise($(this));
+                return false;
+            });
+
+            $(".exercise").click(function () {
+                toggleExercise($(this));
+                return false;
+            });
+
+            function toggleExercise(currentElement)
+            {
+                $(currentElement).find("i").toggleClass("fa-chevron-down fa-chevron-up");
+                $(currentElement).find("i").parent().parent().parent().find('.exercise-info').slideToggle('slow');
+                if ($(currentElement).find("i").hasClass("fa-chevron-up"))
+                {
+                    var index = $(currentElement).find("i").parent().parent().parent().index();
+                    rollUpOtherExercises(index, currentElement);
+                    highlight($(currentElement).find("i").parent().parent())
+                }
+                else
+                {
+                    unhighlight($(currentElement).find("i").parent().parent());
+                }
+            }
+
+            function rollUpOtherExercises(index, currentElement)
+            {
+                $(".roll-down-button > i").each(function () {
+                    if ($(this).hasClass("fa-chevron-up") && $(this).parent().parent().parent().index() !== index) {
+                        $(this).toggleClass("fa-chevron-down fa-chevron-up");
+                        $(this).parent().parent().parent().find('.exercise-info').slideToggle('slow');
+                        unhighlight($(this).parent().parent());
+                    }
+                });
+            }
+
+            function highlight(currentElement)
+            {
+                $(currentElement).css("background-color", "#ffab40");
+            }
+
+            function unhighlight(oldElement)
+            {
+                $(oldElement).css("background-color", "#fff");
+            }
+        });
+    </script>
+}

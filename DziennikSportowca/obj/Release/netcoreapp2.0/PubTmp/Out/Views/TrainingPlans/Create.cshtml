@@ -1,0 +1,41 @@
+﻿@model DziennikSportowca.Models.ViewModels.TrainingPlanViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Plany Treningowe</a></li>
+        <li class="active"><span>Tworzenie planu</span></li>
+    </ol>
+</div>
+
+<form asp-action="Create" >
+    <div class="form-horizontal">           
+        <h4>TrainingPlan</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="TrainingPlan.Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TrainingPlan.Description" class="form-control" />
+                <span asp-validation-for="TrainingPlan.Description" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Dalej" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

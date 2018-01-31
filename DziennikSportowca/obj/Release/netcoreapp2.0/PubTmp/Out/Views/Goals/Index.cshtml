@@ -1,0 +1,100 @@
+﻿@model IList<DziennikSportowca.Models.ViewModels.UserGoalsListViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li class="active"><span>Cele</span></li>
+    </ol>
+</div>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].GoalDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].GoalScope)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].CompletionDate)
+            </th>
+            <th>
+                Czas trwania
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Status)
+            </th>           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoalDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoalScope)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompletionDate)
+            </td>
+            <td>
+                @if (item.CompletionDate.HasValue)
+                {
+                    TimeSpan duration = item.CompletionDate.Value.Subtract(item.CreationDate);
+                    <p>@duration.ToString("%d") dni @duration.ToString(@"hh\:mm\:ss") h</p>
+                }
+                else
+                {
+                    TimeSpan duration = DateTime.Now.Subtract(item.CreationDate);
+                    <p>@duration.ToString("%d") dni @duration.ToString(@"hh\:mm\:ss") h</p>
+                }
+            </td>
+            <td>
+                @if (item.Status)
+                {
+                    <div class="circle-loader">
+                        <div class="checkmark draw"></div>
+                    </div>
+                }
+                else
+                {
+                    <div class="circle-loader-2">
+                        <div class="close-icon-line-1 draw-2"></div>
+                        <div class="close-icon-line-2 draw-2"></div>
+                    </div>
+                }
+                
+            </td>
+            
+            <td>
+                @if (!item.Status)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                }
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/UserGoals/Index.css">
+    <script src="~/js/UserGoals/Index.js"></script>
+}

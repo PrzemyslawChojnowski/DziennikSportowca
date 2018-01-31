@@ -1,0 +1,53 @@
+﻿@model DziennikSportowca.Models.ViewModels.CreateFoodProductViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Produkty żywieniowe</a></li>
+        <li class="active"><span>Tworzenie produktu</span></li>
+    </ol>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Nazwa</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Carbohydrate" class="control-label"></label>
+                <input asp-for="Carbohydrate" class="form-control" />
+                <span asp-validation-for="Carbohydrate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Energy" class="control-label"></label>
+                <input asp-for="Energy" class="form-control" />
+                <span asp-validation-for="Energy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fat" class="control-label"></label>
+                <input asp-for="Fat" class="form-control" />
+                <span asp-validation-for="Fat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Protein" class="control-label"></label>
+                <input asp-for="Protein" class="form-control" />
+                <span asp-validation-for="Protein" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FoodProductTypeId" class="control-label">Typ</label>
+                <select asp-for="FoodProductTypeId" class="form-control" asp-items="ViewBag.FoodTypes"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Utwórz produkt" id="CreateFoodProduct" class="btn btn-success box bar" />
+                <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+            </div>
+        </form>
+    </div>
+</div>

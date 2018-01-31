@@ -1,0 +1,294 @@
+﻿@model DziennikSportowca.Models.ViewModels.SearchViewModel
+@inject DziennikSportowca.Data.ApplicationDbContext context
+@inject UserManager<ApplicationUser> userManager
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Home</a></li>
+        <li class="active"><span>Wyszukiwanie</span></li>
+    </ol>
+</div>
+
+@{ 
+    int resultsCount = 0;
+    if (Model.Exercises != null)
+    {
+        resultsCount += Model.Exercises.Count;
+    }
+    if(Model.FoodProducts != null)
+    {
+        resultsCount += Model.FoodProducts.Count;
+    }
+    if (Model.MuscleParts != null)
+    {
+        resultsCount += Model.MuscleParts.Count;
+    }
+    if (Model.TrainingPlans != null)
+    {
+        resultsCount += Model.TrainingPlans.Count;
+    }
+    if (Model.Users != null)
+    {
+        resultsCount += Model.Users.Count;
+    }
+}
+
+<h2>Wyniki wyszukiwania</h2>
+<h4><strong>Wyszukiwana fraza: </strong><i id="searchString">@Html.DisplayFor(x => x.Key)</i></h4>
+<h4><strong>Liczba wyników: </strong><i>@resultsCount</i></h4>
+
+<form asp-action="Search" asp-controller="Home" class="form" role="search">
+    <div class="form-group">
+        <label class="sr-only">Wpisz szukana fraze</label>
+        <input type="text" class="form-control" id="key" name="key" placeholder="Szukaj">
+    </div>
+    <div class="form-group">
+        <label class="sr-only">Wybierz zakres poszukiwań</label>
+        <select name="type" class="form-control">
+            <option value="All">Wszystkie</option>
+            <option value="Exercises">Ćwiczenia</option>
+            <option value="MuscleParts">Partie mięśniowe</option>
+            <option value="TrainingPlans">Plany treningowe</option>
+            <option value="Users">Użytkownicy</option>
+            <option value="FoodProducts">Żywność</option>
+        </select>
+    </div>
+    <input type="submit" class="btn btn-primary btn-block" value="Szukaj" />
+</form>
+@if (Model.Exercises != null)
+{
+    if (Model.Exercises.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="head">
+                        @Html.DisplayNameFor(x => x.Exercises)
+                        <span><i class="fa fa-chevron-down"></i></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Exercises)
+                {
+                    <tr>
+                        <td>
+                            <div class="table-row search-result">
+                                @Html.DisplayFor(x => item.Name)
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+@if (Model.MuscleParts != null)
+{
+    if (Model.MuscleParts.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="head">
+                        @Html.DisplayNameFor(x => x.MuscleParts)
+                        <span><i class="fa fa-chevron-down"></i></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MuscleParts)
+                {
+                    <tr>
+                        <td>
+                            <div class="table-row search-result">
+                                @Html.DisplayFor(x => item.Description)
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+@if (Model.TrainingPlans != null)
+{
+    if (Model.TrainingPlans.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="head">
+                        @Html.DisplayNameFor(x => x.TrainingPlans)
+                        <span><i class="fa fa-chevron-down"></i></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TrainingPlans)
+                {
+                    <tr>
+                        <td>
+                            <div class="table-row search-result">
+                                @Html.DisplayFor(x => item.Description)
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+@if(Model.Users != null)
+{
+    if (Model.Users.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="head">
+                        @Html.DisplayNameFor(x => x.Users)
+                        <span><i class="fa fa-chevron-down"></i></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            <div class="table-row">
+                                @{
+                                    String profilePicture = "";
+
+                                    if (item.ProfilePicture != null)
+                                    {
+                                        var base64 = Convert.ToBase64String(item.ProfilePicture);
+                                        profilePicture = String.Format("data:image/gif;base64,{0}", base64);
+                                    }
+
+                                    if (!String.IsNullOrEmpty(profilePicture))
+                                    {
+                                        <img src="@profilePicture" alt="." style="height:50px; width:50px; max-height:100px; max-width:200px;" />
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <div class="table-row search-result">
+                                @Html.DisplayFor(x => item.Name)
+                            </div>
+                        </td>
+                        <td>
+                            <div class="table-row search-result">
+                                @Html.DisplayFor(x => item.Surname)
+                            </div>
+                        </td>
+                        <td>
+                            <div class="table-row search-result">
+                                @Html.DisplayFor(x => item.Email)
+                            </div>
+                        </td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <td>
+                                <div class="table-row">
+                                    @{
+                            
+                                        var loggedUserId = userManager.GetUserId(User);
+                                        if (!context.UsersFriends.Where(x => (x.FriendId == item.Id && x.UserId == loggedUserId) ||
+                                            (x.FriendId == loggedUserId && x.UserId == item.Id)).Any()
+                                            && item.Id != loggedUserId)
+                                        {
+                                            <a asp-action="SendInvitationToFriendship" asp-controller="ApplicationUsers" asp-route-id="@item.Id" class="btn btn-default">Zaproś do znajomych</a>
+                                        }
+                                        else if (context.UsersFriends.Where(x => (x.FriendId == item.Id && x.UserId == loggedUserId && x.FriendshipStatus == FriendshipStatus.Friends)
+                                                 || (x.FriendId == loggedUserId && x.UserId == item.Id && x.FriendshipStatus == FriendshipStatus.Friends)).Any())
+                                        {
+                                            <p>Nawiązano znajomość</p>
+                                        }
+                                        else if (context.UsersFriends.Where(x => (x.FriendId == item.Id && x.UserId == loggedUserId && x.FriendshipStatus == FriendshipStatus.InvitationSent)
+                                                || (x.FriendId == loggedUserId && x.UserId == item.Id && x.FriendshipStatus == FriendshipStatus.InvitationSent)).Any())
+                                        {
+                                            <p>Wysłano zaproszenie</p>
+                                        }
+                                    }
+                                </div>
+                            </td> 
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+@if (Model.FoodProducts != null)
+{
+    if (Model.FoodProducts.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="head">
+                        @Html.DisplayNameFor(x => x.FoodProducts)
+                        <span><i class="fa fa-chevron-down"></i></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.FoodProducts)
+                {
+                    <tr>
+                        <td>
+                            <div class="table-row search-result">
+                                @Html.DisplayFor(x => item.Description)
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+@if((Model.Exercises == null || !Model.Exercises.Any()) && (Model.FoodProducts == null || !Model.FoodProducts.Any()) &&
+    (Model.MuscleParts == null || !Model.MuscleParts.Any()) && (Model.TrainingPlans == null || !Model.TrainingPlans.Any()) &&
+    (Model.Users == null || !Model.Users.Any()))
+{
+    <br />
+    <div class="alert alert-danger">
+        <span>Brak wyników <i class="fa fa-frown-o"></i></span>
+    </div>
+}
+<style>
+    tbody > tr{
+        display:none;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".head").click(function () {
+            $(this).find("span > i").toggleClass("fa-chevron-down fa-chevron-up");
+            $(this).parent().parent().parent().find("tbody > tr").fadeToggle("slow");
+
+            return false;
+        });
+
+        $('.search-result').each(function () {
+            var searchString = $('#searchString').text();
+            var result = boldString($(this).html(), searchString);
+            $(this).html(result);
+        });
+    });
+
+    function boldString(str, find) {
+        var re = new RegExp(find, 'gi');
+        return str.replace(re, '<b>' + find + '</b>');
+    }
+</script>

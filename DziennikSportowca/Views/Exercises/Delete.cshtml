@@ -4,36 +4,48 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Ćwiczenia</a></li>
+        <li class="active"><span>Usuwanie ćwiczenia</span></li>
+    </ol>
+</div>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3 class="text-danger">Jesteś pewien, że chcesz usunąć wybrane ćwiczenie?</h3>
 <div>
-    <h4>Exercise</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ActivityType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ActivityType.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ExerciseInstruction)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ExerciseInstruction.Id)
-        </dd>
-    </dl>
-    
+    <div class="panel panel-danger">
+        <div class="panel-heading">Dane ćwiczenia</div>
+        <div class="panel-body">
+            <div class="col-md-12 padding-0">
+                <div class="well well-sm panel-subheading panel-subheading-delete"><label>PODSTAWOWE INFORMACJE</label></div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Nazwa: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Name)</p>
+                </div>
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Typ aktywności: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.ActivityType.Description)</p>
+                </div>
+            </div>
+            @if(Model.MuscleParts != null && Model.MuscleParts.Any())
+            { 
+                <div class="col-md-12 padding-0">
+                    <div class="col-md-6 padding-0 col-md-offset-6">
+                        <label class="inline">Partia mięśniowa: </label>
+                        <p class="inline">@Html.DisplayFor(model => model.MuscleParts[0].MusclePart.Description)</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <div class="form-actions no-color">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" value="Delete" class="btn-danger box bar">Usuń <i class="fa fa-trash"></i></button>
+            <button asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></button>
+        </div>
     </form>
 </div>

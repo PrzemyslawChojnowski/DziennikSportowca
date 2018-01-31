@@ -1,0 +1,122 @@
+﻿@model DziennikSportowca.Models.UserTraining
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Moje Treningi</a></li>
+        <li class="active"><span>Szczegóły treningu</span></li>
+    </ol>
+</div>
+
+<div>
+    <hr />
+    <div class="dl-horizontal">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Dane wykonanego treningu</div>
+            <div class="panel-body">
+                <div class="form-group text-nowrap">
+                    <label>Nazwa treningu: </label>
+                    <h4 style="display: inline">@Html.DisplayFor(x => x.Training.Description)</h4>
+                </div>
+                
+                <div class="form-group col-md-4 padding-0">
+                    <label>
+                        @Html.DisplayNameFor(x => x.StartDateTime): 
+                    </label>
+                    @Html.DisplayFor(x => x.StartDateTime)
+                </div>
+                <div class="form-group col-md-4 padding-0">
+                    <label>
+                        @Html.DisplayNameFor(x => x.EndDateTime): 
+                    </label>
+                    @Html.DisplayFor(x => x.EndDateTime)
+                </div>
+                <div class="form-group col-md-4 padding-0">
+                    <label>
+                        Łączny czas treningu: 
+                    </label>
+                    @{TimeSpan trainingLength = Model.EndDateTime - Model.StartDateTime; }
+                    <span>@trainingLength</span>
+                </div>
+            </div>
+
+            <table class="table table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ćwiczenie</th>
+                        <th>Typ aktywności</th>
+                        <th>Informacje o ćwiczeniu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ 
+                        if (Model.Training.Exercises != null && Model.Training.Exercises.Any())
+                        {
+                            int i = 1;
+
+                            foreach (var exercise in Model.Training.Exercises)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@exercise.Exercise.Name</td>
+                                    <td>@exercise.Exercise.ActivityType.Description</td>
+                                    <td>
+                                        @if (exercise.Exercise.ActivityType.Description == "Ćwiczenia siłowe")
+                                        {
+                                            if (exercise.Results != null && exercise.Results.Any() && exercise.Results[0].Weights != null && exercise.Results[0].Weights.Any())
+                                            {
+                                                <span class="text-success">@exercise.SeriesNo serie po @exercise.RepsNo powtórzeń (</span>
+                                                int index = 0;
+
+                                                foreach (var result in exercise.Results[0].Weights)
+                                                {
+                                                    index++;
+                                                    <span class="text-success">@result.Result kg</span>
+                                                    if (index < exercise.Results[0].Weights.Count)
+                                                    {
+                                                        <span class="text-success"> -> </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-success">)</span>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">Ćwiczenie nie zostało wykonane w trakcie treningu</span>
+
+                                            }
+                                        }
+                                        else if(exercise.Exercise.ActivityType.Description == "Ćwiczenia wytrzymałościowe" ||
+                                                exercise.Exercise.ActivityType.Description == "Sporty grupowe")
+                                        {
+                                            if (exercise.Results != null && exercise.Results.Any() && exercise.Results[0].Weights != null && exercise.Results[0].Weights.Any())
+                                            { 
+                                                <span class="text-success">Czas trwania: @exercise.Results[0].Weights[0].Result minut z @exercise.ExerciseLength planowych</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">Ćwiczenie nie zostało wykonane w trakcie treningu</span>
+
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-success box curmudgeon">Edytuj <i class="fa fa-pencil-square-o"></i></a>
+    <a asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+</div>

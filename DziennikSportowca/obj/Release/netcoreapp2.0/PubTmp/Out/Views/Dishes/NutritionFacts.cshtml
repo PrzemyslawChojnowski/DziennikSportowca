@@ -1,0 +1,88 @@
+﻿@model DziennikSportowca.Models.ViewModels.NutritionFactsViewModel
+
+@{
+    ViewData["Title"] = "NutritionFacts";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Moje posiłki</a></li>
+        <li class="active"><span>Wartości odżywcze</span></li>
+    </ol>
+</div>
+
+<form asp-controller="Dishes" asp-action="NutritionFacts" method="get">
+    <select asp-for="type" asp-items="Model.FoodProductTypes">
+        <option value="">Wszystkie</option>
+    </select>
+    <button type="submit" class="box bar btn btn-info" value="Filter">Filtruj</button>
+</form>
+
+<table class="table table-responsive table-condensed">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(x => x.FoodProducts[0].Description)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.FoodProducts)
+        {
+            <tr>
+                <td class="product-name">
+                    <p>@item.Description</p>
+                </td>
+                <td>
+                    <button class="btn-xs box curmudgeon btn btn-info check-nutrients" data-toggle="modal" data-target="#nutrients">Sprawdź wartości</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p id="abc">@Model.FoodProducts[0].Description</p>
+
+<div id="nutrients" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="gridSystemModalLabel">Wartości odżywcze</h3>
+                <h4><i class="modal-subtitle"></i></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal col-md-12">
+                    <div class="col-md-6 padding-0">
+                        <div class="nutrients-data form-group">
+                            <label class="col-md-4">Węglowodany: </label>
+                            <span class="carbohydrates inline col-md-4"></span>
+                        </div>
+                        <div class="nutrients-data form-group">
+                            <label class="col-md-4">Białko: </label>
+                            <span class="proteins inline col-md-4"></span>
+                        </div>
+                        <div class="nutrients-data form-group">
+                            <label class="col-md-4">Tłuszcze: </label>
+                            <span class="fats inline col-md-4"></span>
+                        </div>
+                        <div class="nutrients-data form-group">
+                            <label class="col-md-4">kcal: </label>
+                            <span class="energy inline col-md-4"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Waga produktu: </label><br />
+                            <input type="number" placeholder="Wprowadź wagę" title="Wprowadź wagę [w gramach]" min="0" id="foodProductWeight" />
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="box foo btn btn-danger pull-right" data-dismiss="modal">Zamknij</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

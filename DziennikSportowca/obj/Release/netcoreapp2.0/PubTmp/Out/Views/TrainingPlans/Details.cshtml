@@ -1,0 +1,148 @@
+﻿@model DziennikSportowca.Models.TrainingPlan
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Plany Treningowe</a></li>
+        <li class="active"><span>Szczegóły planu</span></li>
+    </ol>
+</div>
+
+<div class="panel panel-info">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Dane planu</div>
+    <div class="panel-body">
+        <div class="col-md-12 padding-0">
+            <div class="well well-sm panel-subheading panel-subheading-info"><label>PODSTAWOWE INFORMACJE</label></div>
+        </div>
+        <div class="col-md-12 padding-0">
+
+            <div class="col-md-6 padding-0">
+                <label>@Html.DisplayNameFor(x => x.Description): </label>
+                @Html.DisplayFor(x => x.Description)
+            </div>
+            <div class="col-md-6 padding-0">
+                <label>@Html.DisplayNameFor(x => x.CreationDate): </label>
+                @Html.DisplayFor(x => x.CreationDate)
+            </div>
+        </div>
+        <div class="col-md-12 padding-0 padding-15">
+            <div class="well well-sm panel-subheading panel-subheading-info"><label>INFORMACJE TRENINGOWE</label></div>
+        </div>
+        <div class="col-md-12 padding-0">
+            @{
+                if (Model.UserTrainings != null && Model.UserTrainings.Any())
+                {
+                    DateTime? firstTrainingDate = Model.UserTrainings.OrderBy(x => x.StartDateTime).FirstOrDefault().StartDateTime;
+                    <div class="col-md-4 padding-0">
+                        <label>Data pierwszego treningu: </label>
+                        @if (firstTrainingDate != null)
+                        {
+                            <span class="text-success">@firstTrainingDate</span>
+                        }
+                        else
+                        {
+                            <span class="text-success">Brak danych</span>
+                        }
+                    </div>
+
+                    DateTime lastTrainingDate = Model.UserTrainings.OrderBy(x => x.StartDateTime).LastOrDefault().StartDateTime;
+                    <div class="col-md-4 padding-0">
+                        <label>Data ostatniego treningu: </label>
+                        @if (firstTrainingDate != null)
+                        {
+                            <span class="text-success">@lastTrainingDate</span>
+                        }
+                        else
+                        {
+                            <span class="text-success">Brak danych</span>
+                        }
+                    </div>
+
+                    int? trainingsCount = Model.UserTrainings.Count();
+                    <div class="col-md-4 padding-0">
+                        <label>Liczba wykonanych treningów: </label>
+                        @if (trainingsCount != null)
+                        {
+                            <span class="text-success">@trainingsCount</span>
+                        }
+                        else
+                        {
+                            <span class="text-success">Brak danych</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-4 padding-0">
+                        <label>Data pierwszego treningu: </label>
+                        <span class="text-danger">Nie wykonano żadnego treningu</span>
+                    </div>
+                        <div class="col-md-4 padding-0">
+                            <label>Data ostatniego treningu: </label>
+                            <span class="text-danger">Nie wykonano żadnego treningu</span>
+                        </div>
+                        <div class="col-md-4 padding-0">
+                            <label>Liczba treningów: </label>
+                            <span class="text-danger">0</span>
+                        </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="col-md-12 padding-0">
+        <div class="well well-sm panel-subheading margin-0 panel-subheading-info"><label>INFORMACJE O ĆWICZENIACH</label></div>
+    </div>
+
+    @if (Model.Exercises != null && Model.Exercises.Any())
+            {
+        <table class="table table-hover table-responsive table-info">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ćwiczenie</th>
+                    <th>Typ aktywności</th>
+                    <th>Informacje o ćwiczeniu</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    int i = 0;
+                    foreach (var exercise in Model.Exercises)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i.</td>
+                            <td>@exercise.Exercise.Name</td>
+                            <td>@exercise.Exercise.ActivityType.Description</td>
+                            @if (exercise.Exercise.ActivityType.Description == "Ćwiczenia siłowe")
+                            {
+                                <td>@exercise.SeriesNo serie po @exercise.RepsNo powtórzeń</td>
+                            }
+                            else if (exercise.Exercise.ActivityType.Description == "Ćwiczenia wytrzymałościowe" || exercise.Exercise.ActivityType.Description == "Sporty grupowe")
+                            {
+                                <td>Czas trwania: @exercise.ExerciseLength minut</td>
+                            }
+
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        }
+        else
+        {
+            <h4 class="inline"><label class="text-warning text-center">Ten plan treningowy nie zawiera żadnych ćwiczeń...</label></h4>
+            <a asp-action="AddTrainingExercises" asp-route-id="@Model.Id" class="btn btn-primary box foo margin-left-20">Dodaj ćwiczenia <i class="fa fa-plus-square-o"></i></a>
+        }
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-success box curmudgeon">Edytuj <i class="fa fa-pencil-square-o"></i></a> 
+    <a asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
+</div>

@@ -2,13 +2,16 @@
 @model IEnumerable<DziennikSportowca.Models.UserFigure>
 @inject UserManager<ApplicationUser> _manager
 
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script>
-<script type="text/javascript" src="~/js/chartjs-plugin-datalabels.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
-<script type="text/javascript" src="~/js/UserFigure/DrawChart.js"></script>
+@*<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>*@
+
+@section Scripts{ 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script>
+    <script type="text/javascript" src="~/js/chartjs-plugin-datalabels.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
+    <script type="text/javascript" src="~/js/UserFigure/DrawChart.js"></script>
+}
 @*<script type="text/javascript" src="~/js/chartjs-plugin-zoom.js"></script>*@
 
 @{

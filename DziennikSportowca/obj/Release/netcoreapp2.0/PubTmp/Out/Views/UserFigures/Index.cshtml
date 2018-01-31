@@ -1,0 +1,116 @@
+﻿@using System.Linq;
+@model IEnumerable<DziennikSportowca.Models.UserFigure>
+@inject UserManager<ApplicationUser> _manager
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script>
+<script type="text/javascript" src="~/js/chartjs-plugin-datalabels.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.js"></script>
+<script type="text/javascript" src="~/js/UserFigure/DrawChart.js"></script>
+@*<script type="text/javascript" src="~/js/chartjs-plugin-zoom.js"></script>*@
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li class="active"><span>Moje Pomiary</span></li>
+    </ol>
+</div>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        var userId = await _manager.GetUserIdAsync(await _manager.GetUserAsync(User));
+        <input type="hidden" id="userId" value="@userId" />
+    }
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShouldersCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ChestCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WaistCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BicepsCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TricepsCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ThighCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HipCircumference)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BodyFat)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShouldersCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChestCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaistCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicepsCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TricepsCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThighCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HipCircumference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BodyFat)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<canvas id="myChart" style="height:80vh; width:80vw; margin:0 auto"></canvas>

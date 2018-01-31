@@ -1,0 +1,61 @@
+﻿@model DziennikSportowca.Models.FoodProduct
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Produkty żywieniowe</a></li>
+        <li class="active"><span>Usuwanie produktu</span></li>
+    </ol>
+</div>
+
+<div>
+    <hr />
+    <div class="panel panel-info">
+        <div class="panel-heading">Dane produktu</div>
+        <div class="panel-body">
+            <div class="col-md-12 padding-0">
+                <div class="well well-sm panel-subheading panel-subheading-info"><label>PODSTAWOWE INFORMACJE</label></div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Nazwa: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Description)</p>
+                </div>
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Typ produktu: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Type.Description)</p>
+                </div>
+            </div>
+            <br />
+            <div class="col-md-12 padding-0">
+                <div class="well well-sm panel-subheading panel-subheading-info"><label>SZCZEGÓŁOWE INFORMACJE</label></div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Węglowodany: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Carbohydrate) [g]</p>
+                </div>
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Białko: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Protein) [g]</p>
+                </div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Tłuszcze: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Fat) [g]</p>
+                </div>
+                <div class="col-md-6 padding-0">
+                    <label class="inline">Energia: </label>
+                    <p class="inline">@Html.DisplayFor(model => model.Energy) [g]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form>
+        <button asp-action="Index" class="btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></button>
+    </form>
+</div>

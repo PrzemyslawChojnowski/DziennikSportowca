@@ -1,13 +1,16 @@
-﻿@model DziennikSportowca.Models.Exercise
+﻿@model DziennikSportowca.Models.ViewModels.CreateExerciseViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<div class="container-breadcrumb">
+    <ol class="breadcrumb breadcrumb-arrow">
+        <li><a asp-action="Index">Ćwiczenia</a></li>
+        <li class="active"><span>Tworzenie ćwiczenia</span></li>
+    </ol>
+</div>
 
-<h4>Exercise</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -22,17 +25,13 @@
                 <select asp-for="ActivityTypeId" class ="form-control" asp-items="ViewBag.ActivityTypeId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ExerciseInstructionId" class="control-label"></label>
-                <select asp-for="ExerciseInstructionId" class ="form-control" asp-items="ViewBag.ExerciseInstructionId"></select>
+                <label asp-for="MusclePartId" class="control-label"></label>
+                <select asp-for="MusclePartId" class ="form-control" asp-items="ViewBag.MusclePartId"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Utwórz ćwiczenie" id="CreateExercise" class="btn btn-success box bar" />
+                <a asp-action="Index" class="btn btn-primary box foo">Powrót do listy <i class="fa fa-undo"></i></a>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

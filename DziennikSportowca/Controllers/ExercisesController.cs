@@ -30,6 +30,8 @@ namespace DziennikSportowca.Controllers
             model.CardioExercises = await _context.Exercises
                                         .Include(x => x.ActivityType)
                                         .Include(x => x.ExerciseInstruction)
+                                        .Include(x => x.MuscleParts)
+                                            .ThenInclude(x => x.MusclePart)
                                         .Where(x => x.ActivityType.Description == "Ćwiczenia wytrzymałościowe")
                                         .OrderBy(x => x.Name)
                                         .ToListAsync();
@@ -37,6 +39,8 @@ namespace DziennikSportowca.Controllers
             model.GroupExercises = await _context.Exercises
                                         .Include(x => x.ActivityType)
                                         .Include(x => x.ExerciseInstruction)
+                                        .Include(x => x.MuscleParts)
+                                            .ThenInclude(x => x.MusclePart)
                                         .Where(x => x.ActivityType.Description == "Sporty grupowe")
                                         .OrderBy(x => x.Name)
                                         .ToListAsync();
@@ -44,6 +48,8 @@ namespace DziennikSportowca.Controllers
             model.StrengthExercises = await _context.Exercises
                                         .Include(x => x.ActivityType)
                                         .Include(x => x.ExerciseInstruction)
+                                        .Include(x => x.MuscleParts)
+                                            .ThenInclude(x => x.MusclePart)
                                         .Where(x => x.ActivityType.Description == "Ćwiczenia siłowe")
                                         .OrderBy(x => x.Name)
                                         .ToListAsync();
@@ -62,6 +68,8 @@ namespace DziennikSportowca.Controllers
             var exercise = await _context.Exercises
                 .Include(e => e.ActivityType)
                 .Include(e => e.ExerciseInstruction)
+                .Include(x => x.MuscleParts)
+                    .ThenInclude(x => x.MusclePart)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (exercise == null)
             {
@@ -74,8 +82,9 @@ namespace DziennikSportowca.Controllers
         // GET: Exercises/Create
         public IActionResult Create()
         {
-            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id");
+            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Description");
             ViewData["ExerciseInstructionId"] = new SelectList(_context.ExerciseInstructions, "Id", "Id");
+            ViewData["MusclePartId"] = new SelectList(_context.MuscleParts, "Id", "Description");
             return View();
         }
 
@@ -84,16 +93,28 @@ namespace DziennikSportowca.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ActivityTypeId,ExerciseInstructionId")] Exercise exercise)
+        public async Task<IActionResult> Create([Bind("Id,Name,ActivityTypeId,MusclePartId")] CreateExerciseViewModel exercise)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(exercise);
+                Exercise ex = new Exercise()
+                {
+                    ActivityTypeId = exercise.ActivityTypeId,
+                    Name = exercise.Name
+                };
+                _context.Add(ex);
+
+                _context.MusclePartExercises.Add(new MusclePartExercise()
+                {
+                    ExerciseId = ex.Id,
+                    MuscePartId = exercise.MusclePartId
+                });
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id", exercise.ActivityTypeId);
-            ViewData["ExerciseInstructionId"] = new SelectList(_context.ExerciseInstructions, "Id", "Id", exercise.ExerciseInstructionId);
+            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Description", exercise.ActivityTypeId);
+            ViewData["MusclePartId"] = new SelectList(_context.MuscleParts, "Id", "Description", exercise.MusclePartId);
             return View(exercise);
         }
 
@@ -105,14 +126,31 @@ namespace DziennikSportowca.Controllers
                 return NotFound();
             }
 
-            var exercise = await _context.Exercises.Include(x => x.ActivityType).Include(x => x.ExerciseInstruction).SingleOrDefaultAsync(m => m.Id == id);
+            var exercise = await _context.Exercises
+                                .Include(x => x.ActivityType)
+                                .Include(x => x.ExerciseInstruction)
+                                .Include(x => x.MuscleParts)
+                                    .ThenInclude(x => x.MusclePart)
+                                .SingleOrDefaultAsync(m => m.Id == id);
             if (exercise == null)
             {
                 return NotFound();
             }
-            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id", exercise.ActivityTypeId);
+            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Description", exercise.ActivityTypeId);
             ViewData["ExerciseInstructionId"] = new SelectList(_context.ExerciseInstructions, "Id", "Id", exercise.ExerciseInstructionId);
-            return View(exercise);
+            ViewData["MusclePartId"] = new SelectList(_context.MuscleParts, "Id", "Description");
+
+            EditExerciseViewModel model = new EditExerciseViewModel()
+            {
+                ActivityTypeId = exercise.ActivityTypeId,
+                Id = exercise.Id,
+                Name = exercise.Name
+            };
+
+            if (exercise.MuscleParts != null && exercise.MuscleParts.Any())
+                model.MusclePartId = exercise.MuscleParts[0].MuscePartId;
+
+            return View(model);
         }
 
         // POST: Exercises/Edit/5
@@ -120,9 +158,9 @@ namespace DziennikSportowca.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ActivityTypeId")] Exercise exercise)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ActivityTypeId,MusclePartId")] EditExerciseViewModel exerciseModel)
         {
-            if (id != exercise.Id)
+            if (id != exerciseModel.Id)
             {
                 return NotFound();
             }
@@ -131,12 +169,49 @@ namespace DziennikSportowca.Controllers
             {
                 try
                 {
+                    Exercise exercise = await _context.Exercises
+                                    .Include(x => x.MuscleParts)
+                                        .ThenInclude(x => x.MusclePart)
+                                    .Include(x => x.ExerciseInstruction)
+                                    .Include(x => x.ActivityType)
+                                    .SingleOrDefaultAsync(x => x.Id == id);
+
+                    if(exercise != null)
+                    {
+                        exercise.ActivityTypeId = exerciseModel.ActivityTypeId;
+                        exercise.Name = exerciseModel.Name;
+
+                        if (exercise.MuscleParts != null && exercise.MuscleParts.Any())
+                        {
+                            if (exercise.MuscleParts[0].MuscePartId != exerciseModel.MusclePartId)
+                            {
+                                MusclePartExercise mpExercise = await _context.MusclePartExercises.FirstOrDefaultAsync(x => x.MuscePartId == exercise.MuscleParts[0].MuscePartId && x.ExerciseId == id);
+                                _context.MusclePartExercises.Remove(mpExercise);
+                                await _context.SaveChangesAsync();
+                                _context.MusclePartExercises.Add(new MusclePartExercise()
+                                {
+                                    ExerciseId = exercise.Id,
+                                    MuscePartId = exerciseModel.MusclePartId
+                                });
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        else
+                        {
+                            _context.MusclePartExercises.Add(new MusclePartExercise()
+                            {
+                                ExerciseId = exercise.Id,
+                                MuscePartId = exerciseModel.MusclePartId
+                            });
+                            await _context.SaveChangesAsync();
+                        }
+                    }
                     _context.Exercises.Update(exercise);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ExerciseExists(exercise.Id))
+                    if (!ExerciseExists(exerciseModel.Id))
                     {
                         return NotFound();
                     }
@@ -147,9 +222,18 @@ namespace DziennikSportowca.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id", exercise.ActivityTypeId);
-            ViewData["ExerciseInstructionId"] = new SelectList(_context.ExerciseInstructions, "Id", "Id", exercise.ExerciseInstructionId);
-            return View(exercise);
+            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Description", exerciseModel.ActivityTypeId);
+            ViewData["MusclePartId"] = new SelectList(_context.MuscleParts, "Id", "Description");
+
+            EditExerciseViewModel model = new EditExerciseViewModel()
+            {
+                ActivityTypeId = exerciseModel.ActivityTypeId,
+                Id = exerciseModel.Id,
+                Name = exerciseModel.Name,
+                MusclePartId = exerciseModel.MusclePartId
+            };
+
+            return View(model);
         }
 
         // GET: Exercises/Delete/5
@@ -163,6 +247,8 @@ namespace DziennikSportowca.Controllers
             var exercise = await _context.Exercises
                 .Include(e => e.ActivityType)
                 .Include(e => e.ExerciseInstruction)
+                .Include(e => e.MuscleParts)
+                    .ThenInclude(e => e.MusclePart)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (exercise == null)
             {
